@@ -1,0 +1,110 @@
+/*
+ * Contact / newsletter band (docs/ui-spec.md I2). ≈325px tall at 1363 with ≈50px top padding;
+ * equal thirds with fine rules.
+ */
+
+.band {
+  padding-block: clamp(2rem, 3.67vw, 3.5rem) clamp(2rem, 3.4vw, 3.25rem);
+  background: var(--color-mist);
+}
+
+/* Two explicit lines: "Have a" / "question?" */
+.invitation {
+  font-size: clamp(1.75rem, 3.125vw, 3.5rem);
+  font-weight: var(--fw-heading);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-display);
+}
+
+.invitation span {
+  display: block;
+}
+
+.column {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--space-3);
+}
+
+.heading {
+  margin-bottom: var(--space-1);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+}
+
+.body {
+  max-width: 36ch;
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: var(--color-ink-soft);
+}
+
+.body a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: var(--hairline);
+  text-underline-offset: 0.2em;
+}
+
+/* Compact charcoal-filled rectangle. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: max(2.25rem, var(--touch));
+  margin-top: var(--space-3);
+  padding: 0 var(--space-4);
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.button:hover {
+  background: var(--color-ink-soft);
+}
+
+/* Small underlined signup link with a tiny leading mark. */
+.textAction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: max(1.75rem, var(--touch));
+  margin-top: var(--space-2);
+  font-size: var(--fs-small);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--hairline) no-repeat;
+}
+
+.mark {
+  width: 0.875rem;
+  height: var(--hairline);
+  background: currentColor;
+  transition: width var(--dur-base) var(--ease-out-expo);
+}
+
+.textAction:hover .mark {
+  width: 1.5rem;
+}
+
+@media (pointer: coarse) {
+  .button,
+  .textAction {
+    min-height: var(--control-size);
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .invite {
+    grid-column: 1 / -1;
+    margin-bottom: var(--space-6);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .column + .column {
+    margin-top: var(--space-7);
+  }
+}

@@ -1,0 +1,65 @@
+/*
+ * Culture feature (docs/ui-spec.md H1). ≈650px tall at 1363: 85px padding above and below a
+ * ≈843×474 media slot (two thirds minus 28px insets, 16:9).
+ */
+
+.culture {
+  padding-block: clamp(2.5rem, 6.24vw, 6rem);
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label {
+  margin-bottom: var(--space-4);
+  color: var(--color-on-dark-muted);
+}
+
+.heading {
+  font-size: var(--fs-h2);
+}
+
+.line {
+  display: block;
+}
+
+/* Small text action: fine underline with a compact leading mark. */
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: max(1.75rem, var(--touch));
+  margin-top: var(--space-6);
+  font-size: var(--fs-small);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--hairline) no-repeat;
+}
+
+.mark {
+  width: 0.875rem;
+  height: var(--hairline);
+  background: currentColor;
+  transition: width var(--dur-base) var(--ease-out-expo);
+}
+
+.action:hover .mark {
+  width: 1.5rem;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-charcoal-raised);
+}
+
+@media (max-width: 1023.98px) {
+  .copy {
+    grid-column: 1 / -1;
+    margin-bottom: var(--space-7);
+  }
+}

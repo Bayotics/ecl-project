@@ -1,0 +1,51 @@
+/* Route-change curtains: light, below the header (which stays put), never clickable. */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-header) - 5);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.curtain {
+  --track: calc(100% - var(--scrollbar-w, 0px));
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--track) / 3 + 1px);
+  background: var(--color-mist);
+  will-change: transform;
+}
+
+.left {
+  left: 0;
+}
+
+.middle {
+  left: calc(var(--track) / 3);
+}
+
+.right {
+  left: calc(var(--track) * 2 / 3);
+  right: 0;
+  width: auto;
+}
+
+/* The fine ⅓ and ⅔ rules travel with the curtains, as in the intro. */
+.left::after,
+.middle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 1px;
+  bottom: 0;
+  width: var(--hairline);
+  background: var(--color-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    display: none;
+  }
+}

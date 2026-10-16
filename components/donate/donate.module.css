@@ -1,0 +1,142 @@
+/* Donation entry and status (docs/ui-spec.md J5): compact near-square controls on warm paper. */
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 34rem;
+}
+
+.fieldset {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.segmented,
+.amounts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: var(--space-2);
+}
+
+.segmented {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Radio rendered as a compact outlined rectangle; the native input stays focusable and announced. */
+.choice {
+  position: relative;
+  display: grid;
+}
+
+.choice input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.choice span {
+  display: grid;
+  place-items: center;
+  min-height: var(--control-size);
+  padding: 0 var(--space-3);
+  border: var(--hairline) solid var(--color-line-strong);
+  font-size: var(--fs-body);
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.choice input:checked + span {
+  background: var(--color-charcoal);
+  border-color: var(--color-charcoal);
+  color: var(--color-on-dark);
+}
+
+.choice input:focus-visible + span {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .choice:hover input:not(:checked) + span {
+    border-color: var(--color-ink);
+  }
+}
+
+.custom {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.customInput {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  max-width: 14rem;
+  font-size: var(--fs-body);
+}
+
+.hint {
+  font-size: var(--fs-small);
+  color: var(--color-ink-muted);
+}
+
+/* ── Status (thank-you page, unavailable and canceled notices) ──── */
+
+.statusCard {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  max-width: 40rem;
+  padding: var(--space-6);
+  border: var(--hairline) solid var(--color-line);
+  background: var(--color-paper-raised);
+}
+
+.statusCard[data-state="paid"] {
+  border-left: 2px solid var(--color-success);
+}
+
+.statusCard[data-state="failed"] {
+  border-left: 2px solid var(--color-danger);
+}
+
+.statusTitle {
+  font-size: var(--fs-h3);
+}
+
+.statusCard p {
+  font-size: var(--fs-body);
+  color: var(--color-ink-soft);
+}
+
+.statusAction {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-size);
+  margin-top: var(--space-2);
+  padding: 0 var(--space-5);
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.notice {
+  max-width: 40rem;
+  padding: var(--space-3) var(--space-4);
+  border-left: 2px solid var(--color-charcoal);
+  background: var(--color-paper-raised);
+  font-size: var(--fs-small);
+  color: var(--color-ink-soft);
+}

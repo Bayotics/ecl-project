@@ -1,0 +1,166 @@
+/*
+ * Causes track (docs/ui-spec.md Part G). One light section on the page background; a fine top rule
+ * defines it. Items ≈26vw with a ≈0.8vw gap inside a viewport inset by the gutters, so three full items
+ * and most of a fourth show at desktop widths.
+ */
+
+.section {
+  padding-top: var(--section-y-sm);
+  /* ≈170px of open space beneath the captions at 1363, reducing responsively. */
+  padding-bottom: clamp(4rem, 12.5vw, 11rem);
+  background: var(--color-paper);
+  border-top: var(--hairline) solid var(--color-line);
+}
+
+/* Heading at the left gutter; controls at the far right on the same baseline. */
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: clamp(1.75rem, 1rem + 2vw, 3rem);
+  padding-inline: var(--page-x);
+}
+
+.heading {
+  font-size: var(--fs-h2);
+}
+
+.controls {
+  display: flex;
+  flex: none;
+  gap: 0.375rem;
+}
+
+/* Small on desktop; comfortable on touch layouts. */
+.control {
+  width: clamp(1.75rem, 2.2vw, 2.25rem);
+  height: clamp(1.75rem, 2.2vw, 2.25rem);
+}
+
+@media (pointer: coarse) {
+  .control {
+    width: var(--control-size);
+    height: var(--control-size);
+  }
+}
+
+.viewport {
+  margin-inline: var(--page-x);
+  overflow: hidden;
+  cursor: grab;
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  --gap: clamp(0.5rem, 0.8vw, 0.875rem);
+  --item: 26vw;
+
+  display: flex;
+  margin-left: calc(-1 * var(--gap));
+  touch-action: pan-y pinch-zoom;
+  backface-visibility: hidden;
+}
+
+.slide {
+  flex: 0 0 calc(var(--item) + var(--gap));
+  min-width: 0;
+  padding-left: var(--gap);
+}
+
+.card {
+  display: grid;
+  justify-items: start;
+}
+
+.media {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--color-mist);
+  -webkit-user-drag: none;
+}
+
+.img {
+  transition: transform 1.2s var(--ease-out-expo);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.title {
+  margin-top: var(--space-4);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-tight);
+}
+
+.title a {
+  -webkit-user-drag: none;
+}
+
+.summary {
+  margin-top: var(--space-1);
+  max-width: 34ch;
+  color: var(--color-ink-soft);
+}
+
+/* Very small outlined action, farther below. */
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: max(1.5rem, var(--touch));
+  margin-top: var(--space-6);
+  padding: 0 var(--space-3);
+  border: var(--hairline) solid var(--color-line-strong);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  -webkit-user-drag: none;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.action:hover {
+  background: var(--color-ink);
+  color: var(--color-on-dark);
+}
+
+@media (pointer: coarse) {
+  .action {
+    min-height: var(--control-size);
+  }
+}
+
+@media (hover: hover) {
+  .card:hover .img {
+    transform: scale(calc(var(--zoom, 1) * 1.03));
+  }
+
+  .title a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: var(--hairline);
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* Tablet: about two items and a partial third. */
+@media (max-width: 1023.98px) {
+  .track {
+    --item: 40vw;
+  }
+}
+
+/* Phone: one large item with the next edge visible. */
+@media (max-width: 767.98px) {
+  .track {
+    --item: 78vw;
+  }
+}

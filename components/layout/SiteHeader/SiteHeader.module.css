@@ -1,0 +1,350 @@
+/*
+ * Header (docs/ui-spec.md Part D). Slim utility strip (~27px at 1363) above a main row (~73.5px).
+ * Themes:
+ *   overlay — translucent dark glass, light text, thin light bottom line (over the hero)
+ *   solid   — pale bar, charcoal text (everywhere else, and whenever an overlay is open)
+ */
+
+.header {
+  --hdr-fg: var(--color-ink);
+  --hdr-muted: var(--color-ink-muted);
+  --hdr-bg: var(--color-glass-light);
+  --hdr-line: var(--color-line);
+  --hdr-line-strong: var(--color-line-strong);
+  --hdr-invert: var(--color-paper);
+  --panel-top: var(--header-h);
+
+  position: fixed;
+  /* Full viewport width; content stops at the page grid via padding (see .utility and .bar). */
+  inset: 0 0 auto 0;
+  z-index: var(--z-header);
+  color: var(--hdr-fg);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.header[data-theme="overlay"] {
+  --hdr-fg: var(--color-on-dark);
+  --hdr-muted: var(--color-on-dark-muted);
+  --hdr-bg: var(--color-glass-dark);
+  --hdr-line: var(--color-line-on-dark);
+  --hdr-line-strong: var(--color-line-on-dark-strong);
+  --hdr-invert: var(--color-charcoal);
+}
+
+.header[data-theme="overlay"] :focus-visible {
+  outline-color: var(--color-on-dark);
+}
+
+/* The utility strip scrolls out; the main row stays pinned to the top of the viewport. */
+.header[data-collapsed="true"] {
+  --panel-top: var(--nav-h);
+  transform: translateY(calc(-1 * var(--utility-h)));
+}
+
+.utility,
+.bar {
+  background-color: var(--hdr-bg);
+  border-bottom: var(--hairline) solid var(--hdr-line);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  backdrop-filter: blur(14px) saturate(1.15);
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+/* ── Utility strip ─────────────────────────────────────────────── */
+
+.utility {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  height: var(--utility-h);
+  padding-inline: var(--page-x) calc(var(--page-x) + var(--scrollbar-w, 0px));
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-micro);
+  color: var(--hdr-muted);
+}
+
+.utilityText {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+
+.utilityLinks {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.utilityLinks li {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Delicate rule between links. */
+.utilityLinks li + li::before {
+  content: "";
+  width: var(--hairline);
+  height: 42%;
+  margin-inline: var(--space-4);
+  background: var(--hdr-line-strong);
+}
+
+.utilityLinks a {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.utilityLinks a:hover {
+  color: var(--hdr-fg);
+}
+
+/* ── Main row ──────────────────────────────────────────────────── */
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  height: var(--nav-h);
+  padding-inline: var(--page-x) calc(var(--page-x) + var(--scrollbar-w, 0px));
+}
+
+.brand {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Modest emblem so the bar stays slim (~36px at 1363). */
+.logo {
+  width: clamp(1.875rem, 2.65vw, 2.375rem);
+  height: auto;
+}
+
+.wordmark {
+  display: grid;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 1.9vw, 2.25rem);
+  height: 100%;
+}
+
+.nav,
+.navList,
+.navList li {
+  display: flex;
+  height: 100%;
+}
+
+.navList {
+  gap: clamp(1rem, 2vw, 2.25rem);
+}
+
+.navItem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--fs-nav);
+  font-weight: var(--fw-body);
+  white-space: nowrap;
+}
+
+/* Hairline indicator along the bottom edge of the row. */
+.navItem::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: calc(-1 * var(--hairline));
+  left: 0;
+  height: var(--hairline);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 100% 50%;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.navItem[aria-expanded="true"]::after,
+.navItem[data-current]::after,
+.navItem[aria-current="page"]::after {
+  transform: scaleX(1);
+  transform-origin: 0 50%;
+}
+
+@media (hover: hover) {
+  .navItem:hover::after {
+    transform: scaleX(1);
+    transform-origin: 0 50%;
+  }
+}
+
+.chevron {
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.navItem[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+/* Compact Donate action: small outlined rectangle. */
+.donate {
+  display: inline-flex;
+  align-items: center;
+  min-height: max(2.25rem, var(--touch));
+  padding: 0 var(--space-4);
+  border: var(--hairline) solid var(--hdr-line-strong);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.donate:hover {
+  background: var(--hdr-fg);
+  border-color: var(--hdr-fg);
+  color: var(--hdr-invert);
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-inline: -0.375rem;
+}
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: max(2.5rem, var(--touch));
+  font-size: var(--fs-nav);
+  font-weight: var(--fw-body);
+}
+
+/* Three thin lines that fold into a thin X while the menu is open. */
+.burger {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 13px;
+}
+
+.burger span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--hairline);
+  background: currentColor;
+  transition:
+    transform var(--dur-base) var(--ease-out-expo),
+    top var(--dur-base) var(--ease-out-expo),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+.burger span:nth-child(1) {
+  top: 0;
+}
+
+.burger span:nth-child(2) {
+  top: 6px;
+}
+
+.burger span:nth-child(3) {
+  top: 12px;
+}
+
+.burger[data-open="true"] span:nth-child(1) {
+  top: 6px;
+  transform: rotate(45deg);
+}
+
+.burger[data-open="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger[data-open="true"] span:nth-child(3) {
+  top: 6px;
+  transform: rotate(-45deg);
+}
+
+/* ── Overlay shell and backdrop ────────────────────────────────── */
+
+.shell {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+/* Blurs and dims the page beneath; the header and panels sit above it and stay sharp. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-backdrop);
+  background: rgb(27 26 20 / 0.26);
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ── Breakpoints ───────────────────────────────────────────────── */
+
+@media (max-width: 1023.98px) {
+  .nav {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .utility {
+    display: none;
+  }
+}
+
+/* Donate stays visible on every page and width (Prompt 9). On phones it tightens, and the word
+   "Menu" becomes screen-reader-only so the bar still fits at 320px. */
+@media (max-width: 559.98px) {
+  .controls {
+    gap: 0.875rem;
+  }
+
+  .donate {
+    min-height: max(2rem, var(--touch));
+    padding: 0 0.625rem;
+  }
+
+  .menuLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

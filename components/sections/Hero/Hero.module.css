@@ -1,0 +1,237 @@
+/*
+ * Cinematic hero (docs/ui-spec.md Part E). Full-bleed ~100svh with the header overlaid on top.
+ * Bottom-anchored composition, calibrated at 1363×936:
+ *   control strip ≈64px · clearance ≈34px · content group ≈198px
+ *   → eyebrow ≈y640, headline ≈y675, support row ≈y815, controls ≈y872.
+ */
+
+.hero {
+  --controls-h: clamp(3.25rem, 4.7vw, 4.75rem);
+  --copy-clear: clamp(1.25rem, 2.5vw, 2.5rem);
+  --eyebrow-gap: clamp(0.875rem, 1.47vw, 1.5rem);
+  --support-gap: clamp(1rem, 1.9vw, 1.75rem);
+
+  position: relative;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+  /* Vertical gestures stay native scrolling; horizontal ones reach the swipe handler. */
+  touch-action: pan-y;
+}
+
+/* ── Media ─────────────────────────────────────────────────────── */
+
+.media,
+.layer,
+.scrim {
+  position: absolute;
+  inset: 0;
+}
+
+/* Before any interaction only the first slide shows; GSAP owns opacity afterwards. */
+.layer:not(:first-child) {
+  opacity: 0;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darkens toward the copy and controls only; no text card. */
+.scrim {
+  background: var(--hero-scrim);
+  pointer-events: none;
+}
+
+/* ── Copy: stacked per slide, anchored low and left ─────────────── */
+
+.stage {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--controls-h) + var(--copy-clear) + var(--safe-bottom));
+  left: 0;
+}
+
+.copy {
+  position: absolute;
+  right: var(--page-x);
+  bottom: 0;
+  left: var(--page-x);
+}
+
+.copy:not(:first-child) {
+  visibility: hidden;
+}
+
+.eyebrow {
+  margin-bottom: var(--eyebrow-gap);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: var(--fs-display);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+/* The title moves inside its own mask; the layout never shifts. */
+.mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.titleInner {
+  display: block;
+}
+
+.support {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 1.83vw, 1.875rem);
+  margin-top: var(--support-gap);
+}
+
+.text {
+  /* One line beside the CTA at desktop widths; wraps naturally when narrower. */
+  max-width: 75ch;
+  font-size: var(--fs-body);
+  line-height: 1.4;
+  color: var(--color-on-dark-muted);
+}
+
+/* Compact outlined CTA (24px tall: the minimum target size, and it keeps the content group ≈198px). */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: max(1.5rem, var(--touch));
+  padding: 0 var(--space-3);
+  border: var(--hairline) solid var(--color-line-on-dark-strong);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.cta:hover {
+  background: var(--color-on-dark);
+  border-color: var(--color-on-dark);
+  color: var(--color-ink);
+}
+
+/* ── Control strip ─────────────────────────────────────────────── */
+
+.controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-raised);
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  height: calc(var(--controls-h) + var(--safe-bottom));
+  padding-inline: var(--page-x);
+  padding-bottom: var(--safe-bottom);
+  border-top: var(--hairline) solid var(--color-line-on-dark);
+}
+
+.arrows {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.divider {
+  align-self: stretch;
+  width: var(--hairline);
+  background: var(--color-line-on-dark);
+}
+
+.tabs {
+  display: flex;
+  gap: clamp(1.25rem, 2.6vw, 3rem);
+  min-width: 0;
+}
+
+.tab {
+  min-height: max(2rem, var(--touch));
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-on-dark-muted);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--color-on-dark);
+}
+
+@media (hover: hover) {
+  .tab:hover {
+    color: var(--color-on-dark);
+  }
+}
+
+.end {
+  display: flex;
+  gap: 0.375rem;
+  margin-left: auto;
+}
+
+.mediaToggle {
+  display: grid;
+  place-items: center;
+  width: clamp(1.625rem, 1.98vw, 2rem);
+  height: clamp(1.625rem, 1.98vw, 2rem);
+  color: var(--color-on-dark-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.mediaToggle:hover {
+  color: var(--color-on-dark);
+}
+
+/* ── Phones ────────────────────────────────────────────────────── */
+
+@media (max-width: 767.98px) {
+  .support {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  /* Numbers only; the full label remains each tab's accessible name. */
+  .tabLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .tabs {
+    gap: var(--space-5);
+  }
+}

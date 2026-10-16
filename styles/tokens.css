@@ -1,0 +1,165 @@
+/*
+ * Design tokens — Eko Club Louisiana
+ * Source of truth: docs/ui-spec.md (Part C, Prompt 2). Components consume these through CSS Modules;
+ * no component should hard-code a color, size, duration or easing.
+ *
+ * Fluid sizes are calibrated at a 1363px desktop viewport:
+ *   gutter 2.083vw ≈ 28.4px · hero 8.333vw ≈ 113.6px · section heading 2.083vw ≈ 28.4px · nav 1.25vw ≈ 17px
+ */
+
+:root {
+  /* ── Color: surfaces ─────────────────────────────────────────── */
+  --color-paper: #eeeeeb; /* main page */
+  --color-mist: #e0e0de; /* secondary gray: intro column, contact band */
+  --color-paper-raised: #fafaf8; /* very light panels */
+  --color-charcoal: #1b1a14; /* charcoal panels */
+  --color-charcoal-raised: #26251e;
+
+  /* ── Color: content ──────────────────────────────────────────── */
+  --color-ink: #1b1a14; /* dark text uses the charcoal tone */
+  --color-ink-soft: #3b3a33;
+  --color-ink-muted: #5e5d57; /* ≥ 4.5:1 on paper and mist */
+  --color-on-dark: #f4f2ec; /* warm near-white */
+  --color-on-dark-muted: rgb(244 242 236 / 0.72);
+
+  /* ── Color: rules ────────────────────────────────────────────── */
+  --color-line: rgb(27 26 20 / 0.13);
+  --color-line-strong: rgb(27 26 20 / 0.42);
+  --color-line-on-dark: rgb(255 255 255 / 0.2);
+  --color-line-on-dark-strong: rgb(255 255 255 / 0.5);
+  --color-danger: #9b2c1f;
+  --color-success: #3c5e35;
+
+  /* ── Color: overlays ─────────────────────────────────────────── */
+  --color-scrim: rgb(27 26 20 / 0.34);
+  --color-glass-dark: rgb(27 26 20 / 0.22);
+  --color-glass-light: rgb(238 238 235 / 0.94);
+  --hero-scrim:
+    linear-gradient(
+      180deg,
+      rgb(27 26 20 / 0.45) 0%,
+      rgb(27 26 20 / 0) 24%,
+      rgb(27 26 20 / 0.08) 36%,
+      rgb(27 26 20 / 0.58) 66%,
+      rgb(27 26 20 / 0.82) 100%
+    ),
+    linear-gradient(90deg, rgb(27 26 20 / 0.4) 0%, rgb(27 26 20 / 0) 62%);
+
+  /* ── Typography: Geologica (variable) ────────────────────────── */
+  --font-sans: var(--font-geologica), system-ui, sans-serif;
+
+  --fw-heading: 200; /* main and section headings — never bold */
+  --fw-body: 300; /* navigation, descriptions, ordinary copy */
+  --fw-label: 500; /* compact uppercase labels, small action text */
+
+  --fs-micro: 0.6875rem; /* 11px legal row */
+  --fs-label: clamp(0.6875rem, 0.66rem + 0.08vw, 0.75rem); /* 11–12px labels and actions */
+  --fs-small: 0.875rem;
+  --fs-body: clamp(1rem, 0.9rem + 0.25vw, 1.125rem); /* 16–18px descriptions */
+  --fs-nav: clamp(0.9375rem, 1.25vw, 1.375rem); /* ≈17px at 1363 */
+  --fs-h3: clamp(1.125rem, 0.25rem + 1.25vw, 1.5rem); /* card and caption titles */
+  --fs-h2: clamp(1.5rem, 2.083vw, 2.75rem); /* section headings ≈28.4px at 1363 */
+  --fs-lead: var(--fs-h2); /* mission paragraphs share the section-heading scale */
+  --fs-title: clamp(2.25rem, 4.167vw, 5.5rem); /* inner-page h1 */
+  --fs-display: clamp(2.75rem, 8.333vw, 10.5rem); /* hero ≈113.6px at 1363 */
+
+  --lh-display: 1;
+  --lh-heading: 1.15;
+  --lh-lead: 1.3;
+  --lh-tight: 1.3;
+  --lh-body: 1.6;
+
+  --tracking-display: -0.01em;
+  --tracking-heading: -0.005em;
+  --tracking-label: 0.12em;
+  --tracking-micro: 0.04em;
+
+  /* ── Space (4px base) ────────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-9: 4rem;
+  --space-10: 6rem;
+
+  /* ── Layout ──────────────────────────────────────────────────── */
+  --page-x: max(clamp(1.25rem, 2.083vw, 3rem), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px)); /* outer gutter ≈28.4px at 1363; clears a notch in landscape */
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --cell-x: var(--page-x);
+  --gutter: var(--page-x);
+  --section-y: clamp(4.5rem, 2.5rem + 8vw, 10rem);
+  --section-y-sm: clamp(3rem, 2rem + 4vw, 6rem);
+  --measure: 34ch;
+  --measure-wide: 52ch;
+
+  --utility-h: clamp(1.5rem, 1.98vw, 2rem); /* ≈27px at 1363 */
+  --nav-h: clamp(3.75rem, 5.39vw, 5.25rem); /* ≈73.5px at 1363 */
+  --header-h: calc(var(--utility-h) + var(--nav-h));
+
+  --control-size: 2.75rem;
+  /* Minimum touch target; 0 on fine pointers so desktop controls keep their drawn size. */
+  --touch: 0px;
+  --hairline: 1px;
+  --radius: 0;
+
+  /* ── Layers ──────────────────────────────────────────────────── */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-backdrop: 80;
+  --z-header: 100;
+  --z-skip: 200;
+
+  /* ── Motion ──────────────────────────────────────────────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --dur-fast: 240ms;
+  --dur-base: 450ms;
+  --dur-slow: 800ms;
+  --dur-cinematic: 1400ms;
+}
+
+@media (max-width: 1023.98px) {
+  :root {
+    --nav-h: 4rem;
+  }
+}
+
+/* Phones: comfortable reading sizes instead of strict proportional scaling. */
+@media (max-width: 767.98px) {
+  :root {
+    --utility-h: 0px;
+    --fs-body: 1rem;
+    --fs-lead: 1.375rem;
+    --lh-lead: 1.35;
+  }
+}
+
+/* Phones in either orientation: secondary copy and form controls stay at 16px (readable, and no
+   automatic zoom on focus in mobile Safari). */
+@media (max-width: 767.98px), (pointer: coarse) and (max-height: 500px) {
+  :root {
+    --fs-small: 1rem;
+  }
+}
+
+/* Touch screens: comfortable 44px targets. Visible desktop control squares stay small on fine pointers. */
+@media (pointer: coarse) {
+  :root {
+    --touch: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-base: 1ms;
+    --dur-slow: 1ms;
+    --dur-cinematic: 1ms;
+  }
+}

@@ -1,0 +1,181 @@
+.footer {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border-top: var(--hairline) solid var(--color-line);
+}
+
+/* ── Logo strip ────────────────────────────────────────────────── */
+
+.logoStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  /* 100–120px strip: emblem at the left gutter, up-arrow square at the right. */
+  min-height: clamp(6.25rem, 8.1vw, 7.5rem);
+  padding: var(--space-4) var(--page-x);
+  border-bottom: var(--hairline) solid var(--color-line);
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1.1vw, 1.25rem);
+}
+
+/* Larger than the header mark, never poster-sized. */
+.logo {
+  width: clamp(3.25rem, 4.4vw, 4.5rem);
+  height: auto;
+}
+
+.wordmark {
+  font-size: clamp(1.25rem, 1.83vw, 2rem);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.wordmark span {
+  color: var(--color-ink-muted);
+}
+
+.top {
+  flex: none;
+}
+
+/* ── Six compact columns ───────────────────────────────────────── */
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  /* No row gap: the column rules stay continuous when the grid wraps. */
+  row-gap: 0;
+}
+
+.column {
+  min-width: 0;
+  /* 35–45px above the labels; open space below the lists. */
+  padding: clamp(2.2rem, 2.93vw, 2.8rem) var(--cell-x) var(--space-10);
+}
+
+/* Six subdivisions: a hairline before each column after the first. */
+.column + .column {
+  border-left: var(--hairline) solid var(--color-line);
+}
+
+.heading {
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+
+.lines {
+  display: grid;
+  gap: var(--space-3);
+  font-size: clamp(0.75rem, 0.95vw, 0.875rem);
+  line-height: 1.5;
+  color: var(--color-ink-muted);
+}
+
+.lines p:first-child {
+  color: var(--color-ink-soft);
+}
+
+.links {
+  display: grid;
+  gap: var(--space-2);
+  overflow-wrap: anywhere;
+  /* 12–14px */
+  font-size: clamp(0.75rem, 0.95vw, 0.875rem);
+  line-height: var(--lh-tight);
+  color: var(--color-ink-soft);
+}
+
+.links a {
+  display: inline-block;
+  padding-block: 0.2rem;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 var(--hairline) no-repeat;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-size var(--dur-base) var(--ease-out-expo);
+}
+
+.links a:hover {
+  color: var(--color-ink);
+  background-size: 100% var(--hairline);
+}
+
+/* ── Legal row ─────────────────────────────────────────────────── */
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-6);
+  padding: var(--space-5) var(--page-x) calc(var(--space-5) + var(--safe-bottom));
+  border-top: var(--hairline) solid var(--color-line);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-micro);
+  color: var(--color-ink-muted);
+}
+
+.legalLinks {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.legalLinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: max(1.5rem, var(--touch));
+}
+
+.legalLinks a:hover {
+  color: var(--color-ink);
+}
+
+@media (max-width: 1023.98px) {
+  .columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .column:nth-child(3n + 1) {
+    border-left: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .column {
+    padding-bottom: var(--space-7);
+    border-bottom: var(--hairline) solid var(--color-line);
+  }
+
+  .column:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .column:nth-child(3n + 1) {
+    border-left: var(--hairline) solid var(--color-line);
+  }
+
+  .column:nth-child(2n + 1) {
+    border-left: 0;
+  }
+
+  .logoStrip {
+    align-items: center;
+  }
+
+  .wordmark span {
+    display: block;
+  }
+}

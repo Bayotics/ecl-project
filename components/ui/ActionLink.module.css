@@ -1,0 +1,102 @@
+.link {
+  --action-fg: var(--color-ink);
+  --action-line: var(--color-line-strong);
+  --action-fill: var(--color-ink);
+  --action-fg-hover: var(--color-on-dark);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--action-fg);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-body);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.light {
+  --action-fg: var(--color-on-dark);
+  --action-line: var(--color-line-on-dark-strong);
+  --action-fill: var(--color-on-dark);
+  --action-fg-hover: var(--color-ink);
+}
+
+.icon {
+  flex: none;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+/* ── Outline: small rectangle, fill wipes in from the left ─────────── */
+
+.outline {
+  min-height: var(--control-size);
+  padding: 0 var(--space-4);
+  border: var(--hairline) solid var(--action-line);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+.outline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--action-fill);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+/* ── Text: hairline underline that redraws on hover ────────────────── */
+
+.text {
+  min-height: var(--control-size);
+}
+
+.text .label {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--hairline) no-repeat;
+  padding-bottom: 0.3em;
+  transition: background-size var(--dur-base) var(--ease-out-expo);
+}
+
+@media (hover: hover) {
+  .outline:hover {
+    color: var(--action-fg-hover);
+    border-color: var(--action-fill);
+  }
+
+  .outline:hover::before {
+    transform: scaleX(1);
+  }
+
+  .link:hover .icon {
+    transform: translateX(3px);
+  }
+
+  .text:hover .label {
+    animation: redraw var(--dur-slow) var(--ease-out-expo);
+  }
+}
+
+@keyframes redraw {
+  0% {
+    background-size: 100% var(--hairline);
+    background-position: 100% 100%;
+  }
+  45% {
+    background-size: 0% var(--hairline);
+    background-position: 100% 100%;
+  }
+  46% {
+    background-position: 0 100%;
+  }
+  100% {
+    background-size: 100% var(--hairline);
+    background-position: 0 100%;
+  }
+}

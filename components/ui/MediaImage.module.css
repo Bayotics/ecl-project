@@ -1,0 +1,12 @@
+.image {
+  object-fit: cover;
+  transform: scale(var(--zoom, 1));
+  transform-origin: var(--focal, 50% 50%);
+}
+
+/* Logos and crests sit on a very light panel instead of being cropped. */
+.contain {
+  object-fit: contain;
+  padding: 16%;
+  background: var(--color-paper-raised);
+}

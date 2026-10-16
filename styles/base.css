@@ -1,0 +1,190 @@
+/* Reset, element defaults and a few global utilities. Everything else lives in CSS Modules. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+  scroll-padding-top: calc(var(--nav-h) + var(--space-4));
+}
+
+html[data-scroll-locked] {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+picture,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+[data-surface="dark"] :focus-visible {
+  outline-color: var(--color-on-dark);
+}
+
+::selection {
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+}
+
+/* ── Utilities ─────────────────────────────────────────────────── */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: var(--z-skip);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  transform: translateY(-200%);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline-color: var(--color-on-dark);
+  outline-offset: -4px;
+}
+
+/* Programmatic focus targets (skip link, back-to-top) need no visible ring. */
+main:focus {
+  outline: none;
+}
+
+/* Anchor used by the back-to-top control so focus can land at the start of the page. */
+.page-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  outline: none;
+}
+
+/*
+ * Touch screens (Prompt 10): every standalone control gets a comfortable 44px target. Zero
+ * specificity (:where) so components can still tune layout; `--touch` is 0 on fine pointers, so
+ * desktop controls keep their drawn size. Links inside running text are exempt, as in WCAG 2.5.8.
+ */
+@media (pointer: coarse) {
+  /* Fully wrapped in :where() so specificity stays 0 and any component rule wins. */
+  :where(
+      :is(a, button, select, textarea, [role="tab"], input:not([type="checkbox"], [type="radio"], [type="hidden"])):not(
+          p *,
+          .visually-hidden,
+          [aria-hidden="true"] *
+        )
+    ) {
+    min-height: var(--touch);
+  }
+
+  :where(:is(button, [role="tab"]):not(.visually-hidden, [aria-hidden="true"] *)) {
+    min-width: var(--touch);
+  }
+
+  :where(a:not(p *, .visually-hidden)) {
+    align-content: center;
+  }
+}

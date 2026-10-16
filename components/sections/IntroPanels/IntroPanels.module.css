@@ -1,0 +1,69 @@
+/*
+ * Three-panel section (docs/ui-spec.md Part F). Calibrated at 1363: section ≈710px tall,
+ * panels ≈409px high, widths ≈426 / 454 / 426 (gutter→⅓, ⅓→⅔, ⅔→gutter).
+ */
+
+.section {
+  --panel-h: clamp(21rem, 30vw, 32rem);
+  --panel-pad: var(--page-x);
+  --panel-top: clamp(1.75rem, 3.08vw, 3rem);
+
+  padding-block: clamp(3rem, 11vw, 10rem);
+  background: var(--color-paper);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+/* Outer panels stop at the gutters; the inner edges sit exactly on the ⅓ and ⅔ lines. */
+.row > :first-child {
+  margin-left: var(--page-x);
+}
+
+.row > :last-child {
+  margin-right: var(--page-x);
+}
+
+.intro {
+  height: var(--panel-h);
+  padding: var(--panel-top) var(--panel-pad) var(--panel-pad);
+  overflow: hidden;
+  background: var(--color-mist);
+}
+
+.label {
+  margin-bottom: var(--space-4);
+  color: var(--color-ink-muted);
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 36ch;
+  margin-top: var(--space-5);
+  color: var(--color-ink-soft);
+}
+
+/* Below desktop: stack introduction, impact, causes; less empty space. */
+@media (max-width: 1023.98px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .row > * {
+    margin-inline: var(--page-x);
+  }
+
+  .intro {
+    height: auto;
+  }
+}

@@ -1,0 +1,142 @@
+/*
+ * Fixed-size panel (docs/ui-spec.md Part F). Interior padding ≈28px, title ≈42px below the top.
+ * States are layered inside; nothing changes the panel's dimensions.
+ */
+
+.panel {
+  position: relative;
+  height: var(--panel-h);
+  padding: var(--panel-top) var(--panel-pad) var(--panel-pad);
+  overflow: hidden;
+}
+
+.dark {
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+}
+
+.light {
+  background: var(--color-paper-raised);
+  color: var(--color-ink);
+}
+
+.title {
+  position: relative;
+  z-index: 2;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  will-change: transform;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: left;
+}
+
+/* Tiny outlined arrow beside the title. */
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: var(--hairline) solid currentColor;
+  opacity: 0.7;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.panel[data-active="true"] .arrow {
+  transform: rotate(-90deg);
+}
+
+/* Photograph: lower-right ~60% of the width, inset from the right and bottom edges. */
+.media {
+  position: absolute;
+  right: var(--panel-pad);
+  bottom: var(--panel-pad);
+  width: 60%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-mist);
+}
+
+/* Revealed content occupies the upper area. */
+.body {
+  position: absolute;
+  top: var(--panel-top);
+  right: var(--panel-pad);
+  left: var(--panel-pad);
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+}
+
+.panel[data-active="false"] .body {
+  pointer-events: none;
+}
+
+/* Hidden until the timeline reveals it (also prevents a flash before hydration). */
+.body [data-panel-item] {
+  opacity: 0;
+}
+
+.text {
+  max-width: 34ch;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
+
+.dark .text {
+  color: var(--color-on-dark);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: max(1.75rem, var(--touch));
+  padding: 0 var(--space-3);
+  border: var(--hairline) solid currentColor;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.dark .action:hover {
+  background: var(--color-on-dark);
+  color: var(--color-ink);
+}
+
+.light .action:hover {
+  background: var(--color-ink);
+  color: var(--color-on-dark);
+}
+
+.links {
+  display: grid;
+  justify-items: start;
+}
+
+/* Light ~26–28px type with tight but clear spacing. */
+.link {
+  display: inline-block;
+  font-size: clamp(1.375rem, 1.95vw, 1.75rem);
+  font-weight: var(--fw-heading);
+  line-height: 1.18;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: var(--hairline);
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover,
+.link:focus-visible {
+  text-decoration-color: currentColor;
+}

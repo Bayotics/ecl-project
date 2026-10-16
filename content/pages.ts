@@ -1,0 +1,120 @@
+// Copy and metadata for inner pages. Facts come from content records; nothing here states dates,
+// figures, officers or history that the club has not confirmed.
+
+export const pages = {
+  about: {
+    href: "/about",
+    label: "About",
+    title: "A shared legacy",
+    description: "Who Eko Club Louisiana is, what it stands for and how it serves Louisiana and Lagos.",
+  },
+  history: {
+    href: "/about/history",
+    label: "Our story",
+    title: "Between Lagos and Louisiana",
+    lead: "Many of us carry two homes. The club is where they meet: a place to honor where we come from and to contribute to where we live now.",
+    description: "The story of Eko Club Louisiana.",
+  },
+  leadership: {
+    href: "/about/leadership",
+    label: "Leadership",
+    title: "Club leadership",
+    description: "Officers and committee members of Eko Club Louisiana.",
+  },
+  impact: {
+    href: "/impact",
+    label: "Our impact",
+    title: "Stories, service and participation",
+    description: "Stories, volunteer highlights and confirmed figures from the work of Eko Club Louisiana.",
+  },
+  programs: {
+    href: "/programs",
+    label: "Programs & causes",
+    title: "Six areas of focus",
+    lead: "Six areas guide the work of the club.",
+    description:
+      "Education, Youth Leadership, Cultural Heritage, Humanitarian Support, Community Building, and Health and Wellbeing.",
+  },
+  culture: {
+    href: "/culture",
+    label: "Culture",
+    title: "Keeping our traditions connected",
+    description: "Lagos culture and heritage, celebrated and shared in Louisiana.",
+  },
+  news: {
+    href: "/news",
+    label: "News",
+    title: "Club news",
+    description: "Dated updates from Eko Club Louisiana.",
+  },
+  events: {
+    href: "/events",
+    label: "Events",
+    title: "Moments that bring our community together",
+    description: "Upcoming and past events of Eko Club Louisiana, with dates in local time.",
+  },
+  reports: {
+    href: "/reports",
+    label: "Transparency",
+    title: "Reports",
+    lead: "Governance, financial and impact documents, published as the club approves them.",
+    description: "Governance, financial and impact reports published by Eko Club Louisiana.",
+  },
+  gallery: {
+    href: "/gallery",
+    label: "Gallery",
+    title: "Community in action",
+    description: "Photographs of the people and gatherings of Eko Club Louisiana.",
+  },
+  getInvolved: {
+    href: "/get-involved",
+    label: "Get involved",
+    title: "Build with us",
+    description: "Join, volunteer or support the work of Eko Club Louisiana.",
+  },
+  join: {
+    href: "/join",
+    label: "Membership",
+    title: "Become a member",
+    description: "Ask to join Eko Club Louisiana.",
+  },
+  volunteer: {
+    href: "/volunteer",
+    label: "Volunteer",
+    title: "Volunteer with the club",
+    description: "Offer your time and skills to Eko Club Louisiana.",
+  },
+  donate: {
+    href: "/donate",
+    label: "Donate",
+    title: "Support the work",
+    lead: "Gifts support culture, education and humanitarian service in Louisiana and Lagos.",
+    description: "Support Eko Club Louisiana.",
+  },
+  contact: {
+    href: "/contact",
+    label: "Contact",
+    title: "We would be glad to hear from you",
+    description: "Contact Eko Club Louisiana in Baton Rouge, Louisiana.",
+  },
+  search: {
+    href: "/search",
+    label: "Search",
+    title: "Search the site",
+    description: "Search Eko Club Louisiana.",
+  },
+  cookies: {
+    href: "/cookies",
+    label: "Legal",
+    title: "Cookies",
+    description: "How the Eko Club Louisiana website uses cookies and similar storage.",
+  },
+  privacy: { href: "/privacy", label: "Legal", title: "Privacy", description: "Privacy notice for the Eko Club Louisiana website." },
+  terms: { href: "/terms", label: "Legal", title: "Terms of use", description: "Terms of use for the Eko Club Louisiana website." },
+  accessibility: {
+    href: "/accessibility",
+    label: "Legal",
+    title: "Accessibility",
+    description: "Accessibility statement for the Eko Club Louisiana website.",
+  },
+} as const;

@@ -1,0 +1,65 @@
+.button {
+  --btn-fg: var(--color-ink);
+  --btn-line: var(--color-line-strong);
+  --btn-fill: var(--color-ink);
+  --btn-fg-hover: var(--color-on-dark);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--control-size);
+  height: var(--control-size);
+  flex: none;
+  color: var(--btn-fg);
+  border: var(--hairline) solid var(--btn-line);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+/* Fill wipes up from the bottom edge on hover and reverses on leave. */
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-fill);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+/* ≈27px visible at the 1363 calibration; still above the 24px minimum target size. */
+.compact {
+  width: clamp(1.625rem, 1.98vw, 2rem);
+  height: clamp(1.625rem, 1.98vw, 2rem);
+}
+
+.light {
+  --btn-fg: var(--color-on-dark);
+  --btn-line: var(--color-line-on-dark-strong);
+  --btn-fill: var(--color-on-dark);
+  --btn-fg-hover: var(--color-ink);
+}
+
+.button svg {
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+@media (hover: hover) {
+  .button:not(:disabled):hover {
+    color: var(--btn-fg-hover);
+    border-color: var(--btn-fill);
+  }
+
+  .button:not(:disabled):hover::before {
+    transform: scaleY(1);
+  }
+}
+
+.button:disabled {
+  opacity: 0.32;
+}

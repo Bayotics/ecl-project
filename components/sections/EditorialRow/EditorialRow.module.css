@@ -1,0 +1,78 @@
+/*
+ * Editorial row (docs/ui-spec.md H2). ≈85px from the charcoal feature at 1363; the row itself is
+ * ≈425px tall, set by a near-square photograph filling the right third.
+ */
+
+.editorial {
+  padding-block: clamp(2.5rem, 6.24vw, 6rem);
+  background: var(--color-paper);
+}
+
+.label {
+  margin-bottom: var(--space-4);
+  color: var(--color-ink-muted);
+}
+
+.heading {
+  max-width: 12ch;
+  font-size: var(--fs-h2);
+}
+
+.middle {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--space-4);
+}
+
+.body {
+  max-width: 36ch;
+  color: var(--color-ink-soft);
+}
+
+/* Compact text action: fine underline with a short leading mark. */
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: max(1.75rem, var(--touch));
+  margin-top: var(--space-3);
+  font-size: var(--fs-small);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--hairline) no-repeat;
+}
+
+.mark {
+  width: 0.875rem;
+  height: var(--hairline);
+  background: currentColor;
+  transition: width var(--dur-base) var(--ease-out-expo);
+}
+
+.action:hover .mark {
+  width: 1.5rem;
+}
+
+/* ~1:1, a touch taller than wide to keep the members' figures in frame. */
+.frame {
+  position: relative;
+  aspect-ratio: 1 / 1.05;
+  overflow: hidden;
+  background: var(--color-mist);
+}
+
+@media (max-width: 1023.98px) {
+  .imageCell {
+    grid-column: 1 / -1;
+    margin-top: var(--space-7);
+  }
+
+  .frame {
+    max-width: 36rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .middle {
+    margin-top: var(--space-5);
+  }
+}

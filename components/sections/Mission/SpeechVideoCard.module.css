@@ -1,0 +1,120 @@
+/* Speech video card in the right third of the mission row: 4:5 on desktop, 16:9 on phones. */
+
+.card {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-charcoal);
+}
+
+.poster {
+  transition: transform 1s var(--ease-out);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--color-charcoal);
+}
+
+/* The whole frame is the play target; the visible control is a compact square with a label. */
+.play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  color: var(--color-on-dark);
+  background: linear-gradient(to top, rgb(27 26 20 / 0.6), rgb(27 26 20 / 0) 55%);
+  text-align: left;
+  cursor: pointer;
+}
+
+.playIcon {
+  display: grid;
+  place-items: center;
+  width: var(--control-size);
+  height: var(--control-size);
+  flex: none;
+  border: var(--hairline) solid var(--color-on-dark);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.playLabel {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.play:focus-visible {
+  outline: 2px solid var(--color-on-dark);
+  outline-offset: -6px;
+}
+
+@media (hover: hover) {
+  .play:hover .playIcon {
+    background: var(--color-on-dark);
+    color: var(--color-charcoal);
+  }
+
+  .card:hover .poster {
+    transform: scale(calc(var(--zoom, 1) * 1.02));
+  }
+}
+
+.pending {
+  position: absolute;
+  left: var(--space-5);
+  bottom: var(--space-5);
+  padding: var(--space-1) var(--space-3);
+  background: rgb(27 26 20 / 0.7);
+  color: var(--color-on-dark);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.caption {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-tight);
+  color: var(--color-ink);
+}
+
+.speaker {
+  font-size: var(--fs-small);
+  color: var(--color-ink-soft);
+}
+
+@media (max-width: 1023.98px) {
+  .frame {
+    aspect-ratio: 16 / 9;
+  }
+}

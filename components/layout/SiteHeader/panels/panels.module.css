@@ -1,0 +1,653 @@
+/*
+ * Header overlay panels (docs/ui-spec.md Part D). Every panel shares the same shell: full viewport
+ * width, light, hidden by clip-path until GSAP reveals it from the header edge. Items marked
+ * `data-panel-item` start 12px low and transparent; overlayMotion.ts animates them in.
+ */
+
+.panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-height: calc(100dvh - var(--panel-top, var(--header-h)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border-bottom: var(--hairline) solid var(--color-line);
+  clip-path: inset(0% 0% 100% 0%);
+  visibility: hidden;
+}
+
+.panel [data-panel-item] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* Large light links: subtle color, underline and arrow feedback. */
+.listLink,
+.featureLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: var(--hairline);
+  text-underline-offset: 0.18em;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.listLink {
+  font-size: var(--fs-h2);
+}
+
+.featureLink {
+  font-size: clamp(1.75rem, 3.125vw, 3.5rem);
+  letter-spacing: var(--tracking-display);
+}
+
+.listArrow {
+  flex: none;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-out-expo);
+}
+
+.listLink:hover,
+.listLink:focus-visible,
+.featureLink:hover,
+.featureLink:focus-visible {
+  text-decoration-color: currentColor;
+}
+
+.listLink:hover .listArrow,
+.listLink:focus-visible .listArrow,
+.featureLink:hover .listArrow,
+.featureLink:focus-visible .listArrow {
+  opacity: 1;
+  transform: none;
+}
+
+/* While one link is hovered, its siblings recede slightly. */
+@media (hover: hover) {
+  ul:hover > li > .listLink:not(:hover),
+  ul:hover > li > .featureLink:not(:hover) {
+    color: var(--color-ink-muted);
+  }
+}
+
+.compactLink {
+  display: inline-block;
+  padding-block: 0.2rem;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 var(--hairline) no-repeat;
+  transition: background-size var(--dur-base) var(--ease-out-expo);
+}
+
+.compactLink:hover,
+.compactLink:focus-visible {
+  background-size: 100% var(--hairline);
+}
+
+.textAction,
+.outlineAction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.textAction {
+  align-self: flex-start;
+  min-height: max(1.75rem, var(--touch));
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--hairline) no-repeat;
+}
+
+.outlineAction {
+  min-height: max(2.5rem, var(--touch));
+  padding: 0 var(--space-4);
+  border: var(--hairline) solid var(--color-line-strong);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.outlineAction:hover {
+  background: var(--color-ink);
+  color: var(--color-on-dark);
+}
+
+/* ── Desktop-only panels ───────────────────────────────────────── */
+
+.programs,
+.events,
+.menu {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .programs,
+  .events,
+  .menu {
+    display: grid;
+  }
+
+  .mobile {
+    display: none;
+  }
+}
+
+/* ── A. Programs: image (⅓) · list (⅓) · open (⅓) ─────────────── */
+
+.programs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-height: clamp(18rem, 25.5vw, 24rem); /* ≈343px at 1363 */
+}
+
+/* Photograph runs to the panel's lower edge. */
+.programsMedia {
+  position: relative;
+  margin: var(--space-6) var(--cell-x) 0;
+  overflow: hidden;
+  background: var(--color-mist);
+}
+
+.programsList,
+.programsAside {
+  padding: var(--space-6) var(--cell-x) var(--space-7);
+  border-left: var(--hairline) solid var(--color-line);
+}
+
+.programsList .label {
+  margin-bottom: var(--space-4);
+}
+
+.programsAside {
+  display: flex;
+  align-items: flex-end;
+}
+
+/* ── B. Events: invitation (⅓) · three cards (⅔) ─────────────────── */
+
+.events {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  min-height: clamp(20rem, 28vw, 26rem); /* ≈377px at 1363 */
+}
+
+.eventsIntro {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--cell-x) var(--space-7);
+}
+
+.invitation {
+  max-width: 21ch; /* two lines at the calibration width */
+  margin-top: var(--space-4);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.eventCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--gutter);
+  padding: var(--space-6) var(--cell-x) var(--space-7);
+  border-left: var(--hairline) solid var(--color-line);
+}
+
+.eventCard {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+}
+
+.eventMedia {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  margin-bottom: var(--space-2);
+  overflow: hidden;
+  background: var(--color-mist);
+}
+
+.eventMedia img {
+  transition: transform 1.2s var(--ease-out-expo);
+}
+
+.statusMedia {
+  display: grid;
+  place-items: center;
+  background: var(--color-paper-raised);
+  border: var(--hairline) solid var(--color-line);
+}
+
+.statusMedia span {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.eventTitle {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-tight);
+  letter-spacing: 0;
+}
+
+.eventMeta {
+  font-size: var(--fs-small);
+  color: var(--color-ink-muted);
+}
+
+.tinyAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: var(--space-1);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+/* The title link covers the card, so each card is one tab stop. */
+.stretched::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.stretched:focus-visible {
+  outline: none;
+}
+
+.stretched:focus-visible::after {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .eventCard:hover .eventMedia img {
+    transform: scale(calc(var(--zoom, 1) * 1.04));
+  }
+
+  .eventCard:hover .stretched {
+    text-decoration: underline;
+    text-decoration-thickness: var(--hairline);
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* ── C. Menu: 50% / 25% / 25% with a shared social row ─────────── */
+
+.menu {
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  min-height: clamp(21rem, 28.5vw, 27rem); /* ≈384px at 1363 */
+}
+
+.menuWelcome {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  padding: var(--space-6) var(--cell-x) var(--space-7);
+}
+
+.featureLinks {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-1);
+  margin-top: var(--space-4);
+}
+
+.menuColumn {
+  grid-row: 1;
+  padding: var(--space-6) var(--cell-x) var(--space-6);
+  border-left: var(--hairline) solid var(--color-line);
+}
+
+.compactList {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-1);
+  margin-top: var(--space-4);
+}
+
+.social {
+  grid-column: 2 / span 2;
+  grid-row: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  padding: var(--space-4) var(--cell-x) var(--space-5);
+  border-left: var(--hairline) solid var(--color-line);
+  border-top: var(--hairline) solid var(--color-line);
+}
+
+.socialLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+}
+
+.socialEmpty {
+  font-size: var(--fs-small);
+  color: var(--color-ink-muted);
+}
+
+/* ── Search ────────────────────────────────────────────────────── */
+
+.search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  min-height: clamp(12rem, 17vw, 16rem);
+}
+
+.searchIntro {
+  padding: var(--space-6) var(--cell-x) 0;
+}
+
+.searchMain {
+  display: grid;
+  align-content: start;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--cell-x) var(--space-7);
+  border-left: var(--hairline) solid var(--color-line);
+}
+
+.searchForm {
+  display: flex;
+  max-width: 44rem;
+  min-width: 0;
+  border-bottom: var(--hairline) solid var(--color-line-strong);
+}
+
+.searchForm:focus-within {
+  border-color: var(--color-ink);
+}
+
+.searchForm:has(input:focus-visible) {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  min-height: 3.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+/* The panel has its own close control; the native clear button would duplicate it. */
+.searchInput::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.searchInput::placeholder {
+  color: var(--color-ink-muted);
+}
+
+.searchSubmit {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  width: var(--control-size);
+  height: var(--control-size);
+  flex: none;
+  color: var(--color-on-dark);
+  background: var(--color-charcoal);
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.searchRow .searchForm {
+  flex: 1;
+}
+
+/* Near-square close control: two crossed hairlines. */
+.searchClose {
+  position: relative;
+  width: var(--control-size);
+  height: var(--control-size);
+  flex: none;
+  border: var(--hairline) solid var(--color-line-strong);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.searchClose span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  height: 1.5px;
+  background: currentColor;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.searchClose span + span {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.searchClose:hover {
+  border-color: var(--color-ink);
+}
+
+.searchStatus {
+  font-size: var(--fs-small);
+  color: var(--color-ink-muted);
+}
+
+.searchStatus:empty {
+  display: none;
+}
+
+.results {
+  display: grid;
+  max-width: 44rem;
+  margin-bottom: var(--space-4);
+  border-top: var(--hairline) solid var(--color-line);
+}
+
+.result {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: var(--hairline) solid var(--color-line);
+}
+
+.resultTitle {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+}
+
+.result:hover .resultTitle,
+.result:focus-visible .resultTitle {
+  text-decoration: underline;
+  text-decoration-thickness: var(--hairline);
+  text-underline-offset: 0.2em;
+}
+
+.searchEmpty {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 44rem;
+  font-size: var(--fs-small);
+  color: var(--color-ink-soft);
+}
+
+.searchEmpty ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-5);
+}
+
+.suggestions ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+}
+
+@media (max-width: 1023.98px) {
+  .search {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .searchMain {
+    padding-top: var(--space-4);
+    border-left: 0;
+  }
+
+  .result {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+}
+
+/* ── Mobile: full-width tap-driven panel with nested levels ────── */
+
+.mobile {
+  height: calc(100dvh - var(--panel-top, var(--header-h)));
+  max-height: none;
+  overflow: hidden;
+}
+
+.mobileTrack {
+  display: flex;
+  height: 100%;
+}
+
+.mobileLevel {
+  display: flex;
+  flex: 0 0 100%;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5) var(--page-x) calc(var(--space-8) + var(--safe-bottom));
+}
+
+.mobileList {
+  border-top: var(--hairline) solid var(--color-line);
+}
+
+.mobileList > li {
+  border-bottom: var(--hairline) solid var(--color-line);
+}
+
+.mobileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  min-height: 3.5rem;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+  text-align: left;
+}
+
+.mobileEvent {
+  display: grid;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-heading);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--space-2);
+  min-height: var(--control-size);
+  padding-right: var(--space-4);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.mobileFooter {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: auto;
+  padding-top: var(--space-6);
+}
+
+.donateBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3.25rem;
+  padding: 0 var(--space-5);
+  background: var(--color-charcoal);
+  color: var(--color-on-dark);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.mobileUtility {
+  display: flex;
+  gap: var(--space-5);
+  font-size: var(--fs-small);
+}
+
+.mobileUtility a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-size);
+}

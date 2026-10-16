@@ -1,0 +1,120 @@
+/*
+ * Shared cell grid (docs/ui-spec.md B2).
+ * Tracks are viewport thirds; every cell carries the same inline padding so that column
+ * starts line up across sections.
+ */
+
+.cells {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cell {
+  min-width: 0;
+  padding-inline: var(--cell-x);
+}
+
+.span2 {
+  grid-column: span 2;
+}
+
+.span3 {
+  grid-column: 1 / -1;
+}
+
+.start2 {
+  grid-column-start: 2;
+}
+
+.ruled {
+  border-top: var(--hairline) solid var(--color-line);
+}
+
+/*
+ * Structural rules: thin vertical lines at one third and two thirds of the viewport, drawn behind
+ * the section's content. `rulesFirst` / `rulesSecond` keep only one line where content spans across
+ * the other. Dark sections set `--rule` to the on-dark line color.
+ */
+.rules {
+  position: relative;
+  isolation: isolate;
+}
+
+.rules::before,
+.rules::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  width: var(--hairline);
+  background: var(--rule, var(--color-line));
+  pointer-events: none;
+}
+
+.rules::before {
+  left: calc(100% / 3);
+}
+
+.rules::after {
+  left: calc(200% / 3);
+}
+
+.rulesFirst::after,
+.rulesSecond::before {
+  display: none;
+}
+
+.rulesDark {
+  --rule: var(--color-line-on-dark);
+}
+
+.label {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+.body {
+  max-width: var(--measure-wide);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-ink-soft);
+}
+
+@media (max-width: 1023.98px) {
+  .cells {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Columns stack below desktop, so the structural rules would cut through content. */
+  .rules::before,
+  .rules::after {
+    display: none;
+  }
+
+  .span2,
+  .span3 {
+    grid-column: 1 / -1;
+  }
+
+  .start2 {
+    grid-column-start: auto;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .cells {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

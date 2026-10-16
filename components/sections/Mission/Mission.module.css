@@ -1,0 +1,36 @@
+/* ≈150px above and ≈75px below the content at 1363; fluid, with smaller minimums on phones. */
+.mission {
+  padding-block: clamp(4rem, 11vw, 10rem) clamp(2.5rem, 5.5vw, 5rem);
+  background: var(--color-paper);
+}
+
+.content {
+  display: grid;
+  /* The card in the right third is taller than the copy; keep the copy's rhythm instead of stretching. */
+  align-content: start;
+  gap: clamp(1.5rem, 1rem + 1.6vw, 2.75rem);
+}
+
+.label {
+  margin-bottom: var(--space-3);
+  color: var(--color-ink-muted);
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  font-weight: var(--fw-heading);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+
+/* Right third: the President's address card, top-aligned with the label. */
+.aside {
+  align-self: start;
+}
+
+@media (max-width: 1023.98px) {
+  .aside {
+    grid-column: 1 / -1;
+    margin-top: var(--space-8);
+  }
+}
