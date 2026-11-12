@@ -19,7 +19,7 @@ export interface SpeechVideo {
   sources: VideoSource[];
   /** WebVTT captions (strongly recommended for speech). */
   captions: string | null;
-  poster: ResolvedMedia;
+  poster?: ResolvedMedia;
 }
 
 /**
@@ -53,7 +53,7 @@ export function SpeechVideoCard({ video }: { video: SpeechVideo }) {
             controls
             playsInline
             preload="none"
-            poster={video.poster.src.src}
+            poster={video.poster?.src.src}
             aria-labelledby={titleId}
             onError={() => setFailed(true)}
           >
@@ -64,7 +64,7 @@ export function SpeechVideoCard({ video }: { video: SpeechVideo }) {
           </video>
         ) : (
           <>
-            <MediaImage media={video.poster} sizes="(min-width: 1024px) 30vw, 92vw" className={styles.poster} />
+            {video.poster ? <MediaImage media={video.poster} sizes="(min-width: 1024px) 30vw, 92vw" className={styles.poster} /> : null}
             {available ? (
               <button type="button" className={styles.play} onClick={start} aria-describedby={titleId}>
                 <span className={styles.playIcon} aria-hidden="true">

@@ -12,7 +12,7 @@ interface CultureFeatureProps {
   label: string;
   heading: string;
   link: LinkItem;
-  poster: ResolvedMedia;
+  poster?: ResolvedMedia;
   video: VideoSource[];
   videoLabel: string;
 }
@@ -50,12 +50,12 @@ export function CultureFeature({ label, heading, link, poster, video, videoLabel
         </Reveal>
         <Reveal className={cx(layout.cell, layout.span2)}>
           <div className={styles.frame} data-reveal="mask-left">
-            <AmbientVideo
+            {poster ? <AmbientVideo
               sources={video}
               poster={poster}
               label={videoLabel}
               sizes="(min-width: 1024px) 64vw, 100vw"
-            />
+            /> : null}
           </div>
         </Reveal>
       </div>

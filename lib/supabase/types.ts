@@ -128,7 +128,20 @@ export type EventMedia = {
  media_url:string; poster_url:string; alt_text:string; caption:string;
  sort_order:number; published:boolean; created_at:string;
 }
+export type PageMedia = {
+ id:string
+ placement:string
+ page:"home"|"about"
+ label:string
+ image_url:string
+ image_alt:string
+ active:boolean
+ sort_order:number
+ created_at:string
+ updated_at:string
+}
 export type Tables = {
+  page_media: PageMedia
   event_categories: EventCategory
   event_media: EventMedia
   executives: Executive

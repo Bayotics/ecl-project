@@ -156,9 +156,11 @@ export function RevealPanel({ content, tone }: RevealPanelProps) {
         </button>
       </h2>
 
-      <div className={styles.media} data-panel-media aria-hidden={active}>
-        <MediaImage media={content.media} sizes="(min-width: 1024px) 20vw, 60vw" />
-      </div>
+      {content.media ? (
+        <div className={styles.media} data-panel-media aria-hidden={active}>
+          <MediaImage media={content.media} sizes="(min-width: 1024px) 20vw, 60vw" />
+        </div>
+      ) : null}
 
       {/* Concealed content is inert: no pointer or keyboard interaction until revealed. */}
       <div id={bodyId} className={styles.body} inert={!active}>

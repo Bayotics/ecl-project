@@ -13,8 +13,9 @@ import { NewsEvents } from "@/components/sections/NewsEvents/NewsEvents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { causeHref, causes } from "@/content/causes";
 import { feedHref, feedMeta, publishedFeed } from "@/content/feed";
-import { publicSlides, publicEvents, publicSettings } from "@/lib/supabase/content";
+import { publicSlides, publicEvents, publicPageMedia, publicSettings } from "@/lib/supabase/content";
 import { resolveMedia } from "@/content/media";
+import { managedMedia } from "@/lib/supabase/adapters";
 import { published } from "@/content/meta";
 import {
   causesPanel,
@@ -42,6 +43,8 @@ export const metadata: Metadata = pageMetadata({ description: settings.descripti
 export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const managed = await publicSettings();
+  const pageImages = new Map((await publicPageMedia("home")).map(item => [item.placement, resolveMedia(managedMedia(item.image_url, item.image_alt))]));
+  const pageImage = (placement: string) => pageImages.get(placement);
   const slides = (await publicSlides()).map(({ id, tab, eyebrow, headline, text, cta, media, video }) => ({
     id,
     tab,
@@ -53,13 +56,13 @@ export default async function HomePage() {
     video,
   }));
 
-  const causeItems = published(causes).map(({ slug, number, title, short, media }) => ({
+  const causeItems = published(causes).map(({ slug, number, title, short }) => ({
     slug,
     number,
     title,
     short,
     href: causeHref(slug),
-    media: resolveMedia(media),
+    media: pageImage(`home-cause-${slug}`),
   }));
 
   const feedItems = [...(await publicEvents()), ...publishedFeed().filter(item => item.kind !== "event")]
@@ -77,14 +80,14 @@ export default async function HomePage() {
       <JsonLd data={organizationLd()} />
       {slides.length > 0 && <IntroLoader />}
       {slides.length > 0 && <Hero heading={`${settings.name}: a shared legacy`} label="Featured" slides={slides} nextSectionId="mission" />}
-      <Mission label={managed?.mission_headline || mission.label} paragraphs={managed?.mission_summary ? [managed.mission_summary] : mission.paragraphs} video={presidentAddress} />
+      <Mission label={managed?.mission_headline || mission.label} paragraphs={managed?.mission_summary ? [managed.mission_summary] : mission.paragraphs} video={{...presidentAddress,poster:pageImage("home-president-poster")}} />
       {/*
         Suspense boundaries let React hydrate the sections below the hero in separate, interruptible
         chunks instead of one long task (Prompt 10 performance pass). Nothing here suspends, so the
         server HTML is identical and no fallback is ever shown.
       */}
       <Suspense>
-        <IntroPanels intro={whatWeDo} impact={impactPanel} causes={causesPanel} />
+        <IntroPanels intro={whatWeDo} impact={{...impactPanel,media:pageImage("home-impact-panel")}} causes={{...causesPanel,media:pageImage("home-causes-panel")}} />
       </Suspense>
       <Suspense>
         <CausesCarousel heading={causesSection.heading} causes={causeItems} />
@@ -94,7 +97,7 @@ export default async function HomePage() {
           label={culture.label}
           heading={culture.heading}
           link={culture.link}
-          poster={culture.poster}
+          poster={pageImage("home-culture-feature")}
           video={culture.video}
           videoLabel={culture.videoLabel}
         />
@@ -103,7 +106,7 @@ export default async function HomePage() {
           heading={editorial.heading}
           paragraphs={editorial.paragraphs}
           link={editorial.link}
-          media={editorial.media}
+          media={pageImage("home-editorial")}
         />
       </Suspense>
       <Suspense>

@@ -10,8 +10,8 @@ import { publishedEvents as bundledEvents } from "@/content/event-view";
 import { heroSlides } from "@/content/hero";
 import { albums } from "@/content/gallery";
 import { published } from "@/content/meta";
-import type { EventRecord, GalleryAlbum, HeroSlide, MediaRef } from "@/content/types";
-import type { Event } from "./types";
+import type { EventRecord, GalleryAlbum, HeroSlide } from "@/content/types";
+import type { PageMedia } from "./types";
 
 import { meta, mapEvent, managedMedia } from "./adapters";
 // Once configured, Supabase is authoritative: empty/published=false must never resurrect bundled content.
@@ -26,8 +26,18 @@ export const publicSlides = cache(async (): Promise<HeroSlide[]> => {
   const db = publicDatabase(); if (!db) return published(heroSlides);
   const { data, error } = await db.from("hero_slides").select("*").eq("active", true).order("sort_order");
   if (error) throw new Error("Unable to load homepage slides.");
-  return (data ?? []).map((row, index) => ({ ...meta, id: row.id, tab: row.title, eyebrow: "Eko Club Louisiana", headline: row.title,
-    text: row.subtitle, cta: { label: row.cta_label, href: safeDestination(row.cta_url) }, media: index === 0 ? heroSlides[0].media : managedMedia(row.image_url, row.image_alt), video: index === 0 ? heroSlides[0].video : [] }));
+  return (data ?? []).filter(row => Boolean(row.image_url)).map((row, index) => ({ ...meta, id: row.id, tab: row.title, eyebrow: "Eko Club Louisiana", headline: row.title,
+    text: row.subtitle, cta: { label: row.cta_label, href: safeDestination(row.cta_url) }, media: managedMedia(row.image_url, row.image_alt), video: index === 0 ? heroSlides[0].video : [] }));
+});
+export const publicPageMedia = cache(async (page: "home" | "about"): Promise<PageMedia[]> => {
+  const db = publicDatabase();
+  if (!db) return [];
+  const { data, error } = await db.from("page_media").select("*").eq("page", page).eq("active", true).order("sort_order");
+  if (error) {
+    if (["PGRST205", "42P01"].includes(error.code)) return [];
+    throw new Error("Unable to load page images.");
+  }
+  return (data ?? []).filter(row => Boolean(row.image_url));
 });
 function safeDestination(value: string) {
   return /^(\/[^/]|https:\/\/)/.test(value) ? value : "/";

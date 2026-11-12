@@ -27,6 +27,7 @@ export function AdminTableManager({ table }: { table: string }) {
     try {
       const db = supabaseBrowser();
       const result = await db.from(table as TableName).select("*").order(table==="site_settings"?"id":"created_at",{ascending:false});
+      if(result.error && table==="page_media" && ["PGRST205","42P01"].includes(result.error.code)) throw new Error("Page image setup is pending. Run supabase/migrations/20261112_page_media.sql in Supabase SQL Editor, then reload.");
       if(result.error && ["event_media","event_categories"].includes(table) && ["PGRST205","42P01"].includes(result.error.code)) throw new Error("Event media database setup is pending. Run supabase/migrations/20261110_event_categories.sql in Supabase SQL Editor, then reload.");
       if(result.error) throw new Error(table === "executives" && ["PGRST205", "42P01"].includes(result.error.code) ? "Executives database setup is pending. Run supabase/migrations/20261109_executives.sql in the Supabase SQL Editor, then reload." : result.error.message);
       setRows((result.data ?? []) as unknown as Row[]);
@@ -43,7 +44,7 @@ export function AdminTableManager({ table }: { table: string }) {
     } catch(e) { setError(e instanceof Error ? e.message : "Unable to load records."); }
     finally { setLoading(false); }
   },[table]);
-  useEffect(()=>{ void load(); },[load]);
+  useEffect(()=>{ const frame=requestAnimationFrame(()=>void load()); return ()=>cancelAnimationFrame(frame); },[load]);
   function edit(row?: Row) {
     setError(""); setNotice("");
     const value: Row = row ? {...row} : {};

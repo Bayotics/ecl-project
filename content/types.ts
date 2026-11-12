@@ -350,7 +350,7 @@ export interface RevealPanelContent {
   body?: string;
   action?: LinkItem;
   links?: LinkItem[];
-  media: ResolvedMedia;
+  media?: ResolvedMedia;
 }
 
 export interface VideoSource {

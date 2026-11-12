@@ -6,7 +6,9 @@ import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
 import styles from "@/components/page/page.module.css";
 import { causeHref, causes } from "@/content/causes";
-import { media, resolveMedia } from "@/content/media";
+import { resolveMedia } from "@/content/media";
+import { managedMedia } from "@/lib/supabase/adapters";
+import { publicPageMedia } from "@/lib/supabase/content";
 import { published } from "@/content/meta";
 import { pages } from "@/content/pages";
 import { pageMetadata } from "@/lib/seo";
@@ -14,10 +16,14 @@ import { intro, mission, whoWeServe } from "@/content/site";
 
 export const metadata: Metadata = pageMetadata({ title: pages.about.label, description: pages.about.description, path: pages.about.href });
 
-export default function AboutPage() {
+export const dynamic = "force-dynamic";
+export default async function AboutPage() {
+  const pageImages = await publicPageMedia("about");
+  const hero = pageImages.find(item => item.placement === "about-hero");
+  const heroMedia = hero ? resolveMedia(managedMedia(hero.image_url, hero.image_alt)) : undefined;
   return (
     <>
-      <PageIntro label={pages.about.label} title={pages.about.title} lead={intro.body} media={resolveMedia(media.groupFull)} />
+      <PageIntro label={pages.about.label} title={pages.about.title} lead={intro.body} media={heroMedia} />
       <PageSection id="mission" title={mission.label}>
         {mission.paragraphs.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>

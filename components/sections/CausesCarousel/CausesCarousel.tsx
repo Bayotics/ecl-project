@@ -21,7 +21,7 @@ export interface CauseItem {
   title: string;
   short: string;
   href: string;
-  media: ResolvedMedia;
+  media?: ResolvedMedia;
 }
 
 interface CausesCarouselProps {
@@ -108,7 +108,7 @@ export function CausesCarousel({ heading, causes }: CausesCarouselProps) {
             >
               <article className={styles.card} data-reveal="right" data-reveal-x="96">
                 {/* Photograph, title and action share one route; the photo link is a pointer shortcut only. */}
-                <Link href={cause.href} className={styles.media} tabIndex={-1} aria-hidden="true" draggable={false} data-reveal="mask">
+                {cause.media ? <Link href={cause.href} className={styles.media} tabIndex={-1} aria-hidden="true" draggable={false} data-reveal="mask">
                   <MediaImage
                     media={cause.media}
                     decorative
@@ -116,7 +116,7 @@ export function CausesCarousel({ heading, causes }: CausesCarouselProps) {
                     className={styles.img}
                     draggable={false}
                   />
-                </Link>
+                </Link> : null}
                 <h3 className={styles.title}>
                   <Link href={cause.href} draggable={false}>
                     {cause.title}

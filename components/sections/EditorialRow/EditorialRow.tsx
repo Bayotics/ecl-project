@@ -13,7 +13,7 @@ interface EditorialRowProps {
   heading: string;
   paragraphs: string[];
   link: LinkItem;
-  media: ResolvedMedia;
+  media?: ResolvedMedia;
 }
 
 /**
@@ -45,11 +45,11 @@ export function EditorialRow({ label, heading, paragraphs, link, media }: Editor
             </Link>
           </div>
         </div>
-        <div className={cx(layout.cell, styles.imageCell)}>
+        {media ? <div className={cx(layout.cell, styles.imageCell)}>
           <div className={styles.frame} data-reveal="scale">
             <MediaImage media={media} sizes="(min-width: 1024px) 30vw, (min-width: 768px) 46vw, 92vw" />
           </div>
-        </div>
+        </div> : null}
       </Reveal>
     </section>
   );

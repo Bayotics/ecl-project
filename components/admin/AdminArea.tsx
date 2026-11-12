@@ -10,6 +10,7 @@ import { supabaseBrowser } from "@/lib/supabase/client";
 import styles from "./AdminArea.module.css";
 
 const SECTIONS = [
+  ["page_media", "Home & about images", "Replace the photographs used across the homepage and about page."],
   ["event_categories", "Event categories", "Manage Banquets, Oldies Social Night, Youth Outreach and new categories."],
   ["event_media", "Event photos & videos", "Upload and publish photos and videos under an event category."],
   ["executives", "Executives", "Manage current and past executives, portraits and presidential history."],
