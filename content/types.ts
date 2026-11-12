@@ -73,6 +73,7 @@ export interface MediaAsset extends RecordMeta {
 
 /** How a record shows an asset: crop focus, zoom and fit. */
 export interface MediaRef {
+  remote?: StaticImageData;
   asset: AssetId;
   focal?: Focal;
   zoom?: number;
@@ -189,6 +190,7 @@ export interface RsvpConfig {
 }
 
 export interface EventRecord extends FeedRecord {
+  managedId?: string;
   kind: "event";
   /** Past events must never be presented as upcoming. Forces "past" whatever the dates say. */
   historical: boolean;

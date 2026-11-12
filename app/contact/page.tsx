@@ -1,3 +1,4 @@
+import { publicSettings } from "@/lib/supabase/content";
 import type { Metadata } from "next";
 
 import { ContactForm } from "@/components/forms/ContactForm";
@@ -15,8 +16,10 @@ export const metadata: Metadata = pageMetadata({ title: pages.contact.label, des
  * `?topic=Partnership` preselects the topic (links from /get-involved and /impact).
  */
 export default async function ContactPage({ searchParams }: PageProps<"/contact">) {
+  const managed = await publicSettings();
+  const contact = managed ? {email:managed.email,phone:{display:managed.phone,tel:managed.phone.replace(/[^+0-9]/g,"")},location:managed.address,streetAddress:managed.address} : settings.contact;
   const { topic } = await searchParams;
-  const { email, phone, location, streetAddress } = settings.contact;
+  const { email, phone, location, streetAddress } = contact;
 
   return (
     <>
@@ -24,7 +27,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
       <PageSection id="reach-us" title="Reach us">
         {/* Street address withheld until the club confirms which published address is current. */}
         <address>
-          <p>{settings.name}</p>
+          <p>{managed?.organization_name ?? settings.name}</p>
           <p>{streetAddress ?? location}</p>
           <p>
             <a href={`mailto:${email}`}>{email}</a>

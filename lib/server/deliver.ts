@@ -1,5 +1,6 @@
 import "server-only";
 
+import { publicDatabase } from "@/lib/supabase/server";
 import { createHmac } from "node:crypto";
 
 /**
@@ -23,11 +24,19 @@ const ENV: Record<FormKind, string> = {
 
 export const webhookFor = (form: FormKind) => process.env[ENV[form]] || process.env.FORMS_WEBHOOK_URL || null;
 
-export const isDeliveryConfigured = (form: FormKind) => webhookFor(form) !== null;
+export const isDeliveryConfigured = (form: FormKind) => webhookFor(form) !== null || ((form === "contact" || form === "newsletter") && !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export type DeliveryResult = { ok: true } | { ok: false; error: "not_configured" | "upstream_error" | "upstream_unreachable" };
 
 export async function deliver(form: FormKind, fields: Record<string, unknown>): Promise<DeliveryResult> {
+  const db = publicDatabase();
+  if (db && (form === "contact" || form === "newsletter")) {
+    try {
+      const result = form === "contact" ? await db.rpc("submit_contact", { p_name: String(fields.name), p_email: String(fields.email), p_phone: "", p_subject: String(fields.topic || "Website enquiry"), p_message: String(fields.message) })
+        : await db.rpc("subscribe_newsletter", { p_email: String(fields.email) });
+      return result.error ? { ok: false, error: "upstream_error" } : { ok: true };
+    } catch { return { ok: false, error: "upstream_unreachable" }; }
+  }
   const url = webhookFor(form);
   if (!url) return { ok: false, error: "not_configured" };
 

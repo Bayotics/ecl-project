@@ -6,32 +6,30 @@ import { pageMetadata } from "@/lib/seo";
 import { AlbumGallery } from "@/components/gallery/AlbumGallery";
 import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
-import { albums, getAlbum } from "@/content/gallery";
+import { publicAlbum } from "@/lib/supabase/content";
 import { assets, resolveMedia } from "@/content/media";
-import { formatPartialDate, published } from "@/content/meta";
+import { formatPartialDate } from "@/content/meta";
 
-export const dynamicParams = false;
+export const dynamic = "force-dynamic";
 
-export function generateStaticParams() {
-  return published(albums).map((album) => ({ slug: album.slug }));
-}
+
 
 export async function generateMetadata({ params }: PageProps<"/gallery/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const album = getAlbum(slug);
+  const album = await publicAlbum(slug);
   return album ? pageMetadata({ title: `${album.title}: photographs`, description: album.excerpt, path: `/gallery/${album.slug}`, image: resolveMedia(album.cover) }) : {};
 }
 
 export default async function AlbumPage({ params }: PageProps<"/gallery/[slug]">) {
   const { slug } = await params;
-  const album = getAlbum(slug);
+  const album = await publicAlbum(slug);
   if (!album) notFound();
 
   const photos = album.photos.map((photo) => ({
     // Album photos are shown uncropped, at their own proportions.
-    media: resolveMedia({ asset: photo.media.asset, alt: photo.media.alt }),
+    media: resolveMedia(photo.media),
     caption: photo.caption,
-    credit: assets[photo.media.asset].credit,
+    credit: photo.media.remote ? null : assets[photo.media.asset].credit,
   }));
 
   return (

@@ -1,3 +1,5 @@
+import { publicEvent } from "@/lib/supabase/content";
+import { MemberRsvp } from "@/components/account/MemberRsvp";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -15,8 +17,6 @@ import {
   eventStatus,
   eventWhen,
   eventWhenLine,
-  getEvent,
-  publishedEvents,
   rsvpState,
   statusLabel,
 } from "@/content/event-view";
@@ -24,23 +24,21 @@ import { resolveMedia } from "@/content/media";
 import { settings } from "@/content/site";
 import { eventLd } from "@/lib/structured-data";
 
-export const dynamicParams = false;
+export const dynamic = "force-dynamic";
 // Re-render at most every 15 minutes so an event moves to "past" and RSVPs close on time.
-export const revalidate = 900;
 
-export function generateStaticParams() {
-  return publishedEvents().map((event) => ({ slug: event.slug }));
-}
+
+
 
 export async function generateMetadata({ params }: PageProps<"/events/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const event = getEvent(slug);
+  const event = await publicEvent(slug);
   return event ? pageMetadata({ title: event.title, description: event.excerpt, path: eventHref(event.slug), image: resolveMedia(event.media) }) : {};
 }
 
 export default async function EventPage({ params }: PageProps<"/events/[slug]">) {
   const { slug } = await params;
-  const event = getEvent(slug);
+  const event = await publicEvent(slug);
   if (!event) notFound();
 
   const now = new Date();
@@ -101,7 +99,7 @@ export default async function EventPage({ params }: PageProps<"/events/[slug]">)
 
       {event.rsvp?.enabled ? (
         <PageSection id="rsvp" title="RSVP" tone="mist">
-          {rsvp.open ? (
+          {event.managedId ? <MemberRsvp eventId={event.managedId} ended={status !== "upcoming"} /> : rsvp.open ? (
             <>
               {event.rsvp.capacity !== null ? <p className={styles.notice}>Places are limited.</p> : null}
               <RsvpForm

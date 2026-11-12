@@ -27,6 +27,7 @@ export interface EventsQuery {
   when: EventsWhen;
   view: EventsView;
   category: string;
+  collection: string;
   year: string;
   /** "YYYY-MM" for the calendar. */
   month: string;
@@ -37,6 +38,7 @@ export function eventsUrl(query: Partial<EventsQuery>): string {
   const params = new URLSearchParams();
   if (query.when && query.when !== "upcoming") params.set("when", query.when);
   if (query.view && query.view !== "list") params.set("view", query.view);
+  if (query.collection) params.set("collection", query.collection);
   if (query.category) params.set("category", query.category);
   if (query.year) params.set("year", query.year);
   if (query.view === "calendar" && query.month) params.set("month", query.month);
@@ -53,6 +55,7 @@ const monthName = (year: number, month: number) =>
 export function parseEventsQuery(raw: Record<string, string | string[] | undefined>, categories: string[]): EventsQuery {
   const one = (key: string) => (typeof raw[key] === "string" ? (raw[key] as string) : "");
   return {
+    collection: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(one("collection")) ? one("collection") : "",
     when: one("when") === "past" ? "past" : "upcoming",
     view: one("view") === "calendar" ? "calendar" : "list",
     category: categories.includes(one("category")) ? one("category") : "",
@@ -88,7 +91,8 @@ export function EventsBrowser({ events, query, now }: EventsBrowserProps) {
           {(["upcoming", "past"] as const).map((when) => (
             <Link
               key={when}
-              href={eventsUrl({ when, view: query.view })}
+              scroll={false}
+              href={eventsUrl({ ...query, when, category: "", year: "" })}
               className={styles.tab}
               aria-current={query.when === when ? "page" : undefined}
             >
@@ -100,6 +104,7 @@ export function EventsBrowser({ events, query, now }: EventsBrowserProps) {
           {(["list", "calendar"] as const).map((view) => (
             <Link
               key={view}
+              scroll={false}
               href={eventsUrl({ ...query, view })}
               className={styles.viewLink}
               aria-current={query.view === view ? "page" : undefined}

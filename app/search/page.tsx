@@ -6,7 +6,8 @@ import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { pages } from "@/content/pages";
-import { search } from "@/content/search";
+import { publicSearchIndex } from "@/lib/supabase/content";
+import { matchEntries } from "@/lib/search-match";
 
 import styles from "./search.module.css";
 
@@ -20,7 +21,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
   const params = await searchParams;
   const raw = Array.isArray(params.q) ? params.q[0] : params.q;
   const query = (raw ?? "").trim().slice(0, 100);
-  const results = query ? search(query) : [];
+  const results = query ? matchEntries(await publicSearchIndex(), query) : [];
 
   return (
     <>

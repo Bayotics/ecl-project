@@ -25,15 +25,9 @@ function wait(ms: number) {
   return new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 }
 
-/** Resolves when Geologica and the first hero image are usable, or after the cap. */
+/** Resolves when the locally available fonts and first hero image are usable, or after the cap. */
 function essentialsReady(): Promise<void> {
-  // A failed font request rejects; treat it as "ready" so the cap, not the failsafe, decides.
-  const font = document.fonts
-    ? document.fonts.load("200 1em Geologica").then(
-        () => undefined,
-        () => undefined,
-      )
-    : Promise.resolve();
+  const font = document.fonts?.ready.then(() => undefined, () => undefined) ?? Promise.resolve();
   const img = document.querySelector<HTMLImageElement>('[data-hero-media="0"] img');
   const poster =
     !img || img.complete

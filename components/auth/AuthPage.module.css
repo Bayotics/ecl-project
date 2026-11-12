@@ -1,0 +1,17 @@
+.shell { min-height: 100svh; display: grid; place-items: center; padding: clamp(1.25rem, 4vw, 4rem); background: #173b31; color: #173b31; }
+.card { width: min(100%, 31rem); padding: clamp(1.5rem, 4vw, 3rem); background: #f7f5ef; border-radius: 1.5rem; box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 24%); }
+.brand { display: inline-flex; align-items: center; gap: .75rem; margin-bottom: 2.25rem; color: inherit; text-decoration: none; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.crest { width: 2.6rem; height: 2.6rem; object-fit: contain; }
+.eyebrow { margin: 0 0 .55rem; color: #8a6c32; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.title { margin: 0; font-size: clamp(2rem, 7vw, 3.25rem); line-height: .96; letter-spacing: -.06em; }
+.intro { margin: 1rem 0 2rem; color: #52655e; line-height: 1.6; }
+.form { display: grid; gap: 1rem; }
+.field { display: grid; gap: .45rem; font-size: .9rem; font-weight: 700; }
+.field input { width: 100%; box-sizing: border-box; border: 1px solid #b9c1b8; border-radius: .55rem; background: #fff; color: #173b31; padding: .82rem .9rem; font: inherit; }
+.field input:focus { outline: 3px solid rgb(180 139 66 / 35%); border-color: #8a6c32; }
+.submit { border: 0; border-radius: .55rem; background: #173b31; color: #fff; cursor: pointer; padding: .9rem 1.1rem; font: inherit; font-weight: 700; margin-top: .5rem; }
+.submit:disabled { cursor: wait; opacity: .65; }
+.links { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-top: 1.4rem; font-size: .92rem; }
+.links a { color: #173b31; text-underline-offset: .22rem; }
+.message { border-radius: .55rem; padding: .8rem .9rem; background: #e1ebe1; color: #164c31; line-height: 1.45; }
+.error { background: #f6e0db; color: #812a1a; }

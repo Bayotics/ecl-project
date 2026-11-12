@@ -1,3 +1,4 @@
+import { publicSettings } from "@/lib/supabase/content";
 import type { Metadata } from "next";
 
 import { DonateForm } from "@/components/donate/DonateForm";
@@ -19,9 +20,11 @@ export const metadata: Metadata = pageMetadata({ title: pages.donate.label, desc
  * Rendered per request so configuration changes and the "checkout canceled" notice apply immediately.
  */
 export default async function DonatePage({ searchParams }: PageProps<"/donate">) {
+  const managed = await publicSettings();
+  const donationUrl = managed?.donation_url && /^https:\/\//.test(managed.donation_url) ? managed.donation_url : null;
   const { checkout } = await searchParams;
   const availability = donationAvailability();
-  const { email, phone } = settings.contact;
+  const { email, phone } = managed ? {email:managed.email,phone:{display:managed.phone,tel:managed.phone.replace(/[^+0-9]/g,"")}} : settings.contact;
 
   return (
     <>
@@ -32,7 +35,7 @@ export default async function DonatePage({ searchParams }: PageProps<"/donate">)
             Checkout was canceled and nothing was charged. You can start again below whenever you are ready.
           </p>
         ) : null}
-        {availability.available ? (
+        {donationUrl ? <ActionRow actions={[{label:"Donate securely",href:donationUrl,primary:true}]} /> : availability.available ? (
           <DonateForm
             presets={donationSettings.presets}
             min={donationSettings.min}

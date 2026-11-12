@@ -109,7 +109,7 @@ export const headerData: HeaderData = {
         links: [
           { label: "About us", href: routes.about },
           { label: "History", href: routes.history },
-          { label: "Leadership", href: routes.leadership },
+          { label: "Executives", href: routes.leadership },
           { label: "Our impact", href: routes.impact },
           { label: "News", href: routes.news },
         ],
@@ -117,6 +117,7 @@ export const headerData: HeaderData = {
       {
         heading: "Take part",
         links: [
+          { label: "Login", href: "/login" },
           { label: "Join us", href: routes.join },
           { label: "Volunteer", href: routes.volunteer },
           { label: "Reports", href: routes.reports },
@@ -169,7 +170,7 @@ export const footerColumns: FooterColumn[] = [
     links: [
       { label: "About us", href: routes.about },
       { label: "History", href: routes.history },
-      { label: "Leadership", href: routes.leadership },
+      { label: "Executives", href: routes.leadership },
       { label: "Our impact", href: routes.impact },
       { label: "News", href: routes.news },
     ],

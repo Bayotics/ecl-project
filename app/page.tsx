@@ -13,7 +13,7 @@ import { NewsEvents } from "@/components/sections/NewsEvents/NewsEvents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { causeHref, causes } from "@/content/causes";
 import { feedHref, feedMeta, publishedFeed } from "@/content/feed";
-import { heroSlides } from "@/content/hero";
+import { publicSlides, publicEvents, publicSettings } from "@/lib/supabase/content";
 import { resolveMedia } from "@/content/media";
 import { published } from "@/content/meta";
 import {
@@ -39,8 +39,10 @@ export const metadata: Metadata = pageMetadata({ description: settings.descripti
  * Section 9 (logo strip and footer) is the shared footer in app/layout.tsx.
  * Every block reads published records; media references are resolved here, on the server.
  */
-export default function HomePage() {
-  const slides = published(heroSlides).map(({ id, tab, eyebrow, headline, text, cta, media, video }) => ({
+export const dynamic = "force-dynamic";
+export default async function HomePage() {
+  const managed = await publicSettings();
+  const slides = (await publicSlides()).map(({ id, tab, eyebrow, headline, text, cta, media, video }) => ({
     id,
     tab,
     eyebrow,
@@ -60,7 +62,7 @@ export default function HomePage() {
     media: resolveMedia(media),
   }));
 
-  const feedItems = publishedFeed()
+  const feedItems = [...(await publicEvents()), ...publishedFeed().filter(item => item.kind !== "event")]
     .slice(0, 3)
     .map((item) => ({
       slug: item.slug,
@@ -73,9 +75,9 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={organizationLd()} />
-      <IntroLoader />
-      <Hero heading={`${settings.name}: a shared legacy`} label="Featured" slides={slides} nextSectionId="mission" />
-      <Mission label={mission.label} paragraphs={mission.paragraphs} video={presidentAddress} />
+      {slides.length > 0 && <IntroLoader />}
+      {slides.length > 0 && <Hero heading={`${settings.name}: a shared legacy`} label="Featured" slides={slides} nextSectionId="mission" />}
+      <Mission label={managed?.mission_headline || mission.label} paragraphs={managed?.mission_summary ? [managed.mission_summary] : mission.paragraphs} video={presidentAddress} />
       {/*
         Suspense boundaries let React hydrate the sections below the hero in separate, interruptible
         chunks instead of one long task (Prompt 10 performance pass). Nothing here suspends, so the
@@ -110,7 +112,7 @@ export default function HomePage() {
           invitation={contactBand.invitation}
           contact={contactBand.contact}
           newsletter={contactBand.newsletter}
-          details={settings.contact}
+          details={managed ? {email:managed.email,phone:{display:managed.phone,tel:managed.phone.replace(/[^+0-9]/g,"")},location:managed.address,streetAddress:managed.address} : settings.contact}
         />
       </Suspense>
     </>

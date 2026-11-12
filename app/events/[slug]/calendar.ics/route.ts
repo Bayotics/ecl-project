@@ -1,4 +1,5 @@
-import { eventHref, eventInstants, getEvent } from "@/content/event-view";
+import { publicEvent } from "@/lib/supabase/content";
+import { eventHref, eventInstants } from "@/content/event-view";
 import { settings } from "@/content/site";
 import { icsStamp } from "@/lib/time";
 
@@ -23,7 +24,7 @@ function fold(line: string): string {
  */
 export async function GET(_request: Request, ctx: RouteContext<"/events/[slug]/calendar.ics">) {
   const { slug } = await ctx.params;
-  const event = getEvent(slug);
+  const event = await publicEvent(slug);
   const instants = event ? eventInstants(event) : null;
   if (!event || !instants) return new Response("Not found", { status: 404 });
 

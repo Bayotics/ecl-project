@@ -208,10 +208,10 @@ export function resolveMedia(ref: MediaRef): ResolvedMedia {
   const asset = assets[ref.asset];
   const focal = ref.focal ?? asset.focal;
   return {
-    src: asset.src,
+    src: ref.remote ?? asset.src,
     alt: ref.alt ?? asset.alt,
-    kind: asset.kind,
-    fit: ref.fit ?? (asset.kind === "logo" ? "contain" : "cover"),
+    kind: ref.remote ? "photo" : asset.kind,
+    fit: ref.fit ?? (ref.remote ? "cover" : asset.kind === "logo" ? "contain" : "cover"),
     position: `${focal.x}% ${focal.y}%`,
     zoom: ref.zoom ?? 1,
   };

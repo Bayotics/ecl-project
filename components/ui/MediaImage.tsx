@@ -28,7 +28,7 @@ export function MediaImage({ media, decorative = false, className, ...rest }: Me
       src={media.src}
       alt={decorative ? "" : media.alt}
       fill
-      placeholder={media.kind === "photo" ? "blur" : "empty"}
+      placeholder={media.src.blurDataURL ? "blur" : "empty"}
       className={cx(styles.image, media.fit === "contain" && styles.contain, className)}
       style={style}
       {...rest}
