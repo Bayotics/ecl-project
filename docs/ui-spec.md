@@ -667,3 +667,55 @@ Events are sent only after the corresponding real acknowledgement, without names
 - `Donation confirmed`, after a signature-verified webhook marks the gift paid.
 
 Analytics is cookieless, so no consent banner is required. It stays disabled unless configured.
+
+---
+
+## Part L — Route reveal, scroll motion and the About page (2026-10-16)
+
+### L1. Route reveal (`components/motion/RouteTransition.tsx`)
+
+Every client-side page change reuses the intro loader's three curtains. They are light (`--color-mist`, with the fine ⅓/⅔ rules), have no mark, and use no charcoal.
+
+- They cover the new page before it paints, then lift left → middle → right: `yPercent -100`, 0.75s `power3.inOut`, 80ms stagger. Measured: fully clear in ≈0.9s.
+- They sit below the header (the header stays put) and never take pointer events.
+- They are skipped on the first load (the intro loader handles that) and under reduced motion.
+
+### L2. Scroll motion (`components/motion/Reveal.tsx`)
+
+`data-reveal` now selects the motion: `up` (default), `down`, `left`, `right`, `fade`, `scale` (from 96%), `mask` (clip-path wipe upward) and `mask-left`. Travel is set with `data-reveal-y` / `data-reveal-x`.
+
+All variants run once, as elements cross 88% of the viewport, with a per-batch stagger. They are set up at idle; content already on screen is never hidden, and reduced motion shows everything immediately.
+
+| Section | Motion |
+| --- | --- |
+| Mission | Label fades; paragraphs slide from the left; the President's video card wipes open. |
+| Intro panels | The three panels rise in sequence. |
+| Explore our causes | Heading slides from the left; arrows fade; cards slide in from the right in sequence; each photograph wipes open. |
+| Culture | Heading slides from the left; the media wipes open left → right. |
+| Editorial | Heading slides from the left; the image settles from 96%. |
+| News & Events | Heading slides from the left; cards rise. |
+| Contact band | The invitation slides from the left; the columns rise. |
+| Footer | The six columns fade in. |
+| About | Each block uses a different motion (see L3). |
+
+### L3. About page (`app/about/page.tsx`, copy in `content/about.ts`)
+
+Order and layout:
+
+1. **Breadcrumb and title.** "Rooted in Lagos, / at home in Louisiana" at `clamp(2.75rem, 7.6vw, 9rem)`, weight 200.
+2. **Film.** A full-bleed band of the aerial Louisiana footage (`AmbientVideo`: muted, plays only when visible, with a pause control), 62vh tall.
+3. **Statement.** "About us" across ⅔, with a rule at ⅔.
+4. **Story.** The 2018 club photograph across ⅔ with its caption; history notes bottom-aligned in the last third, with a "Read our history" link.
+5. **Facts at a glance.** Label and heading in the first third; facts in two columns, with large Geologica 200 values and square-marked, underlined labels:
+   - 6 areas of focus
+   - 2 homes
+   - 1974, the original Eko Club's founding (labelled as such)
+   - 4 ways to take part
+   
+   The section ends with "Read our reports". Every figure is a fact, not an estimate.
+6. **Two inset mist bands, in thirds.** Culture and Service: label and heading, then text and link, then a full-height photograph.
+7. **Accent band** (`--color-accent-pale`, the stoles' gold). The six areas as a numbered, linked list.
+8. **"Two homes, one community".** Intro text bottom-aligned in the first third, with Baton Rouge and Lagos cards (photo, title, line, outlined action).
+9. **The shared contact band, then the footer.**
+
+Phones stack every block in reading order. Bands become single columns, with the photograph shown 16:9.
