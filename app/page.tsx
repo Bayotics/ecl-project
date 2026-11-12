@@ -13,7 +13,8 @@ import { NewsEvents } from "@/components/sections/NewsEvents/NewsEvents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { causeHref, causes } from "@/content/causes";
 import { feedHref, feedLabel, publishedFeed } from "@/content/feed";
-import { publicSlides, publicEvents, publicPageMedia, publicSettings } from "@/lib/supabase/content";
+import { publicEvents, publicPageMedia, publicSettings } from "@/lib/supabase/content";
+import { heroSlides } from "@/content/hero";
 import { resolveMedia } from "@/content/media";
 import { managedMedia } from "@/lib/supabase/adapters";
 import { published, formatPartialDate } from "@/content/meta";
@@ -47,7 +48,8 @@ export default async function HomePage() {
   // An image set in the admin area (Supabase page media) wins; otherwise the bundled photograph, so a
   // slot is never left empty when nothing has been uploaded (or Supabase is not configured).
   const pageImage = <T,>(placement: string, fallback: T) => pageImages.get(placement) ?? fallback;
-  const slides = (await publicSlides()).map(({ id, tab, eyebrow, headline, text, cta, media, video }) => ({
+  // Hero slides and mission copy are the site's own content, never replaced by backend records.
+  const slides = published(heroSlides).map(({ id, tab, eyebrow, headline, text, cta, media, video }) => ({
     id,
     tab,
     eyebrow,
@@ -83,7 +85,7 @@ export default async function HomePage() {
       <JsonLd data={organizationLd()} />
       {slides.length > 0 && <IntroLoader />}
       {slides.length > 0 && <Hero heading={`${settings.name}: a shared legacy`} label="Featured" slides={slides} nextSectionId="mission" />}
-      <Mission label={managed?.mission_headline || mission.label} paragraphs={managed?.mission_summary ? [managed.mission_summary] : mission.paragraphs} video={{...presidentAddress,poster:pageImage("home-president-poster", presidentAddress.poster)}} />
+      <Mission label={mission.label} paragraphs={mission.paragraphs} video={{...presidentAddress,poster:pageImage("home-president-poster", presidentAddress.poster)}} />
       {/*
         Suspense boundaries let React hydrate the sections below the hero in separate, interruptible
         chunks instead of one long task (Prompt 10 performance pass). Nothing here suspends, so the

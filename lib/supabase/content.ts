@@ -71,7 +71,7 @@ export async function publicNavigation() {
  const [events,index,config]=await Promise.all([publicEvents(),publicSearchIndex(),publicSettings()]);
  const site=config?{...baseSite,name:config.organization_name,contact:{email:config.email,phone:{display:config.phone,tel:config.phone.replace(/[^+0-9]/g,"")},location:config.address,streetAddress:config.address}}:baseSite;
  const social=config?[["Facebook",config.facebook_url],["Instagram",config.instagram_url],["YouTube",config.youtube_url]].filter(([,href])=>/^https:\/\//.test(href)).map(([label,href])=>({label,href})):headerData.menu.social.links;
- return {site,header:{...headerData,siteName:site.name,utility:{...headerData.utility,text:config?.tagline||headerData.utility.text,links:[...headerData.utility.links,{label:"Login",href:"/login"}]},
+ return {site,header:{...headerData,siteName:site.name,utility:{...headerData.utility,text:headerData.utility.text,links:[...headerData.utility.links,{label:"Login",href:"/login"}]},
  events:{...headerData.events,cards:events.slice(0,3).map(e=>({kind:"event" as const,slug:e.slug,title:e.title,href:"/events/"+e.slug,meta:eventWhenLine(e),media:resolveMedia(e.media)}))},
  menu:{...headerData.menu,social:{...headerData.menu.social,links:social}},
  search:{...headerData.search,index}},
