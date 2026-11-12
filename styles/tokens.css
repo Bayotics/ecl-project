@@ -27,6 +27,8 @@
   --color-line-strong: rgb(27 26 20 / 0.42);
   --color-line-on-dark: rgb(255 255 255 / 0.2);
   --color-line-on-dark-strong: rgb(255 255 255 / 0.5);
+  /* Pale gold from the club's stoles: accent bands only (About page). */
+  --color-accent-pale: #e9e3cf;
   --color-danger: #9b2c1f;
   --color-success: #3c5e35;
 
@@ -45,16 +47,17 @@
     ),
     linear-gradient(90deg, rgb(27 26 20 / 0.4) 0%, rgb(27 26 20 / 0) 62%);
 
-  /* ── Typography ──────────────────────────────────────────────── */
-  /* Kept local so the site never depends on a Google Fonts request at runtime. */
-  --font-sans: "Aptos", "Segoe UI", Arial, sans-serif;
+  /* ── Typography: Geologica (variable), self-hosted by next/font ── */
+  /* Matches the reference: Geologica with the CRSV axis on, light weights throughout. */
+  --font-sans: var(--font-geologica), system-ui, sans-serif;
+  --font-variation: "CRSV" 1;
 
-  --fw-heading: 600; /* stronger main and section headings */
-  --fw-body: 500; /* navigation, descriptions, ordinary copy */
-  --fw-label: 700; /* compact uppercase labels, small action text */
+  --fw-heading: 200; /* main and section headings: never bold */
+  --fw-body: 300; /* navigation, descriptions, ordinary copy */
+  --fw-label: 500; /* compact uppercase labels, small action text */
 
   --fs-micro: 0.6875rem; /* 11px legal row */
-  --fs-label: clamp(0.6875rem, 0.66rem + 0.08vw, 0.75rem); /* 11–12px labels and actions */
+  --fs-label: clamp(0.6875rem, 0.885vw, 0.8125rem); /* ≈12.1px labels and actions at 1366 */
   --fs-small: 0.875rem;
   --fs-body: clamp(1rem, 0.9rem + 0.25vw, 1.125rem); /* 16–18px descriptions */
   --fs-nav: clamp(0.9375rem, 1.25vw, 1.375rem); /* ≈17px at 1363 */
@@ -72,7 +75,7 @@
 
   --tracking-display: -0.01em;
   --tracking-heading: -0.005em;
-  --tracking-label: 0.12em;
+  --tracking-label: 0; /* reference labels are untracked */
   --tracking-micro: 0.04em;
 
   /* ── Space (4px base) ────────────────────────────────────────── */

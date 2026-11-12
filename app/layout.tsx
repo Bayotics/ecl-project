@@ -1,5 +1,6 @@
 import { publicNavigation } from "@/lib/supabase/content";
 import type { Metadata, Viewport } from "next";
+import { Geologica } from "next/font/google";
 
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -9,6 +10,15 @@ import { Analytics } from "@/components/providers/Analytics";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { settings as site } from "@/content/site";
 import { DEFAULT_IMAGE } from "@/lib/seo";
+
+// Variable Geologica with the CRSV axis (the reference's letterforms), self-hosted at build time so the
+// live site never requests Google Fonts. Weights in use: 200 headings, 300 copy, 500 labels.
+const geologica = Geologica({
+  subsets: ["latin"],
+  axes: ["CRSV"],
+  variable: "--font-geologica",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -38,7 +48,7 @@ export const dynamic = "force-dynamic";
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const navigation = await publicNavigation().catch(() => null);
   return (
-    <html lang="en">
+    <html lang="en" className={geologica.variable}>
       <body>
         <a href="#main" className="skip-link">
           Skip to content

@@ -7,7 +7,6 @@ import { useCallback, useSyncExternalStore } from "react";
 import type { ResolvedMedia } from "@/content/types";
 import { Reveal } from "@/components/motion/Reveal";
 import { ArrowButton } from "@/components/ui/ArrowButton";
-import { ArrowRightIcon } from "@/components/ui/icons";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { media } from "@/lib/motion";
 import { useMediaQuery } from "@/lib/use-media-query";
@@ -130,7 +129,6 @@ export function CausesCarousel({ heading, causes }: CausesCarouselProps) {
                   aria-label={`Explore cause: ${cause.title}`}
                 >
                   <span>Explore cause</span>
-                  <ArrowRightIcon size={10} />
                 </Link>
               </article>
             </li>

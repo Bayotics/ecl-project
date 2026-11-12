@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type Poin
 import type { LinkItem, ResolvedMedia, VideoSource } from "@/content/types";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 import { ArrowButton } from "@/components/ui/ArrowButton";
-import { ArrowRightIcon, PauseIcon, PlayIcon } from "@/components/ui/icons";
+import { PauseIcon, PlayIcon } from "@/components/ui/icons";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { media as mq, prefersReducedMotion } from "@/lib/motion";
@@ -238,7 +238,6 @@ export function Hero({ heading, label, slides, nextSectionId }: HeroProps) {
               <div data-hero-part data-intro-copy={index === 0 || undefined}>
                 <Link href={slide.cta.href} className={styles.cta}>
                   <span>{slide.cta.label}</span>
-                  <ArrowRightIcon size={12} />
                 </Link>
               </div>
             </div>

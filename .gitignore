@@ -21,3 +21,9 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Raw event photo dumps (multi-GB): host in Supabase storage, not git
+/public/media/2026-banquet/
+/public/media/Oldies-night/
+/public/media/Second-line/
+/public/media/Youth-Outreach/

@@ -74,19 +74,25 @@
   gap: var(--space-3);
   min-height: max(1.75rem, var(--touch));
   margin-top: var(--space-2);
-  font-size: var(--fs-small);
-  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--hairline) no-repeat;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  background: linear-gradient(var(--color-line-strong), var(--color-line-strong)) 0 100% / 100% var(--hairline) no-repeat;
 }
 
+/* Square bullet before text actions, as in the reference ("■ VIEW ALL NEWS"). */
 .mark {
-  width: 0.875rem;
-  height: var(--hairline);
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
   background: currentColor;
-  transition: width var(--dur-base) var(--ease-out-expo);
+  opacity: 0.45;
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
 
 .textAction:hover .mark {
-  width: 1.5rem;
+  opacity: 1;
 }
 
 @media (pointer: coarse) {

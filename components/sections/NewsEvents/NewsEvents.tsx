@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { LinkItem, ResolvedMedia } from "@/content/types";
 import { DialogLink } from "@/components/forms/DialogLink";
 import { Reveal } from "@/components/motion/Reveal";
-import { ArrowRightIcon } from "@/components/ui/icons";
 import { MediaImage } from "@/components/ui/MediaImage";
 import layout from "@/styles/layout.module.css";
 import { cx } from "@/lib/cx";
@@ -15,8 +14,10 @@ export interface FeedCard {
   slug: string;
   title: string;
   href: string;
-  /** e.g. "Archive · December 2018" */
-  meta: string;
+  /** Small category line, e.g. "Archive" or "Event". */
+  category: string;
+  /** Formatted date, or null when the record has none. */
+  date: string | null;
   media: ResolvedMedia;
 }
 
@@ -43,7 +44,7 @@ export function NewsEvents({ heading, action, items }: NewsEventsProps) {
           <h2 id="news-heading" className={styles.heading} data-reveal="left">
             {heading}
           </h2>
-          <Link href={action.href} className={styles.overview} data-reveal="fade">
+          <Link href={action.href} className={styles.textAction} data-reveal="fade">
             <span className={styles.mark} aria-hidden="true" />
             <span>{action.label}</span>
           </Link>
@@ -61,14 +62,16 @@ export function NewsEvents({ heading, action, items }: NewsEventsProps) {
                       className={styles.img}
                     />
                   </div>
-                  <p className={styles.meta}>{item.meta}</p>
+                  <p className={styles.category}>{item.category}</p>
+                  {item.date ? <p className={styles.date}>{item.date}</p> : null}
                   <h3 className={styles.title}>
                     <Link href={item.href} className={styles.link}>
                       {item.title}
                     </Link>
                   </h3>
-                  <span className={styles.action} aria-hidden="true">
-                    Learn more <ArrowRightIcon size={10} />
+                  <span className={styles.textAction} aria-hidden="true">
+                    <span className={styles.mark} />
+                    <span>Learn more</span>
                   </span>
                 </article>
               </li>
@@ -79,10 +82,11 @@ export function NewsEvents({ heading, action, items }: NewsEventsProps) {
                   <div className={cx(styles.media, styles.empty)} aria-hidden="true">
                     <span>No further updates yet</span>
                   </div>
-                  <p className={styles.meta}>Updates</p>
+                  <p className={styles.category}>Updates</p>
                   <h3 className={styles.title}>More news will appear here as the club publishes it</h3>
-                  <DialogLink dialog="newsletter" href="/contact#newsletter" className={styles.actionLink}>
-                    Get updates <ArrowRightIcon size={10} />
+                  <DialogLink dialog="newsletter" href="/contact#newsletter" className={styles.textAction}>
+                    <span className={styles.mark} aria-hidden="true" />
+                    <span>Get updates</span>
                   </DialogLink>
                 </article>
               </li>

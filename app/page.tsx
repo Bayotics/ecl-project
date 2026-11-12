@@ -12,11 +12,11 @@ import { Mission } from "@/components/sections/Mission/Mission";
 import { NewsEvents } from "@/components/sections/NewsEvents/NewsEvents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { causeHref, causes } from "@/content/causes";
-import { feedHref, feedMeta, publishedFeed } from "@/content/feed";
+import { feedHref, feedLabel, publishedFeed } from "@/content/feed";
 import { publicSlides, publicEvents, publicPageMedia, publicSettings } from "@/lib/supabase/content";
 import { resolveMedia } from "@/content/media";
 import { managedMedia } from "@/lib/supabase/adapters";
-import { published } from "@/content/meta";
+import { published, formatPartialDate } from "@/content/meta";
 import {
   causesPanel,
   causesSection,
@@ -44,7 +44,9 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const managed = await publicSettings();
   const pageImages = new Map((await publicPageMedia("home")).map(item => [item.placement, resolveMedia(managedMedia(item.image_url, item.image_alt))]));
-  const pageImage = (placement: string) => pageImages.get(placement);
+  // An image set in the admin area (Supabase page media) wins; otherwise the bundled photograph, so a
+  // slot is never left empty when nothing has been uploaded (or Supabase is not configured).
+  const pageImage = <T,>(placement: string, fallback: T) => pageImages.get(placement) ?? fallback;
   const slides = (await publicSlides()).map(({ id, tab, eyebrow, headline, text, cta, media, video }) => ({
     id,
     tab,
@@ -56,13 +58,13 @@ export default async function HomePage() {
     video,
   }));
 
-  const causeItems = published(causes).map(({ slug, number, title, short }) => ({
+  const causeItems = published(causes).map(({ slug, number, title, short, media }) => ({
     slug,
     number,
     title,
     short,
     href: causeHref(slug),
-    media: pageImage(`home-cause-${slug}`),
+    media: pageImage(`home-cause-${slug}`, resolveMedia(media)),
   }));
 
   const feedItems = [...(await publicEvents()), ...publishedFeed().filter(item => item.kind !== "event")]
@@ -71,7 +73,8 @@ export default async function HomePage() {
       slug: item.slug,
       title: item.title,
       href: feedHref(item),
-      meta: feedMeta(item),
+      category: feedLabel(item),
+      date: item.date ? formatPartialDate(item.date) : null,
       media: resolveMedia(item.media),
     }));
 
@@ -80,14 +83,14 @@ export default async function HomePage() {
       <JsonLd data={organizationLd()} />
       {slides.length > 0 && <IntroLoader />}
       {slides.length > 0 && <Hero heading={`${settings.name}: a shared legacy`} label="Featured" slides={slides} nextSectionId="mission" />}
-      <Mission label={managed?.mission_headline || mission.label} paragraphs={managed?.mission_summary ? [managed.mission_summary] : mission.paragraphs} video={{...presidentAddress,poster:pageImage("home-president-poster")}} />
+      <Mission label={managed?.mission_headline || mission.label} paragraphs={managed?.mission_summary ? [managed.mission_summary] : mission.paragraphs} video={{...presidentAddress,poster:pageImage("home-president-poster", presidentAddress.poster)}} />
       {/*
         Suspense boundaries let React hydrate the sections below the hero in separate, interruptible
         chunks instead of one long task (Prompt 10 performance pass). Nothing here suspends, so the
         server HTML is identical and no fallback is ever shown.
       */}
       <Suspense>
-        <IntroPanels intro={whatWeDo} impact={{...impactPanel,media:pageImage("home-impact-panel")}} causes={{...causesPanel,media:pageImage("home-causes-panel")}} />
+        <IntroPanels intro={whatWeDo} impact={{...impactPanel,media:pageImage("home-impact-panel", impactPanel.media)}} causes={{...causesPanel,media:pageImage("home-causes-panel", causesPanel.media)}} />
       </Suspense>
       <Suspense>
         <CausesCarousel heading={causesSection.heading} causes={causeItems} />
@@ -97,7 +100,7 @@ export default async function HomePage() {
           label={culture.label}
           heading={culture.heading}
           link={culture.link}
-          poster={pageImage("home-culture-feature")}
+          poster={pageImage("home-culture-feature", culture.poster)}
           video={culture.video}
           videoLabel={culture.videoLabel}
         />
@@ -106,7 +109,7 @@ export default async function HomePage() {
           heading={editorial.heading}
           paragraphs={editorial.paragraphs}
           link={editorial.link}
-          media={pageImage("home-editorial")}
+          media={pageImage("home-editorial", editorial.media)}
         />
       </Suspense>
       <Suspense>

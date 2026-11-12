@@ -1,21 +1,44 @@
 /*
- * Editorial row (docs/ui-spec.md H2). ≈85px from the charcoal feature at 1363; the row itself is
- * ≈425px tall, set by a near-square photograph filling the right third.
+ * Editorial band (docs/ui-spec.md H2), matching the reference "Process" band: an inset mist panel
+ * inside the page gutters, three equal columns, a thin rule between the two text columns, and a
+ * photograph filling the right column edge to edge.
  */
 
 .editorial {
-  padding-block: clamp(2.5rem, 6.24vw, 6rem);
+  padding: clamp(2.5rem, 6.24vw, 6rem) var(--page-x);
   background: var(--color-paper);
+}
+
+.band {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-height: clamp(22rem, 32vw, 30rem);
+  background: var(--color-mist);
+}
+
+.cell {
+  min-width: 0;
+  padding: clamp(2rem, 4.5vw, 4.25rem) clamp(1.25rem, 2.6vw, 2.5rem) var(--space-7);
+}
+
+.cell + .cell {
+  border-left: var(--hairline) solid var(--color-line-strong);
 }
 
 .label {
   margin-bottom: var(--space-4);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   color: var(--color-ink-muted);
 }
 
 .heading {
-  max-width: 12ch;
+  max-width: 14ch;
   font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+  line-height: 1.2;
 }
 
 .middle {
@@ -26,53 +49,64 @@
 }
 
 .body {
-  max-width: 36ch;
-  color: var(--color-ink-soft);
+  max-width: 38ch;
+  font-size: clamp(0.875rem, 1.096vw, 1.0625rem);
+  font-weight: var(--fw-body);
+  line-height: 1.55;
+  color: var(--color-ink);
 }
 
-/* Compact text action: fine underline with a short leading mark. */
+/* Compact text action: square bullet, uppercase label, fine underline ("■ FIND OUT MORE"). */
 .action {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
   min-height: max(1.75rem, var(--touch));
   margin-top: var(--space-3);
-  font-size: var(--fs-small);
-  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--hairline) no-repeat;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  background: linear-gradient(var(--color-line-strong), var(--color-line-strong)) 0 100% / 100% var(--hairline) no-repeat;
 }
 
 .mark {
-  width: 0.875rem;
-  height: var(--hairline);
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
   background: currentColor;
-  transition: width var(--dur-base) var(--ease-out-expo);
+  opacity: 0.45;
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
 
 .action:hover .mark {
-  width: 1.5rem;
+  opacity: 1;
 }
 
-/* ~1:1, a touch taller than wide to keep the members' figures in frame. */
-.frame {
+.imageCell {
   position: relative;
-  aspect-ratio: 1 / 1.05;
+  min-height: 18rem;
   overflow: hidden;
-  background: var(--color-mist);
+}
+
+/* Without a managed photo, the two text columns share the panel. */
+.noMedia {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 }
 
 @media (max-width: 1023.98px) {
+  .band,
+  .noMedia {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cell + .cell {
+    border-left: 0;
+    border-top: var(--hairline) solid var(--color-line-strong);
+  }
+
   .imageCell {
-    grid-column: 1 / -1;
-    margin-top: var(--space-7);
-  }
-
-  .frame {
-    max-width: 36rem;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .middle {
-    margin-top: var(--space-5);
+    aspect-ratio: 16 / 10;
+    min-height: 0;
   }
 }
