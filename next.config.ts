@@ -13,7 +13,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: process.env.NEXT_PUBLIC_SUPABASE_URL ? ["site-media", "event-media"].map(bucket => ({ protocol: "https" as const, hostname: new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname, pathname: `/storage/v1/object/public/${bucket}/**` })) : [],
     formats: ["image/avif", "image/webp"],
-    qualities: [75],
+    // Photographs are served at 90 (MediaImage); 75 stays available for other images.
+    qualities: [75, 90],
   },
   // Keep existing URL value: addresses from the previous WordPress site and earlier builds of this one.
   // (Trailing-slash forms such as /history/ are normalised by Next.js first, then matched here.)

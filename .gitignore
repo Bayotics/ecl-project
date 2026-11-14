@@ -27,5 +27,5 @@ next-env.d.ts
 /public/media/Oldies-night/
 /public/media/Second-line/
 /public/media/Youth-Outreach/
-# Original homepage photos (raw camera files, up to 32 MB); the site uses the web copies in assets/media/homepage
+# Original homepage photos (raw camera files, up to 32 MB); the site uses the copies in assets/media/homepage
 /public/media/homepage/
