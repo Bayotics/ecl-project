@@ -10,6 +10,7 @@ import { PauseIcon, PlayIcon } from "@/components/ui/icons";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { media as mq, prefersReducedMotion } from "@/lib/motion";
+import { useAfterLoad } from "@/lib/use-after-load";
 import { useMediaQuery } from "@/lib/use-media-query";
 
 import styles from "./Hero.module.css";
@@ -51,6 +52,10 @@ export function Hero({ heading, label, slides, nextSectionId }: HeroProps) {
   const reducedMotion = useMediaQuery(mq.reducedMotion);
 
   const [active, setActive] = useState(0);
+  // Slides 2+ are not fetched until the visible page has loaded, so they never slow down slide 1.
+  const pageLoaded = useAfterLoad();
+  const [shown, setShown] = useState<ReadonlySet<number>>(() => new Set([0]));
+  if (!shown.has(active)) setShown(new Set([...shown, active]));
   const [announcement, setAnnouncement] = useState("");
   const [inView, setInView] = useState(true);
   const [pageVisible, setPageVisible] = useState(true);
@@ -188,7 +193,7 @@ export function Hero({ heading, label, slides, nextSectionId }: HeroProps) {
       <div className={styles.media}>
         {slides.map((slide, index) => (
           <div key={slide.id} className={styles.layer} data-hero-media={index} aria-hidden={index !== active}>
-            {slide.video.length ? (
+            {!(pageLoaded || shown.has(index)) ? null : slide.video.length ? (
               <HeroVideo
                 sources={slide.video}
                 poster={slide.media}

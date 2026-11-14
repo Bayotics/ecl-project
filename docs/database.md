@@ -28,8 +28,7 @@ events, gallery, executives, page images, contact details and the other sections
 | `hero_slides`, `site_settings` | dashboard-managed slides and club details |
 | `contact_messages`, `newsletter_subscribers` | form submissions |
 
-Every document keeps a string `id` (also its `_id`). Indexes are created automatically on first
-connection.
+Every document keeps a string `id` (also its `_id`). Indexes are created by `scripts/seed-database.mjs`.
 
 ## Security
 

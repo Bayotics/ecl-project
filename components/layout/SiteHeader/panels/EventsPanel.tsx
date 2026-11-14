@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 import type { Ref } from "react";
 
 import type { HeaderData } from "@/content/types";
@@ -21,6 +22,9 @@ interface EventsPanelProps {
  * Cards come from event records only; an empty slot says so rather than showing an invented event.
  */
 export function EventsPanel({ id, data, open, ref, onNavigate }: EventsPanelProps) {
+  // Photos load the first time the panel opens, not with every page.
+  const [opened, setOpened] = useState(false);
+  if (open && !opened) setOpened(true);
   return (
     <div id={id} ref={ref} className={cx(styles.panel, styles.events)} inert={!open} data-lenis-prevent>
       <div className={styles.eventsIntro}>
@@ -47,7 +51,7 @@ export function EventsPanel({ id, data, open, ref, onNavigate }: EventsPanelProp
               {card.kind === "event" ? (
                 <>
                   <div className={styles.eventMedia}>
-                    <MediaImage media={card.media} decorative sizes="(min-width: 1024px) 20vw, 1px" />
+                    {opened ? <MediaImage media={card.media} decorative sizes="(min-width: 1024px) 20vw, 1px" /> : null}
                   </div>
                   <h3 className={styles.eventTitle}>
                     <Link href={card.href} className={styles.stretched} onClick={onNavigate}>

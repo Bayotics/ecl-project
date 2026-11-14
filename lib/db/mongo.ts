@@ -23,9 +23,8 @@ export const isDatabaseConfigured = () => Boolean(process.env.MONGODB_URI);
 async function connect(): Promise<Db> {
   const client = new MongoClient(process.env.MONGODB_URI!, { serverSelectionTimeoutMS: 10000, appName: "ecl-website" });
   await client.connect();
-  const db = client.db(process.env.MONGODB_DB || "ecl");
-  await ensureIndexes(db);
-  return db;
+  // Indexes are created once by scripts/seed-database.mjs, not on every server start.
+  return client.db(process.env.MONGODB_DB || "ecl");
 }
 
 /** The database, or null when MONGODB_URI is not set. */
@@ -67,20 +66,4 @@ export function publicRows<K extends TableName>(name: K, filter: Filter<Document
     ["public-rows", name, JSON.stringify(filter), JSON.stringify(sort)],
     { revalidate: 3600, tags: [CONTENT_TAG] },
   )();
-}
-
-async function ensureIndexes(db: Db) {
-  const unique = { unique: true };
-  await Promise.all([
-    db.collection("users").createIndex({ email: 1 }, unique),
-    db.collection("auth_tokens").createIndex({ token_hash: 1 }, unique),
-    db.collection("auth_tokens").createIndex({ expires_at: 1 }, { expireAfterSeconds: 0 }),
-    db.collection("events").createIndex({ slug: 1 }, unique),
-    db.collection("executives").createIndex({ slug: 1 }, unique),
-    db.collection("event_categories").createIndex({ slug: 1 }, unique),
-    db.collection("gallery_albums").createIndex({ slug: 1 }, unique),
-    db.collection("page_media").createIndex({ placement: 1 }, unique),
-    db.collection("event_rsvps").createIndex({ event_id: 1, user_id: 1 }, unique),
-    db.collection("newsletter_subscribers").createIndex({ email: 1 }, unique),
-  ]);
 }

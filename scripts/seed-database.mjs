@@ -1,5 +1,6 @@
 // Gives a new, empty club database the records the admin dashboard edits: club details, the
-// leadership roster, the event categories and the homepage/about image spots. Existing records are
+// leadership roster, the event categories and the homepage/about image spots, and creates the
+// database indexes. Existing records are
 // never overwritten, so it is safe to run again.
 //
 //   node --env-file=.env.local scripts/seed-database.mjs
@@ -87,6 +88,20 @@ const client = new MongoClient(process.env.MONGODB_URI);
 try {
   await client.connect();
   const db = client.db(process.env.MONGODB_DB || "ecl");
+  const unique = { unique: true };
+  await Promise.all([
+    db.collection("users").createIndex({ email: 1 }, unique),
+    db.collection("auth_tokens").createIndex({ token_hash: 1 }, unique),
+    db.collection("auth_tokens").createIndex({ expires_at: 1 }, { expireAfterSeconds: 0 }),
+    db.collection("events").createIndex({ slug: 1 }, unique),
+    db.collection("executives").createIndex({ slug: 1 }, unique),
+    db.collection("event_categories").createIndex({ slug: 1 }, unique),
+    db.collection("gallery_albums").createIndex({ slug: 1 }, unique),
+    db.collection("page_media").createIndex({ placement: 1 }, unique),
+    db.collection("event_rsvps").createIndex({ event_id: 1, user_id: 1 }, unique),
+    db.collection("newsletter_subscribers").createIndex({ email: 1 }, unique),
+  ]);
+  console.log("- indexes: ready");
   await insertMissing(db, "site_settings", [settings], "id");
   await insertMissing(db, "executives", executives, "slug");
   await insertMissing(db, "event_categories", categories, "slug");

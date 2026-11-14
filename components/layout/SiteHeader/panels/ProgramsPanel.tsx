@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Ref } from "react";
+import { useState, type Ref } from "react";
 
 import type { HeaderData } from "@/content/types";
 import { ArrowRightIcon } from "@/components/ui/icons";
@@ -22,10 +22,13 @@ interface ProgramsPanelProps {
  * (No per-category photography exists yet, so the photograph does not crossfade.)
  */
 export function ProgramsPanel({ id, data, open, ref, onNavigate }: ProgramsPanelProps) {
+  // Photos load the first time the panel opens, not with every page.
+  const [opened, setOpened] = useState(false);
+  if (open && !opened) setOpened(true);
   return (
     <div id={id} ref={ref} className={cx(styles.panel, styles.programs)} inert={!open} data-lenis-prevent>
       <div className={styles.programsMedia} data-panel-item>
-        <MediaImage media={data.media} sizes="(min-width: 1024px) 30vw, 1px" />
+        {opened ? <MediaImage media={data.media} sizes="(min-width: 1024px) 30vw, 1px" /> : null}
       </div>
 
       <div className={styles.programsList}>
