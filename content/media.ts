@@ -14,6 +14,18 @@ import greetingCelebration from "@/assets/media/greeting-celebration.jpg";
 import heroVideoPoster from "@/assets/media/hero-video-poster.jpg";
 import lagosCarnival from "@/assets/media/lagos-carnival.jpg";
 import lagosEyoFloat from "@/assets/media/lagos-eyo-float.jpg";
+import homeCommunityInAction from "@/assets/media/homepage/community-in-action-slide.webp";
+import homeBuildWithUs from "@/assets/media/homepage/build-with-us-slide.webp";
+import homePresidentMessage from "@/assets/media/homepage/message-from-president.webp";
+import homeImpact from "@/assets/media/homepage/impact-card.webp";
+import homeCauses from "@/assets/media/homepage/causes-card.webp";
+import homeYouthLeadership from "@/assets/media/homepage/youth-leadership.webp";
+import homeCulturalHeritage from "@/assets/media/homepage/cultural-heritage.webp";
+import homeHumanitarianSupport from "@/assets/media/homepage/humanitarian-support.webp";
+import homeCommunityBuilding from "@/assets/media/homepage/community-building.webp";
+import homeHealthAndWellbeing from "@/assets/media/homepage/health-and-wellbeing.webp";
+import homeRootedInLagos from "@/assets/media/homepage/rooted-in-lagos.webp";
+import homeCommunityBuiltTogether from "@/assets/media/homepage/community-built-together.webp";
 
 import type { AssetId, MediaAsset, MediaRef, ResolvedMedia } from "./types";
 
@@ -44,10 +56,37 @@ const supplied = (
   review: { verified: false, notes },
 });
 
+
+/** Homepage photographs supplied by the club on 2026-11-14 (public/media/homepage, web copies in assets/media/homepage). */
+const homepage = (id: AssetId, src: MediaAsset["src"], file: string, original: [number, number], alt: string, focal: MediaAsset["focal"]): MediaAsset => ({
+  id,
+  kind: "photo",
+  src,
+  alt,
+  focal,
+  credit: null,
+  original: { file: `public/media/homepage/${file}`, width: original[0], height: original[1] },
+  status: "published",
+  provenance: { source: "club-supplied", retrieved: "2026-11-14", note: "Supplied for the homepage in public/media/homepage." },
+  review: { verified: true, notes: [] },
+});
+
 const STOCK = "Unsplash photograph supplied with the new media. It does not show Eko Club Louisiana members; replace with club photography when available and keep the photographer credit.";
 const LAGOS = "Lagos street-festival photograph supplied with the new media. Confirm the photographer and usage rights.";
 
 export const assets: Record<AssetId, MediaAsset> = {
+  homeCommunityInAction: homepage("homeCommunityInAction", homeCommunityInAction, "community-in-action-slide.jpg", [6000, 4000], "Women in colourful traditional attire and gele head wraps walking together along a city street.", { x: 50, y: 50 }),
+  homeBuildWithUs: homepage("homeBuildWithUs", homeBuildWithUs, "build-with-us-slide.CR2", [6000, 4000], "Volunteers in matching red-and-white shirts gathered behind a table of donated personal-care supplies.", { x: 50, y: 45 }),
+  homePresidentMessage: homepage("homePresidentMessage", homePresidentMessage, "message-from-president-thuimbnail.webp", [525, 685], "Portrait of a man in a cream agbada and an embroidered gold cap.", { x: 50, y: 35 }),
+  homeImpact: homepage("homeImpact", homeImpact, "impact-card.png", [966, 638], "Women in matching royal-blue lace attire and gele head wraps standing together in a school hall.", { x: 50, y: 50 }),
+  homeCauses: homepage("homeCauses", homeCauses, "causes-card.png", [961, 638], "Two club members wearing green Eko Club stoles and blue head ties.", { x: 50, y: 40 }),
+  homeYouthLeadership: homepage("homeYouthLeadership", homeYouthLeadership, "youth-outreach-card.jpg", [6020, 4015], "Young people in matching red-and-white shirts gathered around a table of donated supplies.", { x: 50, y: 45 }),
+  homeCulturalHeritage: homepage("homeCulturalHeritage", homeCulturalHeritage, "cultural-heritage.png", [804, 633], "Two men in white traditional attire and blue caps, one wearing coral beads, in front of a balloon backdrop.", { x: 50, y: 40 }),
+  homeHumanitarianSupport: homepage("homeHumanitarianSupport", homeHumanitarianSupport, "humanitarian-support.png", [964, 641], "Volunteers in red-and-white shirts sorting donated personal-care products.", { x: 50, y: 50 }),
+  homeCommunityBuilding: homepage("homeCommunityBuilding", homeCommunityBuilding, "community-building.png", [893, 638], "A smiling woman and man in white Eko Club polo shirts at a club gathering.", { x: 50, y: 40 }),
+  homeHealthAndWellbeing: homepage("homeHealthAndWellbeing", homeHealthAndWellbeing, "health-and-wellbeing.JPG", [933, 1290], "A health worker in gloves and a mask taking a nasal swab from a seated man.", { x: 50, y: 45 }),
+  homeRootedInLagos: homepage("homeRootedInLagos", homeRootedInLagos, "rooted-in-lagos.png", [960, 636], "A colourful masquerade figure leading a street procession of people in traditional attire.", { x: 50, y: 45 }),
+  homeCommunityBuiltTogether: homepage("homeCommunityBuiltTogether", homeCommunityBuiltTogether, "community-built-together.png", [920, 635], "Club members in white attire and black-and-gold Eko Club stoles standing together.", { x: 50, y: 40 }),
   eclGroup2018: {
     id: "eclGroup2018",
     kind: "photo",

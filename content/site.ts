@@ -55,7 +55,7 @@ export const presidentAddress = {
   duration: null as string | null,
   sources: [] as VideoSource[],
   captions: null as string | null,
-  poster: resolveMedia({ asset: "eclGroup2018", focal: { x: 52, y: 55 } }),
+  poster: resolveMedia({ asset: "homePresidentMessage" }),
   ...meta(DRAFT, draftReview("Supply the President's speech video (and captions), the speaker's name and the duration.")),
 };
 
@@ -91,14 +91,14 @@ export const impactPanel: RevealPanelContent = {
   // Supplied in Prompt 5; deliberately asserts no project or total.
   body: "Our shared heritage brings people together. Discover the stories, participation and service that shape the ECL community.",
   action: { label: "Explore our impact", href: "/impact" },
-  media: resolveMedia({ asset: "celebrationGuests" }),
+  media: resolveMedia({ asset: "homeImpact" }),
 };
 
 export const causesPanel: RevealPanelContent = {
   id: "causes",
   title: "Our causes",
   links: published(causes).map((cause) => ({ label: cause.title, href: causeHref(cause.slug) })),
-  media: resolveMedia({ asset: "eldersGathering" }),
+  media: resolveMedia({ asset: "homeCauses" }),
 };
 
 export const causesSection = {
@@ -120,7 +120,7 @@ export const culture: {
   heading: "Rooted in Lagos. Connected in Louisiana.",
   body: "Language, dress, music and celebration link our members in Louisiana to the heritage of Lagos.",
   link: { label: "About the club", href: "/about" },
-  poster: resolveMedia({ asset: "lagosEyoFloat" }),
+  poster: resolveMedia({ asset: "homeRootedInLagos" }),
   video: [],
   videoLabel: "A white-robed Eyo masquerade float on parade in Lagos.",
 };
@@ -134,7 +134,7 @@ export const editorial = {
     "Explore how you can share your time, ideas and support while helping strengthen the connections between our heritage and the next generation.",
   ],
   link: { label: "Find your way to get involved", href: "/get-involved" } satisfies LinkItem,
-  media: resolveMedia({ asset: "lagosCarnival" }),
+  media: resolveMedia({ asset: "homeCommunityBuiltTogether" }),
   ...meta(BRIEF_2, briefReview("A photograph of Eko Club Louisiana members taking part would suit this row better than the Lagos carnival photograph.")),
 };
 

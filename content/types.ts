@@ -53,7 +53,19 @@ export type AssetId =
   | "asoOkeCouple"
   | "communityDance"
   | "familyCelebration"
-  | "greetingCelebration";
+  | "greetingCelebration"
+  | "homeCommunityInAction"
+  | "homeBuildWithUs"
+  | "homePresidentMessage"
+  | "homeImpact"
+  | "homeCauses"
+  | "homeYouthLeadership"
+  | "homeCulturalHeritage"
+  | "homeHumanitarianSupport"
+  | "homeCommunityBuilding"
+  | "homeHealthAndWellbeing"
+  | "homeRootedInLagos"
+  | "homeCommunityBuiltTogether";
 
 /** Focal point in percent of the source image (0–100). */
 export interface Focal {
