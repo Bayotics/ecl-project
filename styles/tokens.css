@@ -47,9 +47,9 @@
     ),
     linear-gradient(90deg, rgb(27 26 20 / 0.4) 0%, rgb(27 26 20 / 0) 62%);
 
-  /* ── Typography: Geologica (variable), self-hosted by next/font ── */
+  /* ── Typography: Geologica (variable), self-hosted in public/fonts (styles/fonts.css) ── */
   /* Matches the reference: Geologica with the CRSV axis on, light weights throughout. */
-  --font-sans: var(--font-geologica), system-ui, sans-serif;
+  --font-sans: "Geologica", "Geologica Fallback", system-ui, sans-serif;
   --font-variation: "CRSV" 1;
 
   --fw-heading: 200; /* main and section headings: never bold */
