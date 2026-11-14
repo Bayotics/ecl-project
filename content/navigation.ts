@@ -90,6 +90,7 @@ export const headerData: HeaderData = {
     links: causeLinks,
     media: resolveMedia({ asset: "asoOkeCouple" }),
     viewAll: { label: "All programs & causes", href: routes.programs },
+    exact: true,
   },
   about: {
     label: "About us",

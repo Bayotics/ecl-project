@@ -3,7 +3,7 @@
  * carry their own crop focus and zoom. Club photographs are described as the club; supplied stock and
  * Lagos photographs are described neutrally and never as Eko Club Louisiana members or events.
  */
-import asoOkeCouple from "@/public/media/homepage/programs-dropdown.png";
+import asoOkeCouple from "@/assets/media/homepage/programs-dropdown.png";
 import celebrationGuests from "@/assets/media/celebration-guests.jpg";
 import communityDance from "@/assets/media/community-dance.jpg";
 import crest from "@/assets/media/ecl-crest.png";
@@ -183,16 +183,8 @@ export const assets: Record<AssetId, MediaAsset> = {
     "Jim Nyamao / Unsplash",
     [STOCK],
   ),
-  asoOkeCouple: supplied(
-    "asoOkeCouple",
-    asoOkeCouple,
-    "samson-ejim-olzRU-XchJ4-unsplash.jpg",
-    [3748, 2464],
-    "ECL Members at oldies night.",
-    { x: 50, y: 36 },
-    "Samson Ejim / Unsplash",
-    [STOCK],
-  ),
+  // Programs dropdown photo (the id is kept from the stock image it replaced).
+  asoOkeCouple: homepage("asoOkeCouple", asoOkeCouple, "programs-dropdown.png", [953, 635], "ECL Members at oldies night.", { x: 50, y: 40 }),
   communityDance: supplied(
     "communityDance",
     communityDance,
