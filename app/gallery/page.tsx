@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { CardGrid } from "@/components/page/CardGrid";
 import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
-import { publicAlbums } from "@/lib/supabase/content";
+import { publicAlbums } from "@/lib/db/content";
 import { resolveMedia } from "@/content/media";
 import { heroSlides } from "@/content/hero";
 import { pages } from "@/content/pages";

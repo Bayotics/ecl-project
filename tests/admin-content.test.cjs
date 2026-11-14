@@ -5,8 +5,8 @@ function load(file,deps={}) {
  const source=ts.transpileModule(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
  const module={exports:{}};new Function('require','exports','module',source)(name=>{if(name in deps)return deps[name];throw new Error('Unexpected dependency '+name);},module.exports,module);return module.exports;
 }
-const fields=load('lib/supabase/admin-fields.ts');
-const adapter=load('lib/supabase/adapters.ts');
+const fields=load('lib/db/admin-fields.ts');
+const adapter=load('lib/db/adapters.ts');
 const time=load('lib/time.ts');
 const view=load('content/event-view.ts',{'@/lib/time':time,'./events':{events:[]},'./meta':{published:x=>x,formatPartialDate:x=>x.value}});
 test('titles become URL-safe slugs with whitespace and diacritics',()=>{assert.equal(fields.slugFromTitle('  Éko  Club / Annual Celebration! '),'eko-club-annual-celebration');});

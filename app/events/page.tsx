@@ -4,8 +4,8 @@ import { EventsBrowser, parseEventsQuery } from "@/components/events/EventsBrows
 import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
 import { EventCollections } from "@/components/events/EventCollections";
-import { publicEventCollections } from "@/lib/supabase/event-collections";
-import { publicEvents } from "@/lib/supabase/content";
+import { publicEventCollections } from "@/lib/db/event-collections";
+import { publicEvents } from "@/lib/db/content";
 import { pages } from "@/content/pages";
 import { pageMetadata } from "@/lib/seo";
 

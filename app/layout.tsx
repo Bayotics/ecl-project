@@ -1,4 +1,4 @@
-import { publicNavigation } from "@/lib/supabase/content";
+import { publicNavigation } from "@/lib/db/content";
 import type { Metadata, Viewport } from "next";
 import { preload } from "react-dom";
 

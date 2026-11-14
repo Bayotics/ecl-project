@@ -2,15 +2,11 @@
 import Link from "next/link";
 import { EventMediaUpload } from "./EventMediaUpload";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { supabaseBrowser } from "@/lib/supabase/client";
-import { sections, slugFromTitle, localInput } from "@/lib/supabase/admin-fields";
-import type { Database } from "@/lib/supabase/types";
+import { api, uploadMedia } from "@/lib/api-client";
+import { sections, slugFromTitle, localInput } from "@/lib/db/admin-fields";
 import styles from "./AdminArea.module.css";
 
 type Row = Record<string, string | number | boolean | null>;
-type TableName = Exclude<keyof Database["public"]["Tables"], "user_roles">;
-type MutationResult = PromiseLike<{error: {message:string}|null}>;
-type MutableTable = { update: (value:Row) => {eq:(key:"id",value:string|number)=>MutationResult}; insert:(value:Row)=>MutationResult; delete:()=>{eq:(key:"id",value:string)=>MutationResult} };
 export function AdminTableManager({ table }: { table: string }) {
   const config = sections[table];
   const [rows,setRows] = useState<Row[]>([]);
@@ -25,22 +21,10 @@ export function AdminTableManager({ table }: { table: string }) {
   const load = useCallback(async () => {
     setLoading(true); setError("");
     try {
-      const db = supabaseBrowser();
-      const result = await db.from(table as TableName).select("*").order(table==="site_settings"?"id":"created_at",{ascending:false});
-      if(result.error && table==="page_media" && ["PGRST205","42P01"].includes(result.error.code)) throw new Error("Page image setup is pending. Run supabase/migrations/20261112_page_media.sql in Supabase SQL Editor, then reload.");
-      if(result.error && ["event_media","event_categories"].includes(table) && ["PGRST205","42P01"].includes(result.error.code)) throw new Error("Event media database setup is pending. Run supabase/migrations/20261110_event_categories.sql in Supabase SQL Editor, then reload.");
-      if(result.error) throw new Error(table === "executives" && ["PGRST205", "42P01"].includes(result.error.code) ? "Executives database setup is pending. Run supabase/migrations/20261109_executives.sql in the Supabase SQL Editor, then reload." : result.error.message);
-      setRows((result.data ?? []) as unknown as Row[]);
-      if(table==="event_media" || table==="events") {
-        const categoryResult=await db.from("event_categories").select("id,title").order("sort_order");
-        if(categoryResult.error && table==="event_media") throw new Error("Set up event categories first using supabase/migrations/20261110_event_categories.sql.");
-        setCategories(categoryResult.data??[]);
-      }
-      if(table==="gallery_photos") {
-        const result = await db.from("gallery_albums").select("id,title").order("title");
-        if(result.error) throw new Error(result.error.message);
-        setAlbums(result.data ?? []);
-      }
+      const result = await api<{rows:Row[];categories:{id:string;title:string}[];albums:{id:string;title:string}[]}>(`/api/admin/${table}`);
+      setRows(result.rows);
+      setCategories(result.categories);
+      setAlbums(result.albums);
     } catch(e) { setError(e instanceof Error ? e.message : "Unable to load records."); }
     finally { setLoading(false); }
   },[table]);
@@ -77,11 +61,7 @@ export function AdminTableManager({ table }: { table: string }) {
       const context=canvas.getContext("2d");if(!context) throw new Error("Image conversion is unavailable.");
       context.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
       const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Image conversion failed.")),"image/webp",.82));
-      const db=supabaseBrowser();const {data:{user}}=await db.auth.getUser();if(!user) throw new Error("Sign in again.");
-      const path=user.id+"/"+crypto.randomUUID()+".webp";
-      const result=await db.storage.from("site-media").upload(path,blob,{contentType:"image/webp",upsert:false});
-      if(result.error) throw new Error(result.error.message);
-      change("image_url",db.storage.from("site-media").getPublicUrl(path).data.publicUrl);
+      change("image_url",await uploadMedia("site-media",blob));
       setNotice("Image uploaded and optimized. Save the record to use it.");
     } catch(e){setError(e instanceof Error?e.message:"Upload failed.");}finally{setBusy(false);}
   }
@@ -102,17 +82,15 @@ export function AdminTableManager({ table }: { table: string }) {
         payload[f.key]=value??null;
       }
       if(table==="events" && new Date(String(payload.end_at))<new Date(String(payload.start_at))) throw new Error("The end must be after the start.");
-      const db=supabaseBrowser();
-      const target = db.from(table as TableName) as unknown as MutableTable;
-      const result=editor.id ? await target.update(payload).eq("id",editor.id as string|number) : await target.insert(payload);
-      if(result.error) throw new Error(result.error.message);
+      if(table==="event_media") payload.media_type=editor.media_type??"image";
+      await api(editor.id!=null ? `/api/admin/${table}/${encodeURIComponent(String(editor.id))}` : `/api/admin/${table}`,{method:editor.id!=null?"PATCH":"POST",body:payload});
       setEditor(null);await load();setNotice("Saved. Published changes appear on the website on its next load.");
     }catch(e){setError(e instanceof Error?e.message:"Save failed.");}finally{setBusy(false);}
   }
   async function remove(row:Row) {
     if(!confirm("Permanently delete this record? "+(table==="gallery_albums"?"Its photos will also be removed from the gallery.":""))) return;
     setBusy(true);setError("");
-    try {const {error}=await (supabaseBrowser().from(table as TableName) as unknown as MutableTable).delete().eq("id",String(row.id));if(error) throw new Error(error.message);await load();setNotice("Record deleted.");}
+    try {await api(`/api/admin/${table}/${encodeURIComponent(String(row.id))}`,{method:"DELETE"});await load();setNotice("Record deleted.");}
     catch(e){setError(e instanceof Error?e.message:"Delete failed.");}finally{setBusy(false);}
   }
   function exportCsv() {

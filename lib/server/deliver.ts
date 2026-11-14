@@ -1,13 +1,16 @@
 import "server-only";
 
-import { publicDatabase } from "@/lib/supabase/server";
-import { createHmac } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
+
+import { database, isDatabaseConfigured } from "@/lib/db/mongo";
 
 /**
  * Hands a validated submission to the club's configured form service (a webhook: e.g. a form-to-email
  * service, Google Apps Script writing to a sheet, Zapier/Make, or a CRM). The site treats a 2xx answer
  * as the service's acknowledgement that the submission is stored; nothing else counts as success.
  *
+ * Contact messages and newsletter sign-ups are stored in the club database when MONGODB_URI is set
+ * (they appear in the admin dashboard); other forms, or those two without a database, use a webhook.
  * Each form has its own variable; `FORMS_WEBHOOK_URL` is the fallback for all of them. When
  * `FORMS_WEBHOOK_SECRET` is set, the body is signed (`X-ECL-Signature: sha256=<hex HMAC>`) so the
  * receiver can reject forged requests.
@@ -24,17 +27,24 @@ const ENV: Record<FormKind, string> = {
 
 export const webhookFor = (form: FormKind) => process.env[ENV[form]] || process.env.FORMS_WEBHOOK_URL || null;
 
-export const isDeliveryConfigured = (form: FormKind) => webhookFor(form) !== null || ((form === "contact" || form === "newsletter") && !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+export const isDeliveryConfigured = (form: FormKind) => webhookFor(form) !== null || ((form === "contact" || form === "newsletter") && isDatabaseConfigured());
 
 export type DeliveryResult = { ok: true } | { ok: false; error: "not_configured" | "upstream_error" | "upstream_unreachable" };
 
 export async function deliver(form: FormKind, fields: Record<string, unknown>): Promise<DeliveryResult> {
-  const db = publicDatabase();
-  if (db && (form === "contact" || form === "newsletter")) {
+  if ((form === "contact" || form === "newsletter") && isDatabaseConfigured()) {
     try {
-      const result = form === "contact" ? await db.rpc("submit_contact", { p_name: String(fields.name), p_email: String(fields.email), p_phone: "", p_subject: String(fields.topic || "Website enquiry"), p_message: String(fields.message) })
-        : await db.rpc("subscribe_newsletter", { p_email: String(fields.email) });
-      return result.error ? { ok: false, error: "upstream_error" } : { ok: true };
+      const db = await database();
+      if (!db) return { ok: false, error: "not_configured" };
+      const id = randomUUID();
+      const now = new Date().toISOString();
+      if (form === "contact") {
+        await db.collection("contact_messages").insertOne({ _id: id as never, id, name: String(fields.name ?? ""), email: String(fields.email ?? ""), phone: String(fields.phone ?? ""), subject: String(fields.topic || "Website enquiry"), message: String(fields.message ?? ""), status: "unread", created_at: now });
+      } else {
+        const email = String(fields.email ?? "").trim().toLowerCase();
+        await db.collection("newsletter_subscribers").updateOne({ email }, { $set: { active: true }, $setOnInsert: { _id: id as never, id, email, source: "website", created_at: now } }, { upsert: true });
+      }
+      return { ok: true };
     } catch { return { ok: false, error: "upstream_unreachable" }; }
   }
   const url = webhookFor(form);

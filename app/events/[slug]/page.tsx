@@ -1,4 +1,4 @@
-import { publicEvent } from "@/lib/supabase/content";
+import { publicEvent } from "@/lib/db/content";
 import { MemberRsvp } from "@/components/account/MemberRsvp";
 import type { Metadata } from "next";
 import Link from "next/link";

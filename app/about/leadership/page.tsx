@@ -4,7 +4,7 @@ import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
 import styles from "@/components/page/page.module.css";
 import { MediaImage } from "@/components/ui/MediaImage";
-import { publicExecutives } from "@/lib/supabase/content";
+import { publicExecutives } from "@/lib/db/content";
 import portraitStyles from "./leadership.module.css";
 import { resolveMedia } from "@/content/media";
 import { published } from "@/content/meta";

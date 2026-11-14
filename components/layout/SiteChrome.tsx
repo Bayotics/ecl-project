@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader/SiteHeader";
 import { RouteTransition } from "@/components/motion/RouteTransition";
 import { footerColumns, headerData, legalLinks } from "@/content/navigation";
-import type { publicNavigation } from "@/lib/supabase/content";
+import type { publicNavigation } from "@/lib/db/content";
 import { settings as defaultSite } from "@/content/site";
 
 const PRIVATE_PREFIXES = ["/login", "/signup", "/forgot-password", "/reset-password", "/member", "/admin"];

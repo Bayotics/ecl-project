@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import crest from "@/assets/media/ecl-crest.png";
-import { supabaseBrowser } from "@/lib/supabase/client";
+import { api, type Me } from "@/lib/api-client";
 
 import styles from "./AdminArea.module.css";
 
@@ -26,15 +26,14 @@ const SECTIONS = [
 ] as const;
 
 type CountMap = Record<string, number | undefined>;
-type RawClient = { from: (table: string) => { select: (columns: string, options?: { count?: "exact"; head?: boolean }) => PromiseLike<{ count: number | null; error: { message: string } | null }> } };
 
 function AdminHeader({ signOut }: { signOut: () => void }) { return <header className={styles.header}><Link href="/" className={styles.brand}><Image src={crest} alt="" width={38} height={38} /><span>Eko Club Louisiana</span></Link><button onClick={signOut}>Sign out</button></header>; }
 
 export function AdminArea() {
   const [authorized, setAuthorized] = useState<boolean | null>(null); const [counts, setCounts] = useState<CountMap>({});
-  useEffect(() => { let live = true; async function load() { try { const client = supabaseBrowser(); const { data: { user } } = await client.auth.getUser(); if (!user) { if (live) setAuthorized(false); return; } const { data: role } = await client.from("user_roles").select("role").eq("user_id", user.id).maybeSingle(); if (role?.role !== "admin") { if (live) setAuthorized(false); return; } if (!live) return; setAuthorized(true); const raw = client as unknown as RawClient; const results = await Promise.all(SECTIONS.map(async ([table]) => { const result = await raw.from(table).select("id", { count: "exact", head: true }); return [table, result.count ?? 0] as const; })); if (live) setCounts(Object.fromEntries(results)); } catch { if (live) setAuthorized(false); } } void load(); return () => { live = false; }; }, []);
-  async function signOut() { await supabaseBrowser().auth.signOut(); window.location.assign("/"); }
+  useEffect(() => { let live = true; async function load() { try { const { user } = await api<Me>("/api/auth/me"); if (user?.role !== "admin") { if (live) setAuthorized(false); return; } if (!live) return; setAuthorized(true); const { counts } = await api<{ counts: CountMap }>("/api/admin/counts"); if (live) setCounts(counts); } catch { if (live) setAuthorized(false); } } void load(); return () => { live = false; }; }, []);
+  async function signOut() { await api("/api/auth/logout", { method: "POST" }).catch(() => undefined); window.location.assign("/"); }
   if (authorized === null) return <section className={styles.notice}>Checking secure administrator access…</section>;
   if (!authorized) return <section className={styles.notice}><h1>Administrator access required</h1><p>Sign in with a club administrator account to manage this site.</p><Link href="/login?next=/admin">Sign in</Link></section>;
-  return <section className={styles.shell}><AdminHeader signOut={() => void signOut()} /><div className={styles.content}><p className={styles.eyebrow}>Club administration</p><h1>Manage the club site.</h1><p className={styles.lead}>Content changes are protected by Supabase roles and publish controls. Draft records remain private until you make them live.</p><div className={styles.cards}>{SECTIONS.map(([key, title, description]) => <Link className={styles.card} key={key} href={`/admin/${key}`}><h2>{title}</h2><p>{description}</p><span className={styles.count}>{counts[key] ?? 0} records</span></Link>)}</div></div></section>;
+  return <section className={styles.shell}><AdminHeader signOut={() => void signOut()} /><div className={styles.content}><p className={styles.eyebrow}>Club administration</p><h1>Manage the club site.</h1><p className={styles.lead}>Content changes are limited to administrator accounts and publish controls. Draft records remain private until you make them live.</p><div className={styles.cards}>{SECTIONS.map(([key, title, description]) => <Link className={styles.card} key={key} href={`/admin/${key}`}><h2>{title}</h2><p>{description}</p><span className={styles.count}>{counts[key] ?? 0} records</span></Link>)}</div></div></section>;
 }

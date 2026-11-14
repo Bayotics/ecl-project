@@ -5,7 +5,7 @@ import { eventWhenLine } from "@/content/event-view";
 import { resolveMedia } from "@/content/media";
 import "server-only";
 import { cache } from "react";
-import { publicDatabase } from "./server";
+import { database, rows } from "./mongo";
 import { publishedEvents as bundledEvents } from "@/content/event-view";
 import { heroSlides } from "@/content/hero";
 import { albums } from "@/content/gallery";
@@ -14,52 +14,41 @@ import type { EventRecord, GalleryAlbum, HeroSlide } from "@/content/types";
 import type { PageMedia } from "./types";
 
 import { meta, mapEvent, managedMedia } from "./adapters";
-// Once configured, Supabase is authoritative: empty/published=false must never resurrect bundled content.
+// Built-in history (content/events.ts, content/gallery.ts) is part of the site and always shows; records
+// added in the admin appear alongside it, and a database record with the same slug replaces it.
 export const publicEvents = cache(async (): Promise<EventRecord[]> => {
-  const db = publicDatabase(); if (!db) return bundledEvents();
-  const { data, error } = await db.from("events").select("*").eq("published", true).order("start_at");
-  if (error) throw new Error("Unable to load club events.");
-  return (data ?? []).map(mapEvent);
+  const db = await database(); if (!db) return bundledEvents();
+  const managed = (await rows(db, "events", { published: true }, { start_at: 1 })).map(mapEvent);
+  return [...managed, ...bundledEvents().filter(event => !managed.some(m => m.slug === event.slug))];
 });
 export async function publicEvent(slug: string) { return (await publicEvents()).find(e => e.slug === slug); }
 export const publicSlides = cache(async (): Promise<HeroSlide[]> => {
-  const db = publicDatabase(); if (!db) return published(heroSlides);
-  const { data, error } = await db.from("hero_slides").select("*").eq("active", true).order("sort_order");
-  if (error) throw new Error("Unable to load homepage slides.");
-  return (data ?? []).filter(row => Boolean(row.image_url)).map((row, index) => ({ ...meta, id: row.id, tab: row.title, eyebrow: "Eko Club Louisiana", headline: row.title,
+  const db = await database(); if (!db) return published(heroSlides);
+  return (await rows(db, "hero_slides", { active: true })).filter(row => Boolean(row.image_url)).map((row, index) => ({ ...meta, id: row.id, tab: row.title, eyebrow: "Eko Club Louisiana", headline: row.title,
     text: row.subtitle, cta: { label: row.cta_label, href: safeDestination(row.cta_url) }, media: managedMedia(row.image_url, row.image_alt), video: index === 0 ? heroSlides[0].video : [] }));
 });
 export const publicPageMedia = cache(async (page: "home" | "about"): Promise<PageMedia[]> => {
-  const db = publicDatabase();
+  const db = await database();
   if (!db) return [];
-  const { data, error } = await db.from("page_media").select("*").eq("page", page).eq("active", true).order("sort_order");
-  if (error) {
-    if (["PGRST205", "42P01"].includes(error.code)) return [];
-    throw new Error("Unable to load page images.");
-  }
-  return (data ?? []).filter(row => Boolean(row.image_url));
+  return (await rows(db, "page_media", { page, active: true })).filter(row => Boolean(row.image_url));
 });
 function safeDestination(value: string) {
   return /^(\/[^/]|https:\/\/)/.test(value) ? value : "/";
 }
 export const publicAlbums = cache(async (): Promise<GalleryAlbum[]> => {
-  const db = publicDatabase(); if (!db) return published(albums);
-  const [albumResult, photoResult] = await Promise.all([
-    db.from("gallery_albums").select("*").eq("published", true).order("sort_order"),
-    db.from("gallery_photos").select("*").eq("published", true).order("sort_order")
-  ]);
-  if (albumResult.error || photoResult.error) throw new Error("Unable to load club photographs.");
-  return (albumResult.data ?? []).map(row => ({ ...meta, slug: row.slug, title: row.title, excerpt: row.description,
+  const db = await database(); if (!db) return published(albums);
+  const [albumRows, photoRows] = await Promise.all([rows(db, "gallery_albums", { published: true }), rows(db, "gallery_photos", { published: true })]);
+  const managed: GalleryAlbum[] = albumRows.map(row => ({ ...meta, slug: row.slug, title: row.title, excerpt: row.description,
     date: row.album_date ? { value: row.album_date, precision: "day" as const } : null,
     cover: managedMedia(row.image_url, row.title),
-    photos: (photoResult.data ?? []).filter(p => p.album_id === row.id).map(p => ({ media: managedMedia(p.image_url, p.alt_text), caption: p.caption })) }));
+    photos: photoRows.filter(p => p.album_id === row.id).map(p => ({ media: managedMedia(p.image_url, p.alt_text), caption: p.caption })) }));
+  return [...managed, ...published(albums).filter(album => !managed.some(m => m.slug === album.slug))];
 });
 export async function publicAlbum(slug: string) { return (await publicAlbums()).find(a => a.slug === slug); }
 
 export const publicSettings = cache(async () => {
- const db=publicDatabase();if(!db)return null;
- const {data,error}=await db.from("site_settings").select("*").eq("id",1).maybeSingle();
- if(error)throw new Error("Unable to load club settings.");return data;
+ const db=await database();if(!db)return null;
+ const [row]=await rows(db,"site_settings",{id:1},{id:1});return row??null;
 });
 export const publicSearchIndex = cache(async () => {
  const [events,albums]=await Promise.all([publicEvents(),publicAlbums()]);
@@ -82,13 +71,8 @@ export async function publicNavigation() {
 export const publicExecutives = cache(async () => {
   const { leadership, presidents } = await import("@/content/leadership");
   const fallback = () => [...leadership.map(person => ({...person, section: "current"})), ...presidents.map(person => ({...person, section: "presidents"}))];
-  const db = publicDatabase();
+  const db = await database();
   if (!db) return fallback();
-  const { data, error } = await db.from("executives").select("*").eq("published", true).order("sort_order").order("name");
-  if (error) {
-    if (["PGRST205", "42P01"].includes(error.code)) return fallback();
-    throw new Error("Unable to load club executives.");
-  }
-  return (data ?? []).map(row => ({...meta, slug:row.slug, name:row.name, role:row.role, term:row.term, bio:row.bio, section:row.section,
+  return (await rows(db, "executives", { published: true }, { sort_order: 1, name: 1 })).map(row => ({...meta, slug:row.slug, name:row.name, role:row.role, term:row.term, bio:row.bio, section:row.section,
     media:row.image_url ? {...managedMedia(row.image_url,row.image_alt || row.name),fit:"contain" as const} : null}));
 });

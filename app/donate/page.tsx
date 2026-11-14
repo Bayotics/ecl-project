@@ -1,4 +1,4 @@
-import { publicSettings } from "@/lib/supabase/content";
+import { publicSettings } from "@/lib/db/content";
 import type { Metadata } from "next";
 
 import { DonateForm } from "@/components/donate/DonateForm";

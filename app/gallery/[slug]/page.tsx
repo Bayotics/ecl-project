@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 import { AlbumGallery } from "@/components/gallery/AlbumGallery";
 import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
-import { publicAlbum } from "@/lib/supabase/content";
+import { publicAlbum } from "@/lib/db/content";
 import { assets, resolveMedia } from "@/content/media";
 import { formatPartialDate } from "@/content/meta";
 

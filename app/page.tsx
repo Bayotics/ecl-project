@@ -13,10 +13,10 @@ import { NewsEvents } from "@/components/sections/NewsEvents/NewsEvents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { causeHref, causes } from "@/content/causes";
 import { feedHref, feedLabel, publishedFeed } from "@/content/feed";
-import { publicEvents, publicPageMedia, publicSettings } from "@/lib/supabase/content";
+import { publicEvents, publicPageMedia, publicSettings } from "@/lib/db/content";
 import { heroSlides } from "@/content/hero";
 import { resolveMedia } from "@/content/media";
-import { managedMedia } from "@/lib/supabase/adapters";
+import { managedMedia } from "@/lib/db/adapters";
 import { published, formatPartialDate } from "@/content/meta";
 import {
   causesPanel,
@@ -45,8 +45,8 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const managed = await publicSettings();
   const pageImages = new Map((await publicPageMedia("home")).map(item => [item.placement, resolveMedia(managedMedia(item.image_url, item.image_alt))]));
-  // An image set in the admin area (Supabase page media) wins; otherwise the bundled photograph, so a
-  // slot is never left empty when nothing has been uploaded (or Supabase is not configured).
+  // An image set in the admin area (page media in the database) wins; otherwise the bundled photograph, so a
+  // slot is never left empty when nothing has been uploaded (or the database is not configured).
   const pageImage = <T,>(placement: string, fallback: T) => pageImages.get(placement) ?? fallback;
   // Hero slides and mission copy are the site's own content, never replaced by backend records.
   const slides = published(heroSlides).map(({ id, tab, eyebrow, headline, text, cta, media, video }) => ({

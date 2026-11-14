@@ -6,7 +6,7 @@ import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { pages } from "@/content/pages";
-import { publicSearchIndex } from "@/lib/supabase/content";
+import { publicSearchIndex } from "@/lib/db/content";
 import { matchEntries } from "@/lib/search-match";
 
 import styles from "./search.module.css";

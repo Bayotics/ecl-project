@@ -99,12 +99,6 @@ export type Subscriber = {
   source: string
   created_at: string
 }
-type Table<T> = {
-  Row: T
-  Insert: Partial<T>
-  Update: Partial<T>
-  Relationships: []
-}
 export type Executive = {
  id: string
  slug: string
@@ -154,35 +148,16 @@ export type Tables = {
   event_rsvps: Rsvp
   contact_messages: Message
   newsletter_subscribers: Subscriber
-  user_roles: { user_id: string; role: 'member' | 'admin' }
 }
-export type Database = {
-  public: {
-    Tables: { [K in keyof Tables]: Table<Tables[K]> }
-    Views: Record<never, never>
-    Enums: Record<never, never>
-    CompositeTypes: Record<never, never>
-    Functions: {
-      is_admin: { Args: Record<never, never>; Returns: boolean }
-      set_rsvp: {
-        Args: { p_event_id: string; p_going: boolean }
-        Returns: undefined
-      }
-      submit_contact: {
-        Args: {
-          p_name: string
-          p_email: string
-          p_phone: string
-          p_subject: string
-          p_message: string
-          p_website?: string
-        }
-        Returns: undefined
-      }
-      subscribe_newsletter: {
-        Args: { p_email: string; p_website?: string }
-        Returns: undefined
-      }
-    }
-  }
+
+/** Login record (the `users` collection). Never sent to the browser as-is. */
+export type User = {
+  id: string
+  email: string
+  password_hash: string
+  role: "member" | "admin"
+  email_confirmed_at: string | null
+  created_at: string
+  updated_at: string
 }
+export type TableName = keyof Tables

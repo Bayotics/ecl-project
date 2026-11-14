@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { resolveMedia } from "@/content/media";
-import { managedMedia } from "@/lib/supabase/adapters";
-import type { EventCategory,EventMedia } from "@/lib/supabase/types";
+import { managedMedia } from "@/lib/db/adapters";
+import type { EventCategory,EventMedia } from "@/lib/db/types";
 import styles from "./collections.module.css";
 
 export function EventCollections({categories,media,selected}:{categories:EventCategory[];media:EventMedia[];selected:string}) {

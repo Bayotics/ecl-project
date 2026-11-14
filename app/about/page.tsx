@@ -12,8 +12,8 @@ import { pages } from "@/content/pages";
 import { contactBand, settings } from "@/content/site";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
-import { managedMedia } from "@/lib/supabase/adapters";
-import { publicPageMedia } from "@/lib/supabase/content";
+import { managedMedia } from "@/lib/db/adapters";
+import { publicPageMedia } from "@/lib/db/content";
 import layout from "@/styles/layout.module.css";
 
 import styles from "./about.module.css";
@@ -35,7 +35,7 @@ function MarkLink({ href, children, tone = "dark" }: { href: string; children: s
  * story column, facts grid, three-column feature bands, an accent list of the six areas, the two homes,
  * then the shared contact band. Each block enters with a different scroll motion.
  */
-// Images can be replaced from the admin area (Supabase page media), so render per request.
+// Images can be replaced from the admin area (page media in the database), so render per request.
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 import crest from "@/assets/media/ecl-crest.png";
-import { supabaseBrowser } from "@/lib/supabase/client";
+import { api } from "@/lib/api-client";
 
 import styles from "./AuthPage.module.css";
 
@@ -33,27 +33,20 @@ export function AuthPage({ mode }: { mode: Mode }) {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError(null); setNotice(null);
     try {
-      const supabase = supabaseBrowser();
       if ((mode === "signup" || mode === "reset") && password.length < 6) throw new Error("Password must contain at least 6 characters.");
       if (mode === "login") {
-        const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
-        if (authError) throw authError;
-        const { data: isAdmin, error: roleError } = await supabase.rpc("is_admin");
-        if (roleError) throw new Error("Unable to check your account role. Please try signing in again.");
+        const { admin: isAdmin } = await api<{ admin: boolean }>("/api/auth/login", { body: { email, password } });
         const next = safeNext(new URLSearchParams(window.location.search).get("next"));
         router.replace(isAdmin ? "/admin" : /^\/admin(?:[/?#]|$)/.test(next) ? "/member" : next);
         router.refresh();
       } else if (mode === "signup") {
-        const { data, error: authError } = await supabase.auth.signUp({ email, password, options: { data: { full_name: name }, emailRedirectTo: `${window.location.origin}/login` } });
-        if (authError) throw authError;
-        if (data.session) { router.replace("/member"); router.refresh(); } else setNotice("Check your email to confirm your account, then sign in.");
+        const { signedIn } = await api<{ signedIn: boolean }>("/api/auth/signup", { body: { name, email, password } });
+        if (signedIn) { router.replace("/member"); router.refresh(); } else setNotice("Check your email to confirm your account, then sign in.");
       } else if (mode === "forgot") {
-        const { error: authError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
-        if (authError) throw authError;
+        await api("/api/auth/forgot", { body: { email } });
         setNotice("If an account exists for that email, a reset link is on its way.");
       } else {
-        const { error: authError } = await supabase.auth.updateUser({ password });
-        if (authError) throw authError;
+        await api("/api/auth/reset", { body: { token: new URLSearchParams(window.location.search).get("token") ?? "", password } });
         setNotice("Your password has been updated. You can now continue to your account.");
       }
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Something went wrong. Please try again."); }

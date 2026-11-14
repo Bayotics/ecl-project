@@ -1,4 +1,4 @@
-import { publicEvent } from "@/lib/supabase/content";
+import { publicEvent } from "@/lib/db/content";
 import { eventHref, eventInstants } from "@/content/event-view";
 import { settings } from "@/content/site";
 import { icsStamp } from "@/lib/time";

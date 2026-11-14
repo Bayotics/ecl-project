@@ -11,7 +11,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    remotePatterns: process.env.NEXT_PUBLIC_SUPABASE_URL ? ["site-media", "event-media"].map(bucket => ({ protocol: "https" as const, hostname: new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname, pathname: `/storage/v1/object/public/${bucket}/**` })) : [],
+    // Uploaded media is served from the Cloudflare R2 bucket's public address.
+    remotePatterns: process.env.R2_PUBLIC_URL ? [{ protocol: "https" as const, hostname: new URL(process.env.R2_PUBLIC_URL).hostname, pathname: "/**" }] : [],
     formats: ["image/avif", "image/webp"],
     // Photographs are served at 90 (MediaImage); 75 stays available for other images.
     qualities: [75, 90],

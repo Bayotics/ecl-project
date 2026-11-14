@@ -1,5 +1,5 @@
 export const dynamic = 'force-dynamic';
-import { publicEvents, publicAlbums } from "@/lib/supabase/content";
+import { publicEvents, publicAlbums } from "@/lib/db/content";
 import type { MetadataRoute } from "next";
 
 import { causeHref, causes } from "@/content/causes";
