@@ -9,8 +9,8 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { levelTimeline } from "../overlayMotion";
 import styles from "./panels.module.css";
 
-type Level = "root" | "programs" | "events";
-const LEVELS: Level[] = ["root", "programs", "events"];
+type Level = "root" | "programs" | "about" | "events";
+const LEVELS: Level[] = ["root", "programs", "about", "events"];
 
 interface MobilePanelProps {
   id: string;
@@ -137,10 +137,27 @@ export function MobilePanel({ id, data, open, ref, onNavigate }: MobilePanelProp
               </li>
             ))}
           </ul>
-          <Link href={data.programs.viewAll.href} className={styles.textAction} onClick={onNavigate}>
-            <span>{data.programs.viewAll.label}</span>
-            <ArrowRightIcon size={14} />
-          </Link>
+          {data.programs.viewAll ? (
+            <Link href={data.programs.viewAll.href} className={styles.textAction} onClick={onNavigate}>
+              <span>{data.programs.viewAll.label}</span>
+              <ArrowRightIcon size={14} />
+            </Link>
+          ) : null}
+        </div>
+
+        {/* About us */}
+        <div id={`${id}-about`} className={styles.mobileLevel} inert={level !== "about"}>
+          {backButton("about")}
+          <p className={styles.label}>{data.about.label}</p>
+          <ul role="list" className={styles.mobileList}>
+            {data.about.links.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className={styles.mobileRow} onClick={onNavigate}>
+                  <span>{link.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Events */}

@@ -16,7 +16,7 @@ interface MediaImageProps extends Omit<ImageProps, "src" | "alt" | "fill" | "sty
  * Renders a resolved media reference into a positioned frame: applies the record's focal point,
  * zoom and fit. Consumers scale on hover with `scale(calc(var(--zoom, 1) * 1.04))`.
  */
-export function MediaImage({ media, decorative = false, className, quality = 90, ...rest }: MediaImageProps) {
+export function MediaImage({ media, decorative = false, className, quality = 90, unoptimized, ...rest }: MediaImageProps) {
   const style = {
     objectPosition: media.position,
     "--zoom": media.zoom,
@@ -33,7 +33,7 @@ export function MediaImage({ media, decorative = false, className, quality = 90,
       alt={decorative ? "" : media.alt}
       fill
       quality={quality}
-      unoptimized={uploaded}
+      unoptimized={uploaded || unoptimized}
       placeholder={media.src.blurDataURL ? "blur" : "empty"}
       className={cx(styles.image, media.fit === "contain" && styles.contain, className)}
       style={style}

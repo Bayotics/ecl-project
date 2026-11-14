@@ -65,7 +65,8 @@ export type AssetId =
   | "homeCommunityBuilding"
   | "homeHealthAndWellbeing"
   | "homeRootedInLagos"
-  | "homeCommunityBuiltTogether";
+  | "homeCommunityBuiltTogether"
+  | "aboutUsDropdown";
 
 /** Focal point in percent of the source image (0–100). */
 export interface Focal {
@@ -296,7 +297,7 @@ export interface NavGroup {
 }
 
 /** Desktop dropdown panels opened from the main row. Menu and search are separate controls. */
-export type DropdownId = "programs" | "events";
+export type DropdownId = "programs" | "about" | "events";
 
 export interface PrimaryNavItem {
   id: string;
@@ -323,13 +324,24 @@ export type EventCardView =
       action: LinkItem;
     };
 
+/** Photo-plus-links dropdown (Programs, About us). `viewAll` adds a quiet link at the side. */
+export interface LinkPanel {
+  label: string;
+  links: LinkItem[];
+  media: ResolvedMedia;
+  viewAll?: LinkItem;
+  /** Show the photograph exactly as supplied (no resizing or re-encoding). */
+  exact?: boolean;
+}
+
 /** Everything the header needs, resolved on the server from content records. */
 export interface HeaderData {
   siteName: string;
   utility: { text: string; links: LinkItem[] };
   nav: PrimaryNavItem[];
   donate: LinkItem;
-  programs: { label: string; links: LinkItem[]; media: ResolvedMedia; viewAll: LinkItem };
+  programs: LinkPanel;
+  about: LinkPanel;
   events: { label: string; invitation: string; allEvents: LinkItem; cards: EventCardView[] };
   menu: {
     label: string;

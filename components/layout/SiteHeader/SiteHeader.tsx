@@ -27,7 +27,7 @@ type Overlay = "none" | DropdownId | "menu" | "search";
 type PanelKey = DropdownId | "menu" | "search" | "mobile";
 type Control = Exclude<Overlay, "none">;
 
-const PANEL_KEYS: PanelKey[] = ["programs", "events", "menu", "search", "mobile"];
+const PANEL_KEYS: PanelKey[] = ["programs", "about", "events", "menu", "search", "mobile"];
 const panelId = (key: PanelKey) => `overlay-${key}`;
 
 /** Routes whose first section is a full-bleed hero marked `data-header-overlay`. */
@@ -57,6 +57,7 @@ export function SiteHeader({ data }: { data: HeaderData }) {
   const shellRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
   const programsRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
   const eventsRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -84,14 +85,14 @@ export function SiteHeader({ data }: { data: HeaderData }) {
   }
 
   // Dropdowns exist only at desktop width; the Menu control maps to the mobile panel below it.
-  const active: Overlay = !isDesktop && (overlay === "programs" || overlay === "events") ? "none" : overlay;
+  const active: Overlay = !isDesktop && (overlay === "programs" || overlay === "about" || overlay === "events") ? "none" : overlay;
   const open = active !== "none";
   const activeKey: PanelKey | null = active === "none" ? null : active === "menu" && !isDesktop ? "mobile" : active;
   const theme = OVERLAY_ROUTES.has(pathname) && overHero && !open ? "overlay" : "solid";
 
   // Lookups used only inside effects and event handlers.
   const panelEl = (key: PanelKey): HTMLDivElement | null =>
-    ({ programs: programsRef, events: eventsRef, menu: menuRef, search: searchRef, mobile: mobileRef })[key].current;
+    ({ programs: programsRef, about: aboutRef, events: eventsRef, menu: menuRef, search: searchRef, mobile: mobileRef })[key].current;
   const controlEl = (key: Control): HTMLButtonElement | null =>
     key === "search" ? searchButtonRef.current : key === "menu" ? menuButtonRef.current : (triggerRefs.current[key] ?? null);
 
@@ -273,7 +274,7 @@ export function SiteHeader({ data }: { data: HeaderData }) {
       origin.current?.focus();
     } else if (!event.shiftKey && document.activeElement === last) {
       event.preventDefault();
-      if (active === "programs" || active === "events") {
+      if (active === "programs" || active === "about" || active === "events") {
         // Leave the dropdown forwards: continue to the control after its trigger, and close.
         const bar = focusables(headerRef.current?.querySelector<HTMLElement>("[data-nav-bar]"));
         const next = origin.current ? bar[bar.indexOf(origin.current) + 1] : undefined;
@@ -396,6 +397,13 @@ export function SiteHeader({ data }: { data: HeaderData }) {
             data={data.programs}
             open={activeKey === "programs"}
             ref={programsRef}
+            onNavigate={navigateAway}
+          />
+          <ProgramsPanel
+            id={panelId("about")}
+            data={data.about}
+            open={activeKey === "about"}
+            ref={aboutRef}
             onNavigate={navigateAway}
           />
           <EventsPanel

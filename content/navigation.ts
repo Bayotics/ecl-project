@@ -80,7 +80,7 @@ export const headerData: HeaderData = {
   },
   nav: [
     { id: "programs", label: "Programs", href: routes.programs, panel: "programs" },
-    { id: "about", label: "About us", href: routes.about },
+    { id: "about", label: "About us", href: routes.about, panel: "about" },
     { id: "involved", label: "Get involved", href: routes.getInvolved },
     { id: "events", label: "Events", href: routes.events, panel: "events" },
   ],
@@ -90,6 +90,17 @@ export const headerData: HeaderData = {
     links: causeLinks,
     media: resolveMedia({ asset: "asoOkeCouple" }),
     viewAll: { label: "All programs & causes", href: routes.programs },
+  },
+  about: {
+    label: "About us",
+    links: [
+      { label: "About Us", href: routes.about },
+      { label: "History", href: routes.history },
+      { label: "Executives", href: routes.leadership },
+      { label: "Our impact", href: routes.impact },
+    ],
+    media: resolveMedia({ asset: "aboutUsDropdown" }),
+    exact: true,
   },
   events: {
     label: "Events",

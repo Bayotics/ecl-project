@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useState, type Ref } from "react";
 
-import type { HeaderData } from "@/content/types";
+import type { LinkPanel } from "@/content/types";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { cx } from "@/lib/cx";
@@ -10,7 +10,7 @@ import styles from "./panels.module.css";
 
 interface ProgramsPanelProps {
   id: string;
-  data: HeaderData["programs"];
+  data: LinkPanel;
   open: boolean;
   ref?: Ref<HTMLDivElement>;
   onNavigate: () => void;
@@ -28,7 +28,7 @@ export function ProgramsPanel({ id, data, open, ref, onNavigate }: ProgramsPanel
   return (
     <div id={id} ref={ref} className={cx(styles.panel, styles.programs)} inert={!open} data-lenis-prevent>
       <div className={styles.programsMedia} data-panel-item>
-        {opened ? <MediaImage media={data.media} sizes="(min-width: 1024px) 30vw, 1px" /> : null}
+        {opened ? <MediaImage media={data.media} sizes="(min-width: 1024px) 30vw, 1px" unoptimized={data.exact} /> : null}
       </div>
 
       <div className={styles.programsList}>
@@ -48,12 +48,14 @@ export function ProgramsPanel({ id, data, open, ref, onNavigate }: ProgramsPanel
       </div>
 
       <div className={styles.programsAside}>
-        <div data-panel-item>
-          <Link href={data.viewAll.href} className={styles.textAction} onClick={onNavigate}>
-            <span>{data.viewAll.label}</span>
-            <ArrowRightIcon size={14} />
-          </Link>
-        </div>
+        {data.viewAll ? (
+          <div data-panel-item>
+            <Link href={data.viewAll.href} className={styles.textAction} onClick={onNavigate}>
+              <span>{data.viewAll.label}</span>
+              <ArrowRightIcon size={14} />
+            </Link>
+          </div>
+        ) : null}
       </div>
     </div>
   );

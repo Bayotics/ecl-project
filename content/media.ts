@@ -3,7 +3,7 @@
  * carry their own crop focus and zoom. Club photographs are described as the club; supplied stock and
  * Lagos photographs are described neutrally and never as Eko Club Louisiana members or events.
  */
-import asoOkeCouple from "@/assets/media/aso-oke-couple.jpg";
+import asoOkeCouple from "@/public/media/homepage/programs-dropdown.png";
 import celebrationGuests from "@/assets/media/celebration-guests.jpg";
 import communityDance from "@/assets/media/community-dance.jpg";
 import crest from "@/assets/media/ecl-crest.png";
@@ -26,6 +26,7 @@ import homeCommunityBuilding from "@/assets/media/homepage/community-building.pn
 import homeHealthAndWellbeing from "@/assets/media/homepage/health-and-wellbeing.jpg";
 import homeRootedInLagos from "@/assets/media/homepage/rooted-in-lagos.png";
 import homeCommunityBuiltTogether from "@/assets/media/homepage/community-built-together.png";
+import aboutUsDropdown from "@/assets/media/homepage/about-us-dropdown.png";
 
 import type { AssetId, MediaAsset, MediaRef, ResolvedMedia } from "./types";
 
@@ -75,6 +76,7 @@ const STOCK = "Unsplash photograph supplied with the new media. It does not show
 const LAGOS = "Lagos street-festival photograph supplied with the new media. Confirm the photographer and usage rights.";
 
 export const assets: Record<AssetId, MediaAsset> = {
+  aboutUsDropdown: homepage("aboutUsDropdown", aboutUsDropdown, "about-us-dropdown.png", [965, 624], "Eko Club Louisiana members gathered together.", { x: 50, y: 50 }),
   homeCommunityInAction: homepage("homeCommunityInAction", homeCommunityInAction, "community-in-action-slide.jpg", [6000, 4000], "Women in colourful traditional attire and gele head wraps walking together along a city street.", { x: 50, y: 50 }),
   homeBuildWithUs: homepage("homeBuildWithUs", homeBuildWithUs, "build-with-us-slide.CR2", [6000, 4000], "Volunteers in matching red-and-white shirts gathered behind a table of donated personal-care supplies.", { x: 50, y: 45 }),
   homePresidentMessage: homepage("homePresidentMessage", homePresidentMessage, "message-from-president-thuimbnail.webp", [525, 685], "Portrait of a man in a cream agbada and an embroidered gold cap.", { x: 50, y: 35 }),
@@ -186,7 +188,7 @@ export const assets: Record<AssetId, MediaAsset> = {
     asoOkeCouple,
     "samson-ejim-olzRU-XchJ4-unsplash.jpg",
     [3748, 2464],
-    "A smiling couple in matching purple aso-oke, gele and coral beads at a traditional celebration, with a drummer behind them.",
+    "ECL Members at oldies night.",
     { x: 50, y: 36 },
     "Samson Ejim / Unsplash",
     [STOCK],
