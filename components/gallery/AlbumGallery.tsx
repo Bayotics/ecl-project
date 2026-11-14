@@ -118,6 +118,7 @@ export function AlbumGallery({ title, photos }: { title: string; photos: Gallery
                   alt={current.media.alt}
                   fill
                   sizes="100vw"
+                  quality={90}
                   className={styles.full}
                 />
               </div>

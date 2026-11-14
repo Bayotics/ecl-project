@@ -41,7 +41,8 @@ export const metadata: Metadata = pageMetadata({ description: settings.descripti
  * Section 9 (logo strip and footer) is the shared footer in app/layout.tsx.
  * Every block reads published records; media references are resolved here, on the server.
  */
-export const dynamic = "force-dynamic";
+// Cached and served instantly; refreshed hourly and immediately whenever the admin saves a change.
+export const revalidate = 3600;
 export default async function HomePage() {
   const managed = await publicSettings();
   const pageImages = new Map((await publicPageMedia("home")).map(item => [item.placement, resolveMedia(managedMedia(item.image_url, item.image_alt))]));

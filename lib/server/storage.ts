@@ -29,6 +29,6 @@ function r2() {
 export const publicUrl = (key: string) => `${process.env.R2_PUBLIC_URL!.replace(/\/$/, "")}/${key}`;
 
 export async function signedUpload(key: string, contentType: string, size: number) {
-  const command = new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key, ContentType: contentType, ContentLength: size, CacheControl: "public, max-age=31536000, immutable" });
+  const command = new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key, ContentType: contentType, ContentLength: size, CacheControl: "public, max-age=31536000, immutable" /* every upload gets a new name */ });
   return getSignedUrl(r2(), command, { expiresIn: 600 });
 }

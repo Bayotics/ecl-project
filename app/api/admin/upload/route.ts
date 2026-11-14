@@ -4,7 +4,10 @@ import { ApiError, handle } from "@/lib/server/api";
 import { isStorageConfigured, publicUrl, signedUpload } from "@/lib/server/storage";
 
 const TYPES: Record<string, { extension: string; maxMb: number; buckets: string[] }> = {
-  "image/webp": { extension: "webp", maxMb: 20, buckets: ["site-media", "event-media"] },
+  "image/jpeg": { extension: "jpg", maxMb: 25, buckets: ["site-media", "event-media"] },
+  "image/png": { extension: "png", maxMb: 25, buckets: ["site-media", "event-media"] },
+  "image/webp": { extension: "webp", maxMb: 25, buckets: ["site-media", "event-media"] },
+  "image/avif": { extension: "avif", maxMb: 25, buckets: ["site-media", "event-media"] },
   "video/mp4": { extension: "mp4", maxMb: 50, buckets: ["event-media"] },
   "video/webm": { extension: "webm", maxMb: 50, buckets: ["event-media"] },
 };

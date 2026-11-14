@@ -1,6 +1,7 @@
 import "server-only";
 
 import { MongoClient, type Db, type Document, type Filter, type Sort } from "mongodb";
+import { unstable_cache } from "next/cache";
 
 import type { TableName, Tables, User } from "./types";
 
@@ -51,6 +52,21 @@ export function collection<K extends keyof Collections>(db: Db, name: K) {
 export async function rows<K extends TableName>(db: Db, name: K, filter: Filter<Document> = {}, sort: Sort = { sort_order: 1 }): Promise<Tables[K][]> {
   const docs = await db.collection(name).find(filter, { projection: { _id: 0 } }).sort(sort).toArray();
   return docs as unknown as Tables[K][];
+}
+
+/** Tag on every cached public read; admin saves clear it so changes appear immediately. */
+export const CONTENT_TAG = "content";
+
+/**
+ * Published records for the public website, cached across visitors for an hour (or until an admin
+ * save clears CONTENT_TAG), so pages don't wait on the database on every visit.
+ */
+export function publicRows<K extends TableName>(name: K, filter: Filter<Document> = {}, sort: Sort = { sort_order: 1 }): Promise<Tables[K][]> {
+  return unstable_cache(
+    async () => rows(await requireDatabase(), name, filter, sort),
+    ["public-rows", name, JSON.stringify(filter), JSON.stringify(sort)],
+    { revalidate: 3600, tags: [CONTENT_TAG] },
+  )();
 }
 
 async function ensureIndexes(db: Db) {

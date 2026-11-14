@@ -1,6 +1,7 @@
 import { MongoServerError } from "mongodb";
+import { revalidatePath, revalidateTag } from "next/cache";
 
-import { requireDatabase } from "@/lib/db/mongo";
+import { CONTENT_TAG, requireDatabase } from "@/lib/db/mongo";
 import { adminSection, recordFromForm } from "@/lib/server/admin-records";
 import { ApiError, handle } from "@/lib/server/api";
 
@@ -21,6 +22,8 @@ export async function PATCH(request: Request, { params }: Params) {
       if (error instanceof MongoServerError && error.code === 11000) throw new ApiError("A record with that slug or email already exists.", 409);
       throw error;
     }
+    revalidateTag(CONTENT_TAG, { expire: 0 });
+    revalidatePath("/", "layout");
     return {};
   });
 }
@@ -38,6 +41,8 @@ export async function DELETE(request: Request, { params }: Params) {
     if (!result.deletedCount) throw new ApiError("That record no longer exists.", 404);
     if (name === "gallery_albums") await db.collection("gallery_photos").deleteMany({ album_id: id });
     if (name === "events") await db.collection("event_rsvps").deleteMany({ event_id: id });
+    revalidateTag(CONTENT_TAG, { expire: 0 });
+    revalidatePath("/", "layout");
     return {};
   });
 }

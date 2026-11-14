@@ -54,15 +54,10 @@ export function AdminTableManager({ table }: { table: string }) {
     if(!file) return;
     setBusy(true);setError("");
     try {
-      if(!["image/jpeg","image/png","image/webp"].includes(file.type) || file.size>20*1024*1024) throw new Error("Choose a JPEG, PNG or WebP image under 20 MB.");
-      const bitmap=await createImageBitmap(file);
-      const scale=Math.min(1,2400/Math.max(bitmap.width,bitmap.height));
-      const canvas=document.createElement("canvas");canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
-      const context=canvas.getContext("2d");if(!context) throw new Error("Image conversion is unavailable.");
-      context.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
-      const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Image conversion failed.")),"image/webp",.82));
-      change("image_url",await uploadMedia("site-media",blob));
-      setNotice("Image uploaded and optimized. Save the record to use it.");
+      // The original file is stored exactly as chosen; the website sizes it for each screen when shown.
+      if(!["image/jpeg","image/png","image/webp","image/avif"].includes(file.type) || file.size>25*1024*1024) throw new Error("Choose a JPEG, PNG, WebP or AVIF image under 25 MB.");
+      change("image_url",await uploadMedia("site-media",file));
+      setNotice("Original image uploaded at full quality. Save the record to use it.");
     } catch(e){setError(e instanceof Error?e.message:"Upload failed.");}finally{setBusy(false);}
   }
   async function save(event:FormEvent) {
@@ -112,7 +107,7 @@ export function AdminTableManager({ table }: { table: string }) {
         f.type==="textarea"?<textarea value={String(editor[f.key]??"")} readOnly={f.readOnly} required={f.required} onChange={e=>change(f.key,e.target.value)}/>:
         f.type==="datetime-local"?<input name={f.key} type="datetime-local" defaultValue={String(editor[f.key]??"")} required={f.required}/>:f.type==="checkbox"?<input type="checkbox" checked={Boolean(editor[f.key])} onChange={e=>change(f.key,e.target.checked)}/>:
         f.type==="select"?<select value={String(editor[f.key]??"")} required={f.required} onChange={e=>change(f.key,e.target.value)}><option value="">Select…</option>{f.key==="category_id"?categories.map(c=><option key={c.id} value={c.id}>{c.title}</option>):f.key==="album_id"?albums.map(a=><option key={a.id} value={a.id}>{a.title}</option>):f.options?.map(v=><option key={v}>{v}</option>)}</select>:
-        f.type==="image"?<><input aria-label="Image URL" type="text" value={String(editor[f.key]??"")} onChange={e=>change(f.key,e.target.value)}/><input aria-label="Upload image" type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={e=>void upload(e.target.files?.[0])}/>{editor[f.key]&&<a href={String(editor[f.key])} target="_blank" rel="noreferrer">Preview uploaded image</a>}</>:
+        f.type==="image"?<><input aria-label="Image URL" type="text" value={String(editor[f.key]??"")} onChange={e=>change(f.key,e.target.value)}/><input aria-label="Upload image" type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={e=>void upload(e.target.files?.[0])}/>{editor[f.key]&&<a href={String(editor[f.key])} target="_blank" rel="noreferrer">Preview uploaded image</a>}</>:
         <input type={f.type??"text"} value={String(editor[f.key]??"")} required={f.required} readOnly={f.readOnly} onChange={e=>change(f.key,e.target.value)}/>}
       </label>)}
       <div className={styles.toolbar}><button type="submit" className={styles.primary} disabled={busy || config.fields.every(f=>f.readOnly)}>{busy?"Working…":"Save changes"}</button><button type="button" className={styles.secondary} disabled={busy} onClick={()=>setEditor(null)}>Cancel</button></div>

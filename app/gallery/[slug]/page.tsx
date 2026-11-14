@@ -10,7 +10,12 @@ import { publicAlbum } from "@/lib/db/content";
 import { assets, resolveMedia } from "@/content/media";
 import { formatPartialDate } from "@/content/meta";
 
-export const dynamic = "force-dynamic";
+// Cached and served instantly; refreshed hourly and immediately whenever the admin saves a change.
+export const revalidate = 3600;
+// No pages are built ahead; each one is cached the first time it is visited.
+export async function generateStaticParams() {
+  return [];
+}
 
 
 

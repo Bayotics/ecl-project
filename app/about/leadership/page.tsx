@@ -25,7 +25,8 @@ function Portraits({ people }: { people: Leader[] }) {
   )}</ul>;
 }
 
-export const dynamic = "force-dynamic";
+// Cached and served instantly; refreshed hourly and immediately whenever the admin saves a change.
+export const revalidate = 3600;
 export default async function LeadershipPage() {
   const people = await publicExecutives();
   const leadership = people.filter(p => p.section === "current");

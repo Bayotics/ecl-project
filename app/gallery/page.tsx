@@ -13,7 +13,8 @@ export const metadata: Metadata = pageMetadata({ title: pages.gallery.label, des
 
 const slide = heroSlides.find((item) => item.id === "community");
 
-export const dynamic = "force-dynamic";
+// Cached and served instantly; refreshed hourly and immediately whenever the admin saves a change.
+export const revalidate = 3600;
 export default async function GalleryPage() {
   const items = (await publicAlbums()).map(a=>({href:"/gallery/"+a.slug,title:a.title,summary:a.excerpt,media:resolveMedia(a.cover)}));
   return (

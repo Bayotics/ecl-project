@@ -24,7 +24,12 @@ import { resolveMedia } from "@/content/media";
 import { settings } from "@/content/site";
 import { eventLd } from "@/lib/structured-data";
 
-export const dynamic = "force-dynamic";
+// Cached and served instantly; refreshed hourly and immediately whenever the admin saves a change.
+export const revalidate = 3600;
+// No pages are built ahead; each one is cached the first time it is visited.
+export async function generateStaticParams() {
+  return [];
+}
 // Re-render at most every 15 minutes so an event moves to "past" and RSVPs close on time.
 
 

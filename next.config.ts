@@ -13,7 +13,11 @@ const nextConfig: NextConfig = {
   images: {
     // Uploaded media is served from the Cloudflare R2 bucket's public address.
     remotePatterns: process.env.R2_PUBLIC_URL ? [{ protocol: "https" as const, hostname: new URL(process.env.R2_PUBLIC_URL).hostname, pathname: "/**" }] : [],
-    formats: ["image/avif", "image/webp"],
+    // WebP only: as sharp as AVIF at this quality but many times faster to generate on first view.
+    formats: ["image/webp"],
+    // Each resized image is generated once and then served from the CDN for a year. Uploaded and
+    // bundled files never change under the same address, so this is safe.
+    minimumCacheTTL: 31536000,
     // Photographs are served at 90 (MediaImage); 75 stays available for other images.
     qualities: [75, 90],
   },
@@ -43,7 +47,13 @@ const nextConfig: NextConfig = {
     ];
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Fonts never change under the same name: cache for a year in browsers and the CDN.
+      { source: "/fonts/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
+      // Site media (videos, portraits): cache for 30 days, refresh in the background after that.
+      { source: "/media/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=2592000, stale-while-revalidate=86400" }] },
+    ];
   },
 };
 

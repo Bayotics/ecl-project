@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 import { publicEvents, publicAlbums } from "@/lib/db/content";
 import type { MetadataRoute } from "next";
 

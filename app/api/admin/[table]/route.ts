@@ -1,7 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { MongoServerError } from "mongodb";
+import { revalidatePath, revalidateTag } from "next/cache";
 
-import { requireDatabase, rows } from "@/lib/db/mongo";
+import { CONTENT_TAG, requireDatabase, rows } from "@/lib/db/mongo";
 import { adminSection, recordFromForm } from "@/lib/server/admin-records";
 import { ApiError, handle } from "@/lib/server/api";
 
@@ -31,6 +32,8 @@ export async function POST(request: Request, { params }: Params) {
       if (error instanceof MongoServerError && error.code === 11000) throw new ApiError("A record with that slug or email already exists.", 409);
       throw error;
     }
+    revalidateTag(CONTENT_TAG, { expire: 0 });
+    revalidatePath("/", "layout");
     return { id };
   });
 }

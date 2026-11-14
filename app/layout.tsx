@@ -36,7 +36,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export const dynamic = "force-dynamic";
+// Cached and served instantly; refreshed hourly and immediately whenever the admin saves a change.
+export const revalidate = 3600;
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   // Variable Geologica with the CRSV axis (styles/fonts.css), served from public/fonts; fetch the
   // Latin file early so headings render in it on first paint. Weights: 200 headings, 300 copy, 500 labels.

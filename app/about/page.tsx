@@ -36,7 +36,8 @@ function MarkLink({ href, children, tone = "dark" }: { href: string; children: s
  * then the shared contact band. Each block enters with a different scroll motion.
  */
 // Images can be replaced from the admin area (page media in the database), so render per request.
-export const dynamic = "force-dynamic";
+// Cached and served instantly; refreshed hourly and immediately whenever the admin saves a change.
+export const revalidate = 3600;
 
 export default async function AboutPage() {
   const { breadcrumb, title, film, statement, facts, bands, focus, places } = about;
