@@ -119,6 +119,7 @@ export function AlbumGallery({ title, photos }: { title: string; photos: Gallery
                   fill
                   sizes="100vw"
                   quality={90}
+                  unoptimized={/^https?:\/\//.test(current.media.src.src)}
                   className={styles.full}
                 />
               </div>

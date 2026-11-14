@@ -23,12 +23,17 @@ export function MediaImage({ media, decorative = false, className, quality = 90,
     "--focal": media.position,
   } as CSSProperties;
 
+  // Photos uploaded through the admin are shown exactly as uploaded: the original file, never
+  // resized or re-encoded by the site.
+  const uploaded = /^https?:\/\//.test(media.src.src);
+
   return (
     <Image
       src={media.src}
       alt={decorative ? "" : media.alt}
       fill
       quality={quality}
+      unoptimized={uploaded}
       placeholder={media.src.blurDataURL ? "blur" : "empty"}
       className={cx(styles.image, media.fit === "contain" && styles.contain, className)}
       style={style}
