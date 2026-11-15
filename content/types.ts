@@ -59,7 +59,7 @@ export type AssetId =
   | "homePresidentMessage"
   | "homeImpact"
   | "homeCauses"
-  | "homeYouthLeadership"
+  | "homeYouthOutreach"
   | "homeCulturalHeritage"
   | "homeHumanitarianSupport"
   | "homeCommunityBuilding"
@@ -88,7 +88,19 @@ export type AssetId =
   | "humanitarianSorting"
   | "humanitarianTeam"
   | "humanitarianGiving"
-  | "humanitarianOutreach";
+  | "humanitarianOutreach"
+  | "communityHero"
+  | "communityLeanOn"
+  | "communityQuote"
+  | "communityGroup"
+  | "communityGreeting"
+  | "communityCouple"
+  | "communityOutreach1"
+  | "communityOutreach2"
+  | "healthHero"
+  | "healthCare"
+  | "healthElder"
+  | "healthGroup";
 
 /** Focal point in percent of the source image (0–100). */
 export interface Focal {

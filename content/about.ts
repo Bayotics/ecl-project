@@ -29,7 +29,7 @@ export const about = {
     paragraphs: [
       "Eko is the traditional name for Lagos, and our name carries that heritage across the Atlantic.",
       "The original Eko Club was founded in 1974. Eko Club Louisiana shares its name and spirit, and brings members together in Baton Rouge and across the state.",
-      "Our work spans education, youth leadership, cultural heritage, humanitarian support, community building, and health and wellbeing.",
+      "Our work spans youth outreach, cultural heritage, humanitarian support, community building, and health and wellbeing.",
     ],
     link: { label: "Read our history", href: "/about/history" } satisfies LinkItem,
   },
@@ -57,7 +57,7 @@ export const about = {
       id: "service",
       label: "Service",
       heading: "Learning, care and support where it is needed",
-      body: "Education, humanitarian support and health and wellbeing guide how we serve. Members give their time and skills to help communities in Louisiana and in Lagos.",
+      body: "Humanitarian support and health and wellbeing guide how we serve. Members give their time and skills to help communities in Louisiana and in Lagos.",
       link: { label: "See our impact", href: "/impact" } satisfies LinkItem,
       media: resolveMedia({ asset: "greetingCelebration" }),
     },

@@ -22,7 +22,7 @@ This document is the source of truth for layout, states and motion. Later prompt
 ### A1. Organization context
 
 - ECL (Eko Club Louisiana) is a Louisiana-based nonprofit and sociocultural community associated with Lagos heritage.
-- Public mission: cultural preservation, education, youth leadership, community development, fellowship, and humanitarian assistance involving Louisiana and Lagos.
+- Public mission: cultural preservation, youth outreach, community development, fellowship, and humanitarian assistance involving Louisiana and Lagos.
 - Existing website: https://ekoclublouisiana.org/ (retrieval not required).
 - Content must use the facts and review flags supplied in **Prompt 2**. *Prompt 2 has not been received yet; see B8.*
 
@@ -249,11 +249,11 @@ Every record extends `RecordMeta { status, provenance, review }`. Only `publishe
 
 ### C5. Copy in use
 
-- **Hero 1:** "Eko Club Louisiana" / "A shared legacy" / "Advancing culture, education and humanitarian support in Louisiana and Lagos." / "Discover our mission" → `/about#mission`.
+- **Hero 1:** "Eko Club Louisiana" / "A shared legacy" / "Advancing culture and humanitarian support in Louisiana and Lagos." / "Discover our mission" → `/about#mission`.
 - **Hero 2:** "Our community" / "Community in action" / "Explore the people, gatherings and service that connect our community." / "Explore our community" → `/gallery`.
 - **Hero 3:** "Get involved" / "Build with us" / "Join, volunteer or support the work of Eko Club Louisiana." / "Get involved" → `/get-involved`.
 - **Mission:** the two paragraphs, verbatim.
-- **Mission areas:** Education, Youth Leadership, Cultural Heritage, Humanitarian Support, Community Building, Health and Wellbeing, each with its supplied short description.
+- **Mission areas:** Youth Outreach, Cultural Heritage, Humanitarian Support, Community Building, Health and Wellbeing, each with its supplied short description.
 - Copy not supplied in Prompt 2 (intro, panels, culture, editorial, contact band, page intros) is marked `editorial-draft` in its provenance and carries a review note.
 
 ### C6. Factual review flags (internal; `content/review.ts → factualFlags`)

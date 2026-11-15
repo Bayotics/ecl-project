@@ -12,7 +12,7 @@ export const heroSlides: HeroSlide[] = [
     tab: "Our mission",
     eyebrow: "Eko Club Louisiana",
     headline: "A shared legacy",
-    text: "Advancing culture, education and humanitarian support in Louisiana and Lagos.",
+    text: "Advancing culture and humanitarian support in Louisiana and Lagos.",
     cta: { label: "Discover our mission", href: "/about#mission" },
     // Poster and fallback: the opening frame of the footage, so nothing jumps when playback starts.
     media: { asset: "heroVideoPoster" },

@@ -7,7 +7,7 @@ import type { LinkItem, MediaRef } from "./types";
  * take part; it names no programs, figures or outcomes the club has not supplied.
  *
  * Images: every `ImageSlot` shows a themed gradient until `image` is set, e.g.
- *   { label: "Students studying together", image: { asset: "myNewAsset" } }
+ *   { label: "Members at a club gathering", image: { asset: "myNewAsset" } }
  * after registering the photo in content/media.ts.
  */
 
@@ -53,76 +53,11 @@ const takePart = (slug: string) => [
 
 export const programPages: ProgramPage[] = [
   {
-    slug: "education",
-    theme: { deep: "#14304d", accent: "#2f6ea5", pale: "#e2ebf4", glow: "#7fb3dd" },
-    hero: {
-      variant: "split",
-      eyebrow: "Program 01 · Education",
-      title: "Learning that carries us forward",
-      lead: "Encouraging study, sharing knowledge across generations and helping one another find the way forward, in Louisiana and in Lagos.",
-      image: { label: "Members learning together" },
-    },
-    sections: [
-      {
-        kind: "statement",
-        tone: "pale",
-        label: "Why it matters",
-        text: "Education opens doors. For a community with roots in Lagos and a home in Louisiana, learning is one of the most lasting gifts we can pass on.",
-      },
-      {
-        kind: "pillars",
-        tone: "paper",
-        label: "What we care about",
-        heading: "Four ways we think about learning",
-        items: [
-          { title: "Learning together", text: "Study is easier in good company. We encourage members of every age to keep learning and to learn from each other." },
-          { title: "Across generations", text: "Elders carry experience, younger members bring new skills. Both have something to teach." },
-          { title: "Sharing what we know", text: "Members' knowledge of schools, careers and life in Louisiana is a resource for the whole community." },
-          { title: "Opening opportunity", text: "We want every young person in our community to see the paths that are open to them." },
-        ],
-      },
-      {
-        kind: "split",
-        tone: "pale",
-        side: "left",
-        label: "In practice",
-        heading: "Where learning happens",
-        paragraphs: [
-          "Learning happens at club gatherings, in conversations between members and in the encouragement families give one another.",
-          "As the club develops its education work, this page will share what is planned and how to join in.",
-        ],
-        image: { label: "A club gathering or study session" },
-      },
-      {
-        kind: "steps",
-        label: "Take part",
-        heading: "How you can support education",
-        steps: [
-          { title: "Share your experience", text: "Offer your knowledge of study, careers or settling in Louisiana to members who could use it.", href: "/volunteer?interest=education" },
-          { title: "Encourage a young person", text: "A word of support or a little guidance can change how someone sees their future." },
-          { title: "Join the club", text: "Members help shape where the club puts its time and energy.", href: "/join" },
-          { title: "Give", text: "Gifts help the club support learning in our community.", href: "/donate" },
-        ],
-      },
-      {
-        kind: "faq",
-        label: "Questions",
-        heading: "About education at the club",
-        items: [
-          { q: "Do I need to be a member to help?", a: "No. Anyone who shares the club's values can offer their time through the volunteer form; membership is welcome too." },
-          { q: "I have a skill to share. Who do I tell?", a: "Use the volunteer form and choose Education, or contact the club directly. Someone will be in touch." },
-          { q: "Where will future activities be announced?", a: "On the Events page and through the club's newsletter." },
-        ],
-      },
-    ],
-    cta: { heading: "Help someone take their next step", text: "Support education with your time, your membership or a gift.", actions: takePart("education") },
-  },
-  {
-    slug: "youth-leadership",
+    slug: "youth-outreach",
     theme: { deep: "#4a2205", accent: "#d9731c", pale: "#fbeadb", glow: "#f2b45c" },
     hero: {
       variant: "full",
-      eyebrow: "Program 02 · Youth Leadership",
+      eyebrow: "Program 01 · Youth Outreach",
       title: "The next generation leads",
       lead: "A place for young people of Lagos heritage in Louisiana to belong, to learn from those who came before them and to lead in their own right.",
       image: { label: "Young members in matching club shirts standing behind a table of donated supplies", image: { asset: "youthHeroBanner" } },
@@ -176,19 +111,19 @@ export const programPages: ProgramPage[] = [
         heading: "Ways to support young people",
         steps: [
           { title: "Bring young people along", text: "Club gatherings are open to families. Bring the young people in your life.", href: "/events" },
-          { title: "Mentor", text: "Offer your time and experience to a young member.", href: "/volunteer?interest=youth-leadership" },
+          { title: "Mentor", text: "Offer your time and experience to a young member.", href: "/volunteer?interest=youth-outreach" },
           { title: "Make room", text: "Invite young members to help plan and lead club activities." },
         ],
       },
     ],
-    cta: { heading: "Invest in the next generation", text: "Support youth leadership with your time, your membership or a gift.", actions: takePart("youth-leadership") },
+    cta: { heading: "Invest in the next generation", text: "Support youth outreach with your time, your membership or a gift.", actions: takePart("youth-outreach") },
   },
   {
     slug: "cultural-heritage",
     theme: { deep: "#311845", accent: "#7d44a8", pale: "#efe7f5", glow: "#c9a227" },
     hero: {
       variant: "centered",
-      eyebrow: "Program 03 · Cultural Heritage",
+      eyebrow: "Program 02 · Cultural Heritage",
       title: "Traditions that travel with us",
       lead: "The language, dress, music and celebrations of Lagos are part of who we are. The club is a place to keep them alive and pass them on.",
       image: { label: "Members in royal-blue attire and gele head wraps gathered for a group photograph in a hall", image: { asset: "heritageHeroBanner" } },
@@ -256,7 +191,7 @@ export const programPages: ProgramPage[] = [
     theme: { deep: "#0e3a36", accent: "#1d8577", pale: "#ddf0ec", glow: "#7fcfc2" },
     hero: {
       variant: "split",
-      eyebrow: "Program 04 · Humanitarian Support",
+      eyebrow: "Program 03 · Humanitarian Support",
       title: "Together in service",
       lead: "Bringing people together in service, and helping where help is needed, in Louisiana and in Lagos.",
       image: { label: "A large group of volunteers in club shirts behind tables of donated supplies", image: { asset: "humanitarianHero" } },
@@ -321,10 +256,10 @@ export const programPages: ProgramPage[] = [
     theme: { deep: "#45190f", accent: "#b9532f", pale: "#f6e3da", glow: "#e8a07a" },
     hero: {
       variant: "full",
-      eyebrow: "Program 05 · Community Building",
+      eyebrow: "Program 04 · Community Building",
       title: "No one makes a home alone",
       lead: "The club brings the sons, daughters and friends of Lagos together, so that no one has to make a home in Louisiana alone.",
-      image: { label: "Members gathered together" },
+      image: { label: "A large group of members in colourful attire smiling together", image: { asset: "communityHero" } },
     },
     sections: [
       {
@@ -333,11 +268,11 @@ export const programPages: ProgramPage[] = [
         heading: "The faces of our community",
         text: "Photographs from club gatherings and celebrations.",
         slots: [
-          { label: "Members at a gathering" },
-          { label: "Friends greeting each other" },
-          { label: "A shared meal" },
-          { label: "Families together" },
-          { label: "Group photo" },
+          { label: "Three men in white traditional attire and blue caps standing together", image: { asset: "communityGroup" } },
+          { label: "Two women smiling as they hold up a white handkerchief", image: { asset: "communityGreeting" } },
+          { label: "A couple in traditional attire seated together at a celebration table", image: { asset: "communityCouple" } },
+          { label: "Members and neighbours gathered at a community outreach", image: { asset: "communityOutreach1" } },
+          { label: "Members talking together at a community outreach", image: { asset: "communityOutreach2" } },
         ],
       },
       {
@@ -350,13 +285,13 @@ export const programPages: ProgramPage[] = [
           "Moving far from home is easier when you find people who understand where you come from.",
           "The club is that community: a place for friendship, for celebration and for support when times are hard.",
         ],
-        image: { label: "Members talking and laughing" },
+        image: { label: "Members laughing together at a club gathering", image: { asset: "communityLeanOn" } },
       },
       {
         kind: "quote",
         text: "Through fellowship, culture and service, we keep the heritage of Lagos alive in Louisiana.",
         note: "Eko Club Louisiana",
-        image: { label: "A celebration moment" },
+        image: { label: "A woman holding a hand fan among members at a street celebration", image: { asset: "communityQuote" } },
       },
       {
         kind: "pillars",
@@ -388,10 +323,10 @@ export const programPages: ProgramPage[] = [
     theme: { deep: "#14361f", accent: "#2f8346", pale: "#e1f0e3", glow: "#9fd1a6" },
     hero: {
       variant: "centered",
-      eyebrow: "Program 06 · Health and Wellbeing",
+      eyebrow: "Program 05 · Health and Wellbeing",
       title: "Looking after one another",
       lead: "Supporting healthier communities, and looking after one another in body and mind.",
-      image: { label: "Health and wellbeing in the community" },
+      image: { label: "Members in club T-shirts with an elder, hands on donated food and supplies under an Eko Club Louisiana charity outreach banner", image: { asset: "healthHero" } },
     },
     sections: [
       {
@@ -415,7 +350,7 @@ export const programPages: ProgramPage[] = [
           "Good health starts with information and with people who care. Members with health knowledge can help others understand their options.",
           "As the club plans wellbeing activities, they will be announced on this page and the Events page.",
         ],
-        image: { label: "A health check or wellbeing activity" },
+        image: { label: "Members in club shirts gathered around a table of personal-care and hygiene supplies", image: { asset: "healthCare" } },
       },
       {
         kind: "statement",
@@ -439,7 +374,12 @@ export const programPages: ProgramPage[] = [
         label: "Moments",
         heading: "Wellbeing together",
         text: "Photographs of members caring for their health and for one another.",
-        slots: [{ label: "Health outreach" }, { label: "Members exercising or walking" }, { label: "A wellbeing conversation" }, { label: "Community care" }],
+        slots: [
+          { label: "An elder in traditional attire standing beside donated food at the charity outreach", image: { asset: "healthElder" } },
+          { label: "Volunteers handing out personal-care supplies from a table", image: { asset: "humanitarianGiving" } },
+          { label: "Members and an elder standing together behind donated food and supplies", image: { asset: "healthGroup" } },
+          { label: "Community members, including an older man with a walker, gathered at the outreach", image: { asset: "humanitarianOutreach" } },
+        ],
       },
     ],
     cta: { heading: "Help our community thrive", text: "Support health and wellbeing with your time, your membership or a gift.", actions: takePart("health-and-wellbeing") },

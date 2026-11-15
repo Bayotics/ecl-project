@@ -1,6 +1,6 @@
 // Replaces the admin dashboard's "Home & about images" entries for the homepage with the club's new
 // photographs exactly as supplied (assets/media/homepage), uploading each to R2 exactly as the dashboard's upload does.
-// The Education card is left as it is. Safe to re-run.
+// Safe to re-run.
 //
 //   node --env-file=.env.local scripts/set-homepage-images.mjs            (add --dry-run to preview)
 //
@@ -18,7 +18,7 @@ const IMAGES = {
   "home-president-poster": ["message-from-president.webp", "Portrait of a man in a cream agbada and an embroidered gold cap."],
   "home-impact-panel": ["impact-card.png", "Women in matching royal-blue lace attire and gele head wraps standing together in a school hall."],
   "home-causes-panel": ["causes-card.png", "Two club members wearing green Eko Club stoles and blue head ties."],
-  "home-cause-youth-leadership": ["youth-leadership.jpg", "Young people in matching red-and-white shirts gathered around a table of donated supplies."],
+  "home-cause-youth-outreach": ["youth-outreach.jpg", "Young people in matching red-and-white shirts gathered around a table of donated supplies."],
   "home-cause-cultural-heritage": ["cultural-heritage.png", "Two men in white traditional attire and blue caps, one wearing coral beads, in front of a balloon backdrop."],
   "home-cause-humanitarian-support": ["humanitarian-support.png", "Volunteers in red-and-white shirts sorting donated personal-care products."],
   "home-cause-community-building": ["community-building.png", "A smiling woman and man in white Eko Club polo shirts at a club gathering."],

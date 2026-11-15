@@ -33,7 +33,7 @@ export const pages = {
     title: "Six areas of focus",
     lead: "Six areas guide the work of the club.",
     description:
-      "Education, Youth Leadership, Cultural Heritage, Humanitarian Support, Community Building, and Health and Wellbeing.",
+      "Youth Outreach, Cultural Heritage, Humanitarian Support, Community Building, and Health and Wellbeing.",
   },
   culture: {
     href: "/culture",
@@ -88,7 +88,7 @@ export const pages = {
     href: "/donate",
     label: "Donate",
     title: "Support the work",
-    lead: "Gifts support culture, education and humanitarian service in Louisiana and Lagos.",
+    lead: "Gifts support culture and humanitarian service in Louisiana and Lagos.",
     description: "Support Eko Club Louisiana.",
   },
   contact: {

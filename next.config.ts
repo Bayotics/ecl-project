@@ -34,6 +34,9 @@ const nextConfig: NextConfig = {
       // Earlier routes of this site.
       { source: "/causes", destination: "/programs", permanent: true },
       { source: "/causes/:slug", destination: "/programs/:slug", permanent: true },
+      // Education was removed and Youth Leadership renamed Youth Outreach.
+      { source: "/programs/education", destination: "/programs", permanent: true },
+      { source: "/programs/youth-leadership", destination: "/programs/youth-outreach", permanent: true },
       { source: "/our-work", destination: "/impact", permanent: true },
       { source: "/get-involved/membership", destination: "/join", permanent: true },
       { source: "/get-involved/volunteer", destination: "/volunteer", permanent: true },

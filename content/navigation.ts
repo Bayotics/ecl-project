@@ -148,7 +148,7 @@ export const headerData: HeaderData = {
   search: {
     label: "Search",
     suggestions: [
-      { label: "Education", href: causeHref("education") },
+      { label: "Youth Outreach", href: causeHref("youth-outreach") },
       { label: "Cultural Heritage", href: causeHref("cultural-heritage") },
       { label: "Events", href: routes.events },
       { label: "Gallery", href: routes.community },

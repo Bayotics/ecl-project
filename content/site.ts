@@ -8,7 +8,7 @@ export const settings: SiteSettings = {
   name: "Eko Club Louisiana",
   shortName: "ECL",
   description:
-    "Eko Club Louisiana brings together the sons, daughters and friends of Lagos to strengthen community, preserve cultural heritage and support education and humanitarian service.",
+    "Eko Club Louisiana brings together the sons, daughters and friends of Lagos to strengthen community, preserve cultural heritage and support humanitarian service.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ekoclublouisiana.org",
   locale: "en_US",
   legalLine: "A nonprofit sociocultural community based in Baton Rouge, Louisiana.",
@@ -37,8 +37,8 @@ export const settings: SiteSettings = {
 export const mission = {
   label: "Our mission",
   paragraphs: [
-    "Eko Club Louisiana brings together the sons, daughters and friends of Lagos to strengthen community, preserve cultural heritage and support education and humanitarian service.",
-    "Through fellowship, youth leadership and community participation, we work toward a lasting legacy for the next generation.",
+    "Eko Club Louisiana brings together the sons, daughters and friends of Lagos to strengthen community, preserve cultural heritage and support humanitarian service.",
+    "Through fellowship, youth outreach and community participation, we work toward a lasting legacy for the next generation.",
   ],
   ...meta(BRIEF_2, briefReview()),
 };
@@ -80,7 +80,7 @@ export const whatWeDo = {
   heading: "A legacy we share",
   paragraphs: [
     "We keep the language, dress and traditions of Lagos alive in Louisiana, and pass them to the next generation.",
-    "Through education, service and fellowship, we build a community where everyone belongs.",
+    "Through service and fellowship, we build a community where everyone belongs.",
   ],
   ...meta(DRAFT, draftReview()),
 };

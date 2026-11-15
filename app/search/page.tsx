@@ -65,7 +65,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
                 ))}
               </ul>
             ) : (
-              <p>Try a different word, such as “education”, “culture” or “gallery”.</p>
+              <p>Try a different word, such as “youth”, “culture” or “gallery”.</p>
             )}
           </>
         ) : null}

@@ -32,7 +32,7 @@ The originals are kept in `assets/source/new-media/`. Photos were resized to a m
 | Hero 3 "Build with us" (also the /get-involved intro) | `familyCelebration` |
 | Impact panel (also the /impact intro) | `celebrationGuests` |
 | Causes panel | `eldersGathering` |
-| Cause cards and program pages | Education `eldersGathering` · Youth Leadership `asoOkeCouple` · Cultural Heritage `lagosEyoFloat` · Humanitarian Support `greetingCelebration` · Community Building `communityDance` · Health and Wellbeing `celebrationGuests` |
+| Cause cards and program pages | Youth Outreach `homeYouthOutreach` · Cultural Heritage `lagosEyoFloat` · Humanitarian Support `greetingCelebration` · Community Building `communityDance` · Health and Wellbeing `celebrationGuests` |
 | Header Programs panel | `asoOkeCouple` |
 | Culture feature (charcoal) | `lagosEyoFloat` |
 | Editorial row "A community built together" | `lagosCarnival` |

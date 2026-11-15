@@ -19,7 +19,7 @@ import homeBuildWithUs from "@/assets/media/homepage/build-with-us-slide.jpg";
 import homePresidentMessage from "@/assets/media/homepage/message-from-president.webp";
 import homeImpact from "@/assets/media/homepage/impact-card.png";
 import homeCauses from "@/assets/media/homepage/causes-card.png";
-import homeYouthLeadership from "@/assets/media/homepage/youth-leadership.jpg";
+import homeYouthOutreach from "@/assets/media/homepage/youth-outreach.jpg";
 import homeCulturalHeritage from "@/assets/media/homepage/cultural-heritage.png";
 import homeHumanitarianSupport from "@/assets/media/homepage/humanitarian-support.png";
 import homeCommunityBuilding from "@/assets/media/homepage/community-building.png";
@@ -27,13 +27,13 @@ import homeHealthAndWellbeing from "@/assets/media/homepage/health-and-wellbeing
 import homeRootedInLagos from "@/assets/media/homepage/rooted-in-lagos.png";
 import homeCommunityBuiltTogether from "@/assets/media/homepage/community-built-together.png";
 import aboutUsDropdown from "@/assets/media/homepage/about-us-dropdown.png";
-import youthHeroBanner from "@/assets/media/programs/youth-leadership/hero-banner.jpg";
-import youthPlaceToBelong from "@/assets/media/programs/youth-leadership/place-to-belong.png";
-import youthMoment1 from "@/assets/media/programs/youth-leadership/youth-moment-1.png";
-import youthMoment2 from "@/assets/media/programs/youth-leadership/youth-moment-2.png";
-import youthMoment3 from "@/assets/media/programs/youth-leadership/youth-moment-3.png";
-import youthMoment4 from "@/assets/media/programs/youth-leadership/youth-moment-4.png";
-import youthMoment5 from "@/assets/media/programs/youth-leadership/youth-moment-5.png";
+import youthHeroBanner from "@/assets/media/programs/youth-outreach/hero-banner.jpg";
+import youthPlaceToBelong from "@/assets/media/programs/youth-outreach/place-to-belong.png";
+import youthMoment1 from "@/assets/media/programs/youth-outreach/youth-moment-1.png";
+import youthMoment2 from "@/assets/media/programs/youth-outreach/youth-moment-2.png";
+import youthMoment3 from "@/assets/media/programs/youth-outreach/youth-moment-3.png";
+import youthMoment4 from "@/assets/media/programs/youth-outreach/youth-moment-4.png";
+import youthMoment5 from "@/assets/media/programs/youth-outreach/youth-moment-5.png";
 import heritageHeroBanner from "@/assets/media/programs/cultural-heritage/hero-banner.jpg";
 import heritageTradAttire from "@/assets/media/programs/cultural-heritage/trad-attire.png";
 import heritageDrummers from "@/assets/media/programs/cultural-heritage/drummers-or-musicians.png";
@@ -49,6 +49,18 @@ import humanitarianSorting from "@/assets/media/programs/humanitarian-support/so
 import humanitarianTeam from "@/assets/media/programs/humanitarian-support/volunteers-team.jpg";
 import humanitarianGiving from "@/assets/media/programs/humanitarian-support/giving-out-supplies.jpg";
 import humanitarianOutreach from "@/assets/media/programs/humanitarian-support/community-outreach.jpg";
+import communityHero from "@/assets/media/programs/community-building/members-together.jpg";
+import communityLeanOn from "@/assets/media/programs/community-building/members-laughing.jpg";
+import communityQuote from "@/assets/media/programs/community-building/celebration-moment.jpg";
+import communityGroup from "@/assets/media/programs/community-building/group-photo.jpg";
+import communityGreeting from "@/assets/media/programs/community-building/friends-greeting.jpg";
+import communityCouple from "@/assets/media/programs/community-building/couple-at-table.jpg";
+import communityOutreach1 from "@/assets/media/programs/community-building/outreach-gathering.jpg";
+import communityOutreach2 from "@/assets/media/programs/community-building/outreach-together.jpg";
+import healthHero from "@/assets/media/programs/health-and-wellbeing/outreach-team.jpg";
+import healthCare from "@/assets/media/programs/health-and-wellbeing/personal-care-supplies.jpg";
+import healthElder from "@/assets/media/programs/health-and-wellbeing/elder-with-donations.jpg";
+import healthGroup from "@/assets/media/programs/health-and-wellbeing/outreach-group.jpg";
 
 import type { AssetId, MediaAsset, MediaRef, ResolvedMedia } from "./types";
 
@@ -113,6 +125,22 @@ const STOCK = "Unsplash photograph supplied with the new media. It does not show
 const LAGOS = "Lagos street-festival photograph supplied with the new media. Confirm the photographer and usage rights.";
 
 export const assets: Record<AssetId, MediaAsset> = {
+  // Health and Wellbeing photos: web copies at 3000 px, JPEG quality 90 (no visible difference from the originals).
+  // Wide opening strip: frame low enough to keep heads and the donations in view.
+  healthHero: { ...programPhoto("healthHero", healthHero, "health-and-wellbeing", "IMG_5044.jpeg", [4032, 3024], "Members in club T-shirts with an elder, hands on donated food and supplies under an Eko Club Louisiana charity outreach banner."), focal: { x: 50, y: 55 } },
+  healthCare: programPhoto("healthCare", healthCare, "health-and-wellbeing", "IMG_5628.CR2", [6000, 4000], "Members in club shirts gathered around a table of personal-care and hygiene supplies."),
+  healthElder: programPhoto("healthElder", healthElder, "health-and-wellbeing", "IMG_5041.jpeg", [4032, 3024], "An elder in traditional attire standing beside donated food at the charity outreach."),
+  healthGroup: programPhoto("healthGroup", healthGroup, "health-and-wellbeing", "IMG_5042.jpeg", [4032, 3024], "Members and an elder standing together behind donated food and supplies."),
+  // Community Building photos: web copies at 3000 px, JPEG quality 90 (no visible difference from the originals).
+  // Full-screen opening: frame from near the top so heads are not cut off.
+  communityHero: { ...programPhoto("communityHero", communityHero, "Community-building", "IMG_5557.jpg", [6000, 4000], "A large group of members in colourful attire smiling together."), focal: { x: 50, y: 12 } },
+  communityLeanOn: programPhoto("communityLeanOn", communityLeanOn, "Community-building", "IMG_5559.jpg", [6000, 4000], "Members laughing together at a club gathering."),
+  communityQuote: programPhoto("communityQuote", communityQuote, "Community-building", "IMG_5545.jpg", [6000, 4000], "A woman holding a hand fan among members at a street celebration."),
+  communityGroup: programPhoto("communityGroup", communityGroup, "Community-building", "DW3A0330.jpg", [5760, 3840], "Three men in white traditional attire and blue caps standing together."),
+  communityGreeting: programPhoto("communityGreeting", communityGreeting, "Community-building", "IMG_5475.jpg", [6000, 4000], "Two women smiling as they hold up a white handkerchief."),
+  communityCouple: programPhoto("communityCouple", communityCouple, "Community-building", "DW3A0432.jpg", [5760, 3840], "A couple in traditional attire seated together at a celebration table."),
+  communityOutreach1: programPhoto("communityOutreach1", communityOutreach1, "Community-building", "IMG_5633.jpg", [6000, 4000], "Members and neighbours gathered at a community outreach."),
+  communityOutreach2: programPhoto("communityOutreach2", communityOutreach2, "Community-building", "IMG_5634.jpg", [6000, 4000], "Members talking together at a community outreach."),
   // Humanitarian Support photos: web copies at 3000 px, JPEG quality 90, made from the camera JPEG inside
   // each .CR2 (about a third of the original size; no visible difference). Other program photos are exact copies.
   humanitarianHero: programPhoto("humanitarianHero", humanitarianHero, "Youth-Outreach", "IMG_5617.CR2", [6000, 4000], "A large group of volunteers in club shirts behind tables of donated supplies."),
@@ -145,7 +173,7 @@ export const assets: Record<AssetId, MediaAsset> = {
   homePresidentMessage: homepage("homePresidentMessage", homePresidentMessage, "message-from-president-thuimbnail.webp", [525, 685], "Portrait of a man in a cream agbada and an embroidered gold cap.", { x: 50, y: 35 }),
   homeImpact: homepage("homeImpact", homeImpact, "impact-card.png", [966, 638], "Women in matching royal-blue lace attire and gele head wraps standing together in a school hall.", { x: 50, y: 50 }),
   homeCauses: homepage("homeCauses", homeCauses, "causes-card.png", [961, 638], "Two club members wearing green Eko Club stoles and blue head ties.", { x: 50, y: 40 }),
-  homeYouthLeadership: homepage("homeYouthLeadership", homeYouthLeadership, "youth-outreach-card.jpg", [6020, 4015], "Young people in matching red-and-white shirts gathered around a table of donated supplies.", { x: 50, y: 45 }),
+  homeYouthOutreach: homepage("homeYouthOutreach", homeYouthOutreach, "youth-outreach-card.jpg", [6020, 4015], "Young people in matching red-and-white shirts gathered around a table of donated supplies.", { x: 50, y: 45 }),
   homeCulturalHeritage: homepage("homeCulturalHeritage", homeCulturalHeritage, "cultural-heritage.png", [804, 633], "Two men in white traditional attire and blue caps, one wearing coral beads, in front of a balloon backdrop.", { x: 50, y: 40 }),
   homeHumanitarianSupport: homepage("homeHumanitarianSupport", homeHumanitarianSupport, "humanitarian-support.png", [964, 641], "Volunteers in red-and-white shirts sorting donated personal-care products.", { x: 50, y: 50 }),
   homeCommunityBuilding: homepage("homeCommunityBuilding", homeCommunityBuilding, "community-building.png", [893, 638], "A smiling woman and man in white Eko Club polo shirts at a club gathering.", { x: 50, y: 40 }),

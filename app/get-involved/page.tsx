@@ -33,13 +33,13 @@ export default function GetInvolvedPage() {
       </PageSection>
       <PageSection id="partnerships" title="Partner with us">
         <p>
-          Organizations, businesses and sponsors who share the club&apos;s commitment to culture, education and service are
+          Organizations, businesses and sponsors who share the club&apos;s commitment to culture and service are
           welcome to get in touch about working together.
         </p>
         <ActionRow actions={[{ label: "Start a conversation", href: "/contact?topic=Partnership#message", primary: true }]} />
       </PageSection>
       <PageSection id="give" title="Give" tone="mist">
-        <p>Gifts support culture, education and humanitarian service in Louisiana and Lagos.</p>
+        <p>Gifts support culture and humanitarian service in Louisiana and Lagos.</p>
         <ActionRow actions={[{ label: "Donate", href: pages.donate.href, primary: true }, { label: "Upcoming events", href: "/events" }]} />
       </PageSection>
     </>

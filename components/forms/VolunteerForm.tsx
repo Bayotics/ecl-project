@@ -10,7 +10,7 @@ import { checkedValues, useSubmission } from "./useSubmission";
 
 interface VolunteerFormProps {
   interests: Array<{ id: string; label: string }>;
-  /** Preselected interest from a program page link, e.g. /volunteer?interest=education. */
+  /** Preselected interest from a program page link, e.g. /volunteer?interest=youth-outreach. */
   defaultInterest?: string;
   consent: string;
   fallback: { email: string; phone: string };
