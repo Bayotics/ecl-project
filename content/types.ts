@@ -66,7 +66,29 @@ export type AssetId =
   | "homeHealthAndWellbeing"
   | "homeRootedInLagos"
   | "homeCommunityBuiltTogether"
-  | "aboutUsDropdown";
+  | "aboutUsDropdown"
+  | "youthHeroBanner"
+  | "youthPlaceToBelong"
+  | "youthMoment1"
+  | "youthMoment2"
+  | "youthMoment3"
+  | "youthMoment4"
+  | "youthMoment5"
+  | "heritageHeroBanner"
+  | "heritageTradAttire"
+  | "heritageDrummers"
+  | "heritageDance"
+  | "heritageFestival"
+  | "heritageFamily"
+  | "heritageCelebration"
+  | "heritagePortrait"
+  | "heritageEldersYoung"
+  | "humanitarianHero"
+  | "humanitarianManyHands"
+  | "humanitarianSorting"
+  | "humanitarianTeam"
+  | "humanitarianGiving"
+  | "humanitarianOutreach";
 
 /** Focal point in percent of the source image (0–100). */
 export interface Focal {

@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { pageMetadata } from "@/lib/seo";
 
-import { ActionRow } from "@/components/page/ActionRow";
 import { CardGrid } from "@/components/page/CardGrid";
-import { PageIntro } from "@/components/page/PageIntro";
 import { PageSection } from "@/components/page/PageSection";
-import styles from "@/components/page/page.module.css";
+import { OtherPrograms, ProgramCta, ProgramHero, ProgramSectionView, ProgramTheme } from "@/components/programs/ProgramSections";
 import { storyCards } from "@/content/cards";
 import { causeHref, causes, getCause } from "@/content/causes";
 import { resolveMedia } from "@/content/media";
 import { published } from "@/content/meta";
+import { programPage } from "@/content/programs";
 
 export const dynamicParams = false;
 
@@ -26,51 +24,35 @@ export async function generateMetadata({ params }: PageProps<"/programs/[slug]">
   return cause ? pageMetadata({ title: cause.title, description: `${cause.title}: ${cause.short}.`, path: causeHref(cause.slug), image: resolveMedia(cause.media) }) : {};
 }
 
+/**
+ * Program (mission area) page: a themed opening, the area's own sequence of sections
+ * (content/programs.ts), published stories when there are any, a call to action and the other areas.
+ */
 export default async function ProgramPage({ params }: PageProps<"/programs/[slug]">) {
   const { slug } = await params;
   const cause = getCause(slug);
-  if (!cause || cause.status !== "published") notFound();
+  const page = programPage(slug);
+  if (!cause || cause.status !== "published" || !page) notFound();
 
+  // Related stories appear only when the club has published real ones for this area.
   const related = storyCards((story) => story.cause === cause.slug);
-  const others = published(causes).filter((item) => item.slug !== cause.slug);
+  const others = published(causes)
+    .filter((item) => item.slug !== cause.slug)
+    .map((item) => ({ slug: item.slug, number: item.number, title: item.title, href: causeHref(item.slug) }));
 
   return (
-    <>
-      <PageIntro label={`Program ${cause.number}`} title={cause.title} lead={cause.short} media={resolveMedia(cause.media)} />
-      <PageSection id="about-area" title="About this area">
-        {cause.body.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </PageSection>
-      {/* Related stories appear only when the club has published real ones for this area. */}
+    <ProgramTheme page={page}>
+      <ProgramHero hero={page.hero} />
+      {page.sections.map((section, index) => (
+        <ProgramSectionView key={`${section.kind}-${index}`} section={section} index={index} />
+      ))}
       {related.length ? (
         <PageSection id="stories" title="Stories" tone="mist">
           <CardGrid items={related} />
         </PageSection>
       ) : null}
-      <PageSection id="take-part" title="Take part" tone={related.length ? "paper" : "mist"}>
-        <p>Support {cause.title.toLowerCase()} with your time, your membership or a gift.</p>
-        <ActionRow
-          actions={[
-            { label: "Volunteer", href: `/volunteer?interest=${cause.slug}`, primary: true },
-            { label: "Become a member", href: "/join" },
-            { label: "Donate", href: "/donate" },
-            { label: "Events", href: "/events" },
-          ]}
-        />
-      </PageSection>
-      <PageSection id="other-areas" title="Other areas">
-        <ul role="list" className={styles.list}>
-          {others.map((item) => (
-            <li key={item.slug}>
-              <Link href={causeHref(item.slug)}>
-                <span className={styles.listNumber}>{item.number}</span>
-                {item.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </PageSection>
-    </>
+      <ProgramCta cta={page.cta} />
+      <OtherPrograms items={others} />
+    </ProgramTheme>
   );
 }

@@ -27,6 +27,28 @@ import homeHealthAndWellbeing from "@/assets/media/homepage/health-and-wellbeing
 import homeRootedInLagos from "@/assets/media/homepage/rooted-in-lagos.png";
 import homeCommunityBuiltTogether from "@/assets/media/homepage/community-built-together.png";
 import aboutUsDropdown from "@/assets/media/homepage/about-us-dropdown.png";
+import youthHeroBanner from "@/assets/media/programs/youth-leadership/hero-banner.jpg";
+import youthPlaceToBelong from "@/assets/media/programs/youth-leadership/place-to-belong.png";
+import youthMoment1 from "@/assets/media/programs/youth-leadership/youth-moment-1.png";
+import youthMoment2 from "@/assets/media/programs/youth-leadership/youth-moment-2.png";
+import youthMoment3 from "@/assets/media/programs/youth-leadership/youth-moment-3.png";
+import youthMoment4 from "@/assets/media/programs/youth-leadership/youth-moment-4.png";
+import youthMoment5 from "@/assets/media/programs/youth-leadership/youth-moment-5.png";
+import heritageHeroBanner from "@/assets/media/programs/cultural-heritage/hero-banner.jpg";
+import heritageTradAttire from "@/assets/media/programs/cultural-heritage/trad-attire.png";
+import heritageDrummers from "@/assets/media/programs/cultural-heritage/drummers-or-musicians.png";
+import heritageDance from "@/assets/media/programs/cultural-heritage/dance.png";
+import heritageFestival from "@/assets/media/programs/cultural-heritage/festival-or-parade.png";
+import heritageFamily from "@/assets/media/programs/cultural-heritage/fam-in-trad-dress.webp";
+import heritageCelebration from "@/assets/media/programs/cultural-heritage/celebration-in-detail.png";
+import heritagePortrait from "@/assets/media/programs/cultural-heritage/portrait-in-trad-dress.jpg";
+import heritageEldersYoung from "@/assets/media/programs/cultural-heritage/elders-and-young-people.png";
+import humanitarianHero from "@/assets/media/programs/humanitarian-support/volunteers-together.jpg";
+import humanitarianManyHands from "@/assets/media/programs/humanitarian-support/preparing-donations.jpg";
+import humanitarianSorting from "@/assets/media/programs/humanitarian-support/sorting-donations.jpg";
+import humanitarianTeam from "@/assets/media/programs/humanitarian-support/volunteers-team.jpg";
+import humanitarianGiving from "@/assets/media/programs/humanitarian-support/giving-out-supplies.jpg";
+import humanitarianOutreach from "@/assets/media/programs/humanitarian-support/community-outreach.jpg";
 
 import type { AssetId, MediaAsset, MediaRef, ResolvedMedia } from "./types";
 
@@ -72,10 +94,51 @@ const homepage = (id: AssetId, src: MediaAsset["src"], file: string, original: [
   review: { verified: true, notes: [] },
 });
 
+
+/** Program page photographs supplied by the club, copied unchanged (the .CR2 as its embedded camera JPEG). */
+const programPhoto = (id: AssetId, src: MediaAsset["src"], folder: string, file: string, original: [number, number], alt: string): MediaAsset => ({
+  id,
+  kind: "photo",
+  src,
+  alt,
+  focal: { x: 50, y: 45 },
+  credit: null,
+  original: { file: `public/media/${folder}/${file}`, width: original[0], height: original[1] },
+  status: "published",
+  provenance: { source: "club-supplied", retrieved: "2026-11-15", note: `Supplied for the program pages in public/media/${folder}.` },
+  review: { verified: true, notes: [] },
+});
+
 const STOCK = "Unsplash photograph supplied with the new media. It does not show Eko Club Louisiana members; replace with club photography when available and keep the photographer credit.";
 const LAGOS = "Lagos street-festival photograph supplied with the new media. Confirm the photographer and usage rights.";
 
 export const assets: Record<AssetId, MediaAsset> = {
+  // Humanitarian Support photos: web copies at 3000 px, JPEG quality 90, made from the camera JPEG inside
+  // each .CR2 (about a third of the original size; no visible difference). Other program photos are exact copies.
+  humanitarianHero: programPhoto("humanitarianHero", humanitarianHero, "Youth-Outreach", "IMG_5617.CR2", [6000, 4000], "A large group of volunteers in club shirts behind tables of donated supplies."),
+  humanitarianManyHands: programPhoto("humanitarianManyHands", humanitarianManyHands, "Youth-Outreach", "IMG_5602.CR2", [6000, 4000], "Club members smiling together beside a box and bags of donations."),
+  humanitarianSorting: programPhoto("humanitarianSorting", humanitarianSorting, "Youth-Outreach", "IMG_5608.CR2", [6000, 4000], "Club members standing beside bags of donated clothing."),
+  humanitarianTeam: programPhoto("humanitarianTeam", humanitarianTeam, "Youth-Outreach", "IMG_5605.CR2", [6000, 4000], "Volunteers in club shirts posing together for a team photo."),
+  humanitarianGiving: programPhoto("humanitarianGiving", humanitarianGiving, "Youth-Outreach", "IMG_5629.CR2", [6000, 4000], "Volunteers handing out personal-care supplies from a table."),
+  humanitarianOutreach: programPhoto("humanitarianOutreach", humanitarianOutreach, "Youth-Outreach", "IMG_5620.CR2", [6000, 4000], "Community members, including an older man with a walker, gathered at the outreach."),
+  // Web copy: 3000 px wide, JPEG quality 90 (no visible difference; a fraction of the original size).
+  heritageHeroBanner: programPhoto("heritageHeroBanner", heritageHeroBanner, "Cultural-heritage", "hero-banner.jpg", [5760, 3840], "Members in royal-blue attire and gele head wraps gathered for a group photograph in a hall."),
+  heritageTradAttire: programPhoto("heritageTradAttire", heritageTradAttire, "Cultural-heritage", "trad-attire.png", [841, 626], "Two men in white traditional attire and blue caps, one wearing coral beads."),
+  heritageDrummers: programPhoto("heritageDrummers", heritageDrummers, "Cultural-heritage", "drummers-or-musicians.png", [968, 640], "A brass band and a costumed masquerade performer at a celebration."),
+  heritageDance: programPhoto("heritageDance", heritageDance, "Cultural-heritage", "dance.png", [939, 631], "Women in blue and gold traditional attire dancing with hand fans."),
+  heritageFestival: programPhoto("heritageFestival", heritageFestival, "Cultural-heritage", "festival-or-parade.png", [950, 636], "Members in traditional prints holding up white handkerchiefs at a street celebration."),
+  heritageFamily: programPhoto("heritageFamily", heritageFamily, "Cultural-heritage", "fam-in-trad-dress.webp", [991, 606], "Members in white attire and gold-trimmed stoles standing together in front of a stage."),
+  heritageCelebration: programPhoto("heritageCelebration", heritageCelebration, "Cultural-heritage", "celebration-in-detail.png", [960, 634], "A brass player, a smiling woman and a feathered masquerade performer at a celebration."),
+  heritagePortrait: programPhoto("heritagePortrait", heritagePortrait, "Cultural-heritage", "portrait-in-trad-dress.jpg", [2048, 1365], "A white-robed Eyo masquerade figure in a wide-brimmed hat on a parade float."),
+  heritageEldersYoung: programPhoto("heritageEldersYoung", heritageEldersYoung, "Cultural-heritage", "elders-and-young-people.png", [953, 635], "Members in traditional attire seated together at a club gathering."),
+  // Web copy: 3000 px wide, JPEG quality 90 (no visible difference; a fraction of the original size).
+  youthHeroBanner: programPhoto("youthHeroBanner", youthHeroBanner, "Youth-Leadership", "youth-leadership-hero-banner.CR2", [6000, 4000], "Young members in matching club shirts standing behind a table of donated supplies."),
+  youthPlaceToBelong: programPhoto("youthPlaceToBelong", youthPlaceToBelong, "Youth-Leadership", "place-to-belong.png", [964, 633], "Young members in matching club shirts standing together."),
+  youthMoment1: programPhoto("youthMoment1", youthMoment1, "Youth-Leadership", "youth-moment-1.png", [834, 624], "Young members and volunteers gathered around a table of donated supplies."),
+  youthMoment2: programPhoto("youthMoment2", youthMoment2, "Youth-Leadership", "youth-moment-2.png", [954, 631], "A young drummer marching with musicians in a street parade."),
+  youthMoment3: programPhoto("youthMoment3", youthMoment3, "Youth-Leadership", "youth-moment-3.png", [947, 593], "Young volunteers sorting donated personal-care supplies."),
+  youthMoment4: programPhoto("youthMoment4", youthMoment4, "Youth-Leadership", "youth-moment-4.png", [969, 622], "Young people with family and friends at a club gathering."),
+  youthMoment5: programPhoto("youthMoment5", youthMoment5, "Youth-Leadership", "youth-moment-5.png", [627, 622], "Club members smiling together in matching shirts."),
   aboutUsDropdown: homepage("aboutUsDropdown", aboutUsDropdown, "about-us-dropdown.png", [965, 624], "Eko Club Louisiana members gathered together.", { x: 50, y: 50 }),
   homeCommunityInAction: homepage("homeCommunityInAction", homeCommunityInAction, "community-in-action-slide.jpg", [6000, 4000], "Women in colourful traditional attire and gele head wraps walking together along a city street.", { x: 50, y: 50 }),
   homeBuildWithUs: homepage("homeBuildWithUs", homeBuildWithUs, "build-with-us-slide.CR2", [6000, 4000], "Volunteers in matching red-and-white shirts gathered behind a table of donated personal-care supplies.", { x: 50, y: 45 }),

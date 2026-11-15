@@ -1,0 +1,773 @@
+/*
+ * Program detail pages. Each page sets --p-deep, --p-accent, --p-pale and --p-glow (content/programs.ts);
+ * every section below draws its colours from them, so the six areas share layouts but not themes.
+ */
+
+.program {
+  --p-on-deep: #f7f4ee;
+  --p-gap: clamp(1.5rem, 3vw, 3rem);
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.label {
+  display: block;
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--p-accent);
+}
+
+.heading {
+  font-size: clamp(1.75rem, 3vw, 3.25rem);
+  font-weight: var(--fw-heading);
+  line-height: 1.08;
+  letter-spacing: var(--tracking-display);
+  color: var(--p-deep);
+}
+
+.body {
+  max-width: 42ch;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  line-height: 1.6;
+  color: var(--color-ink-soft);
+}
+
+/* Tones shared by several sections. */
+.tone-paper {
+  background: var(--color-paper);
+}
+
+.tone-pale {
+  background: var(--p-pale);
+}
+
+.tone-deep,
+.tone-accent {
+  color: var(--p-on-deep);
+}
+
+.tone-deep {
+  background: var(--p-deep);
+}
+
+.tone-accent {
+  background: linear-gradient(120deg, var(--p-accent), var(--p-deep));
+}
+
+.tone-deep .label,
+.tone-accent .label {
+  color: var(--p-glow);
+}
+
+.tone-deep .heading,
+.tone-deep .body,
+.tone-deep .pillarTitle {
+  color: var(--p-on-deep);
+}
+
+/* ── Image slot / gradient placeholder ─────────────────────────── */
+
+.slot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.placeholder {
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-4);
+  background:
+    radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--p-glow) 85%, transparent) 0, transparent 52%),
+    radial-gradient(circle at 82% 78%, color-mix(in srgb, var(--p-accent) 90%, transparent) 0, transparent 58%),
+    linear-gradient(135deg, var(--p-deep), var(--p-accent));
+}
+
+.placeholder[data-variant="1"] {
+  background:
+    radial-gradient(circle at 75% 20%, color-mix(in srgb, var(--p-glow) 80%, transparent) 0, transparent 50%),
+    radial-gradient(circle at 20% 85%, color-mix(in srgb, var(--p-accent) 85%, transparent) 0, transparent 60%),
+    linear-gradient(200deg, var(--p-accent), var(--p-deep));
+}
+
+.placeholder[data-variant="2"] {
+  background:
+    radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--p-glow) 75%, transparent) 0, transparent 60%),
+    linear-gradient(160deg, var(--p-deep) 10%, var(--p-accent) 90%);
+}
+
+.placeholder[data-variant="3"] {
+  background:
+    radial-gradient(circle at 30% 70%, color-mix(in srgb, var(--p-glow) 70%, transparent) 0, transparent 45%),
+    linear-gradient(45deg, var(--p-accent), var(--p-deep) 70%);
+}
+
+.slotLabel {
+  padding: 0.35em 0.7em;
+  border: var(--hairline) solid rgb(255 255 255 / 0.55);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: #fff;
+  background: rgb(0 0 0 / 0.18);
+}
+
+/* ── Opening: three variants ───────────────────────────────────── */
+
+.hero {
+  padding-top: var(--header-h);
+}
+
+.eyebrow {
+  margin-bottom: var(--space-5);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  font-size: var(--fs-title);
+  font-weight: var(--fw-heading);
+  line-height: 1.02;
+  letter-spacing: var(--tracking-display);
+}
+
+.heroLead {
+  max-width: 40ch;
+  margin-top: var(--space-6);
+  font-size: clamp(1.0625rem, 1.4vw, 1.5rem);
+  font-weight: var(--fw-body);
+  line-height: 1.45;
+}
+
+/* Split: copy on a pale panel, tall picture beside it. */
+.heroSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: min(92vh, 56rem);
+  background: var(--p-pale);
+}
+
+.heroSplitCopy {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--section-y-sm) var(--page-x);
+}
+
+.heroSplit .eyebrow {
+  color: var(--p-accent);
+}
+
+.heroSplit .heroTitle {
+  color: var(--p-deep);
+}
+
+.heroSplitMedia {
+  min-height: 24rem;
+}
+
+/* Full: the picture fills the screen, copy sits low-left over a dark fade. */
+.heroFull {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(100vh, 64rem);
+  color: var(--p-on-deep);
+  background: var(--p-deep);
+}
+
+.heroFullMedia {
+  position: absolute;
+  inset: 0;
+}
+
+.heroFullMedia::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Darkens only behind the text (low and left) so it stays readable over bright photos. */
+  background:
+    linear-gradient(90deg, rgb(0 0 0 / 0.55) 0%, rgb(0 0 0 / 0.2) 55%, transparent 80%),
+    linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 0.72) 100%);
+}
+
+.heroFullCopy .heroTitle,
+.heroFullCopy .heroLead {
+  text-shadow: 0 1px 24px rgb(0 0 0 / 0.35);
+}
+
+.heroFullCopy {
+  position: relative;
+  padding: var(--section-y-sm) var(--page-x);
+}
+
+.heroFull .eyebrow {
+  color: var(--p-glow);
+}
+
+/* Centered: typographic opening on the deep colour, a wide picture strip below. */
+.heroCentered {
+  color: var(--p-on-deep);
+  background: var(--p-deep);
+  text-align: center;
+}
+
+.heroCenteredCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--section-y-sm) var(--page-x) var(--section-y-sm);
+}
+
+.heroCentered .eyebrow {
+  color: var(--p-glow);
+}
+
+.heroCentered .heroTitle {
+  max-width: 16ch;
+  font-size: clamp(2.75rem, 6.5vw, 8rem);
+}
+
+.heroStrip {
+  height: clamp(16rem, 42vw, 34rem);
+  margin: 0 var(--page-x);
+}
+
+/* ── Statement band ────────────────────────────────────────────── */
+
+.statement {
+  padding: var(--section-y) var(--page-x);
+}
+
+.statementText {
+  max-width: 28ch;
+  font-size: clamp(1.75rem, 4vw, 4.25rem);
+  font-weight: var(--fw-heading);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-display);
+}
+
+.tone-pale .statementText {
+  color: var(--p-deep);
+}
+
+/* ── Split ─────────────────────────────────────────────────────── */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--p-gap);
+  padding: var(--section-y-sm) var(--page-x);
+}
+
+.splitMedia {
+  aspect-ratio: 4 / 5;
+}
+
+.splitCopy {
+  display: grid;
+  gap: var(--space-5);
+  padding-inline: clamp(0rem, 3vw, 3rem);
+}
+
+.splitCopy .label {
+  margin-bottom: 0;
+}
+
+.splitReverse .splitMedia {
+  order: 2;
+}
+
+/* ── Pillars ───────────────────────────────────────────────────── */
+
+.pillars {
+  padding: var(--section-y-sm) var(--page-x);
+}
+
+.sectionHead {
+  max-width: 48rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.pillarGrid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: var(--p-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pillarGrid[data-count="2"] {
+  --cols: 2;
+}
+
+.pillarGrid[data-count="3"] {
+  --cols: 3;
+}
+
+.pillar {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding-top: var(--space-5);
+  border-top: 2px solid var(--p-accent);
+}
+
+.tone-deep .pillar {
+  border-top-color: var(--p-glow);
+}
+
+.pillarNumber {
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: var(--fw-heading);
+  line-height: 1;
+  color: var(--p-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.tone-deep .pillarNumber {
+  color: var(--p-glow);
+}
+
+.pillarTitle {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-label);
+  color: var(--p-deep);
+}
+
+/* ── Steps (timeline) ──────────────────────────────────────────── */
+
+.steps {
+  padding: var(--section-y-sm) var(--page-x);
+  background: var(--color-paper-raised);
+}
+
+.stepList {
+  position: relative;
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: var(--p-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The line that joins the steps. */
+.stepList::before {
+  content: "";
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--p-accent), var(--p-glow));
+  opacity: 0.6;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+.stepDot {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  font-weight: var(--fw-label);
+  color: #fff;
+  background: var(--p-accent);
+  box-shadow: 0 0 0 6px var(--color-paper-raised);
+}
+
+.stepTitle {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-label);
+  color: var(--p-deep);
+}
+
+.stepLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat;
+  transition: background-size var(--dur-base) var(--ease-out-expo);
+}
+
+.stepLink:hover {
+  background-size: 100% 2px;
+}
+
+/* ── Mosaic gallery ────────────────────────────────────────────── */
+
+.mosaic {
+  padding: var(--section-y-sm) var(--page-x);
+}
+
+.mosaicHead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  gap: var(--p-gap);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.mosaicGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: clamp(9rem, 16vw, 15rem);
+  gap: clamp(0.5rem, 1vw, 1rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One large photo with the rest around it; every count fills a clean rectangle.
+   4: large + two + one wide · 5: large + four · 6: large + four + a full-width strip. */
+.mosaicItem:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.mosaicGrid[data-count="4"] .mosaicItem:nth-child(4) {
+  grid-column: span 2;
+}
+
+/* Six photos: an even 3 × 2 grid, so landscape photos keep close to their own shape. */
+.mosaicGrid[data-count="6"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: clamp(12rem, 20vw, 19rem);
+}
+
+.mosaicGrid[data-count="6"] .mosaicItem:first-child {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+/* ── Quote band ────────────────────────────────────────────────── */
+
+.quote {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--p-gap);
+  padding: var(--section-y) var(--page-x);
+  color: var(--p-on-deep);
+  background:
+    radial-gradient(circle at 12% 20%, color-mix(in srgb, var(--p-accent) 45%, transparent) 0, transparent 45%),
+    var(--p-deep);
+}
+
+.quoteFigure {
+  margin: 0;
+}
+
+.quoteMark {
+  display: block;
+  font-size: clamp(5rem, 10vw, 9rem);
+  line-height: 0.6;
+  color: var(--p-glow);
+}
+
+.quoteText {
+  margin: var(--space-5) 0 0;
+  max-width: 24ch;
+  font-size: clamp(1.75rem, 3.6vw, 3.75rem);
+  font-weight: var(--fw-heading);
+  line-height: 1.15;
+}
+
+.quoteNote {
+  margin-top: var(--space-6);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--p-glow);
+}
+
+.quoteMedia {
+  aspect-ratio: 3 / 4;
+}
+
+/* ── FAQ ───────────────────────────────────────────────────────── */
+
+.faq {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--p-gap);
+  padding: var(--section-y-sm) var(--page-x);
+}
+
+.faqList {
+  border-top: var(--hairline) solid var(--color-line-strong);
+}
+
+.faqItem {
+  border-bottom: var(--hairline) solid var(--color-line-strong);
+}
+
+.faqQuestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--touch);
+  padding: var(--space-5) 0;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-body);
+  color: var(--p-deep);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faqQuestion::-webkit-details-marker {
+  display: none;
+}
+
+/* Plus that turns into a minus when open. */
+.faqIcon {
+  position: relative;
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.faqIcon::before,
+.faqIcon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--p-accent);
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.faqIcon::after {
+  transform: rotate(90deg);
+}
+
+.faqItem[open] .faqIcon::after {
+  transform: rotate(0deg);
+}
+
+.faqAnswer {
+  max-width: 60ch;
+  padding-bottom: var(--space-5);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--color-ink-soft);
+}
+
+/* ── Closing call to action ────────────────────────────────────── */
+
+.cta {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+  padding: var(--section-y) var(--page-x);
+  color: var(--p-on-deep);
+  background:
+    radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--p-glow) 55%, transparent) 0, transparent 40%),
+    linear-gradient(120deg, var(--p-deep), var(--p-accent));
+}
+
+.ctaHeading {
+  max-width: 18ch;
+  font-size: clamp(2rem, 4.5vw, 4.75rem);
+  font-weight: var(--fw-heading);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+}
+
+.ctaText {
+  max-width: 44ch;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ctaAction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: max(2.5rem, var(--touch));
+  padding: 0 var(--space-5);
+  border: var(--hairline) solid rgb(255 255 255 / 0.7);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: #fff;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.ctaAction:hover,
+.ctaPrimary {
+  color: var(--p-deep);
+  background: #fff;
+  border-color: #fff;
+}
+
+.ctaPrimary:hover {
+  color: #fff;
+  background: transparent;
+}
+
+/* ── Other areas ───────────────────────────────────────────────── */
+
+.others {
+  padding: var(--section-y-sm) var(--page-x);
+}
+
+.otherList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--hairline) solid var(--color-line-strong);
+}
+
+.otherLink {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) 0;
+  border-bottom: var(--hairline) solid var(--color-line-strong);
+  transition: color var(--dur-fast) var(--ease-out), padding var(--dur-base) var(--ease-out-expo);
+}
+
+.otherLink:hover {
+  padding-left: var(--space-4);
+  color: var(--p-accent);
+}
+
+.otherNumber {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  color: var(--color-ink-muted);
+}
+
+.otherTitle {
+  font-size: clamp(1.375rem, 2.4vw, 2.25rem);
+  font-weight: var(--fw-heading);
+}
+
+/* ── Smaller screens ───────────────────────────────────────────── */
+
+@media (max-width: 1023.98px) {
+  .heroSplit,
+  .split,
+  .quote,
+  .faq,
+  .mosaicHead {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroSplitMedia {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .splitReverse .splitMedia {
+    order: 0;
+  }
+
+  .splitMedia {
+    aspect-ratio: 4 / 3;
+  }
+
+  .quoteMedia {
+    max-width: 24rem;
+  }
+
+  .pillarGrid {
+    --cols: 2;
+  }
+
+  .pillarGrid[data-count="3"] {
+    --cols: 3;
+  }
+
+  .stepList {
+    grid-auto-flow: row;
+  }
+
+  .stepList::before {
+    top: 0;
+    bottom: 0;
+    left: 1.25rem;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--p-accent), var(--p-glow));
+  }
+
+  .step {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: var(--space-5);
+  }
+
+  .step > :not(.stepDot) {
+    grid-column: 2;
+  }
+
+  .stepDot {
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .pillarGrid,
+  .pillarGrid[data-count="3"] {
+    --cols: 1;
+  }
+
+  .mosaicGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 9rem;
+  }
+
+  /* Two columns: the first photo spans the width; with an even count the last one does too. */
+  .mosaicItem:first-child {
+    grid-row: auto;
+  }
+
+  .mosaicGrid[data-count="4"] .mosaicItem:nth-child(4) {
+    grid-column: span 2;
+  }
+
+  .mosaicGrid[data-count="6"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 9rem;
+  }
+
+  .otherLink {
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  }
+}
