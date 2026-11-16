@@ -4,7 +4,7 @@ import type { Ref } from "react";
 
 import type { HeaderData } from "@/content/types";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { MediaImage } from "@/components/ui/MediaImage";
+import { LoadingImage } from "@/components/ui/LoadingImage";
 import { cx } from "@/lib/cx";
 
 import styles from "./panels.module.css";
@@ -51,7 +51,16 @@ export function EventsPanel({ id, data, open, ref, onNavigate }: EventsPanelProp
               {card.kind === "event" ? (
                 <>
                   <div className={styles.eventMedia}>
-                    {opened ? <MediaImage media={card.media} decorative sizes="(min-width: 1024px) 20vw, 1px" /> : null}
+                    {opened ? (
+                      <LoadingImage
+                        src={card.media.src}
+                        alt=""
+                        sizes="(min-width: 1024px) 20vw, 1px"
+                        quality={75}
+                        unoptimized={/^https?:[/][/]/.test(card.media.src.src) && !card.optimize}
+                        style={{ objectPosition: card.media.position }}
+                      />
+                    ) : null}
                   </div>
                   <h3 className={styles.eventTitle}>
                     <Link href={card.href} className={styles.stretched} onClick={onNavigate}>
@@ -60,7 +69,7 @@ export function EventsPanel({ id, data, open, ref, onNavigate }: EventsPanelProp
                   </h3>
                   <p className={styles.eventMeta}>{card.meta}</p>
                   <span className={styles.tinyAction} aria-hidden="true">
-                    Learn more <ArrowRightIcon size={12} />
+                    {card.cta ?? "Learn more"} <ArrowRightIcon size={12} />
                   </span>
                 </>
               ) : (

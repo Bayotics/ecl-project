@@ -238,7 +238,7 @@
 }
 
 .eventMedia img {
-  transition: transform 1.2s var(--ease-out-expo);
+  transition: transform 1.2s var(--ease-out-expo), opacity 0.6s var(--ease-out);
 }
 
 .statusMedia {

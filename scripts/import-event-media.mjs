@@ -10,12 +10,14 @@
 // the front, e.g. ffmpeg -movflags +faststart); camera .mov files are skipped.
 //
 //   node --env-file=.env.local scripts/import-event-media.mjs <category-slug> <folder> [--replace] [--dry-run]
+//   node --env-file=.env.local scripts/import-event-media.mjs 2026-parade <folder> "--title=2026 Parade"
 //
+// --title creates the category (published, listed after the existing ones) when the slug is new.
 // --replace deletes what the category held before (records and their files in R2), only after every new
 // file has uploaded. Files are added in name order (camera order) and published straight away.
 
 import { randomUUID } from "node:crypto";
-import { readdir, readFile, stat } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { extname, join } from "node:path";
 
 import { DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
@@ -25,6 +27,7 @@ import sharp from "sharp";
 const args = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const DRY = process.argv.includes("--dry-run");
 const REPLACE = process.argv.includes("--replace");
+const TITLE = process.argv.find((a) => a.startsWith("--title="))?.slice("--title=".length).trim();
 const [slug, folder] = args;
 const need = ["MONGODB_URI", "R2_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET", "R2_PUBLIC_URL"];
 const missing = need.filter((key) => !process.env[key]);
@@ -85,8 +88,18 @@ const mongo = new MongoClient(process.env.MONGODB_URI);
 try {
   await mongo.connect();
   const db = mongo.db(process.env.MONGODB_DB || "ecl");
-  const category = await db.collection("event_categories").findOne({ slug });
-  if (!category) throw new Error(`No event category with the slug "${slug}".`);
+  const categories = db.collection("event_categories");
+  let category = await categories.findOne({ slug });
+  if (!category && TITLE && !DRY) {
+    const [last] = await categories.find().sort({ sort_order: -1 }).limit(1).toArray();
+    const id = randomUUID();
+    const now = new Date().toISOString();
+    category = { _id: id, id, title: TITLE, slug, description: "", image_url: "", sort_order: (last?.sort_order ?? 0) + 1, published: true, created_at: now, updated_at: now };
+    await categories.insertOne(category);
+    console.log(`Created the category "${TITLE}".`);
+  }
+  if (!category && !(TITLE && DRY)) throw new Error(`No event category with the slug "${slug}". Add "--title=…" to create it.`);
+  category ??= { title: TITLE };
   const media = db.collection("event_media");
   const before = await media.find({ category_id: category.id }).toArray();
 

@@ -14,6 +14,8 @@ import type { EventRecord, GalleryAlbum, HeroSlide } from "@/content/types";
 import type { PageMedia } from "./types";
 
 import { meta, mapEvent, managedMedia } from "./adapters";
+import { publicEventCollections } from "./event-collections";
+import { featuredEventCollections } from "@/content/event-categories";
 // Built-in history (content/events.ts, content/gallery.ts) is part of the site and always shows; records
 // added in the admin appear alongside it, and a database record with the same slug replaces it.
 export const publicEvents = cache(async (): Promise<EventRecord[]> => {
@@ -55,12 +57,28 @@ export const publicSearchIndex = cache(async () => {
  ...events.map(e=>({type:"Event" as const,title:e.title,summary:e.excerpt,href:"/events/"+e.slug})),
  ...albums.map(a=>({type:"Gallery" as const,title:a.title,summary:a.excerpt,href:"/gallery/"+a.slug}))];
 });
+/** Header Events dropdown: the featured photo collections (content/event-categories.ts), each with its first photo. */
+async function featuredCollectionCards() {
+ const {categories,media}=await publicEventCollections();
+ const base=(process.env.R2_PUBLIC_URL??"").replace(/[/]$/,"");
+ return featuredEventCollections.flatMap(({slug,title,year})=>{
+  const category=categories.find(c=>c.slug===slug);
+  const items=category?media.filter(m=>m.category_id===category.id):[];
+  if(!category||!items.length) return [];
+  const photo=items.find(m=>m.media_type==="image");
+  const src=category.image_url||(photo?photo.preview_url||photo.media_url:"");
+  const photos=items.filter(m=>m.media_type==="image").length,videos=items.length-photos;
+  const count=[photos&&`${photos} ${photos===1?"photo":"photos"}`,videos&&`${videos} ${videos===1?"video":"videos"}`].filter(Boolean).join(" · ");
+  return [{kind:"event" as const,slug:`collection-${slug}`,title,href:`/events#collection-${slug}`,meta:`${year} · ${count}`,media:resolveMedia(managedMedia(src,`Photo from ${title}`)),cta:"See photos",optimize:Boolean(base&&src.startsWith(base+"/"))}];
+ });
+}
+
 export async function publicNavigation() {
- const [events,index,config]=await Promise.all([publicEvents(),publicSearchIndex(),publicSettings()]);
+ const [events,index,config,featured]=await Promise.all([publicEvents(),publicSearchIndex(),publicSettings(),featuredCollectionCards()]);
  const site=config?{...baseSite,name:config.organization_name,contact:{email:config.email,phone:{display:config.phone,tel:config.phone.replace(/[^+0-9]/g,"")},location:config.address,streetAddress:config.address}}:baseSite;
  const social=config?[["Facebook",config.facebook_url],["Instagram",config.instagram_url],["YouTube",config.youtube_url]].filter(([,href])=>/^https:\/\//.test(href)).map(([label,href])=>({label,href})):headerData.menu.social.links;
  return {site,header:{...headerData,siteName:site.name,utility:{...headerData.utility,text:headerData.utility.text,links:[...headerData.utility.links,{label:"Login",href:"/login"}]},
- events:{...headerData.events,cards:events.slice(0,3).map(e=>({kind:"event" as const,slug:e.slug,title:e.title,href:"/events/"+e.slug,meta:eventWhenLine(e),media:resolveMedia(e.media)}))},
+ events:{...headerData.events,cards:featured.length?featured:events.slice(0,3).map(e=>({kind:"event" as const,slug:e.slug,title:e.title,href:"/events/"+e.slug,meta:eventWhenLine(e),media:resolveMedia(e.media)}))},
  menu:{...headerData.menu,social:{...headerData.menu.social,links:social}},
  search:{...headerData.search,index}},
  columns:footerColumns.map((column,i)=>i===0?{...column,heading:site.name,links:[{label:site.contact.phone.display,href:"tel:"+site.contact.phone.tel},{label:site.contact.email,href:"mailto:"+site.contact.email}]}:i===1?{...column,lines:[site.contact.location]}:i===5?{...column,links:[...column.links.filter(l=>!l.href.startsWith("https://")),...social]}:column)};

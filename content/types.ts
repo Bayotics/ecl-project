@@ -354,6 +354,10 @@ export type EventCardView =
       /** e.g. "December 2018 · Past event" */
       meta: string;
       media: ResolvedMedia;
+      /** Card link label (default "Learn more"). */
+      cta?: string;
+      /** The photo is in the site's R2 bucket, so the image optimizer may resize it. */
+      optimize?: boolean;
     }
   | {
       kind: "status";

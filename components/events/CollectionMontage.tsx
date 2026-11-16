@@ -1,11 +1,11 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- uploaded photos are shown as stored (web-size copies), never resized by the site */
-
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent } from "react";
 
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 import { ArrowButton } from "@/components/ui/ArrowButton";
+import { LoadingImage, LoadingVideoThumb } from "@/components/ui/LoadingImage";
 import { keepTabInside } from "@/lib/focus-trap";
 
 import styles from "./montage.module.css";
@@ -15,9 +15,12 @@ export interface MontageItem {
   kind: "image" | "video";
   /** What is shown: the web-size copy of a photo (or the original when it has none), or the video. */
   src: string;
-  /** The untouched original, linked as "Full-size photo". */
+  /** The full-resolution photo, linked as "Full-size photo". */
   full: string;
   poster: string;
+  /** Whether src / poster are in the site's R2 bucket, so the image optimizer may resize them. */
+  optimize: boolean;
+  optimizePoster: boolean;
   alt: string;
   title: string;
   caption: string;
@@ -28,17 +31,21 @@ const ON_PAGE = 5;
 
 type View = null | "wall" | number;
 
-function Thumb({ item, eager }: { item: MontageItem; eager?: boolean }) {
+/** A resized copy for each place (montage tile, wall, thumbnail strip), with a spinner until it arrives. */
+function Thumb({ item, sizes, eager }: { item: MontageItem; sizes: string; eager?: boolean }) {
+  const loading = eager ? "eager" : "lazy";
   if (item.kind === "video") {
     return (
       <>
-        {item.poster ? <img src={item.poster} alt="" loading={eager ? "eager" : "lazy"} decoding="async" /> : <video src={`${item.src}#t=0.5`} preload="metadata" muted playsInline tabIndex={-1} aria-hidden="true" />}
+        {item.poster ? <LoadingImage src={item.poster} alt="" sizes={sizes} quality={75} loading={loading} unoptimized={!item.optimizePoster} /> : <LoadingVideoThumb src={item.src} />}
         <span className={styles.play} aria-hidden="true" />
       </>
     );
   }
-  return <img src={item.src} alt="" loading={eager ? "eager" : "lazy"} decoding="async" />;
+  return <LoadingImage src={item.src} alt="" sizes={sizes} quality={75} loading={loading} unoptimized={!item.optimize} />;
 }
+
+const SLIDE_SIZES = "100vw";
 
 /**
  * One event category on the Events page: five photos and videos in a montage, and a "See all" button
@@ -83,14 +90,11 @@ export function CollectionMontage({ id, index, title, description, items }: { id
     if (dialog?.open && !dialog.contains(document.activeElement)) dialog.focus({ preventScroll: true });
   }, [view]);
 
-  // Keep the active thumbnail in view, and fetch the neighbouring photos so stepping feels instant.
+  // Keep the active thumbnail in view.
   useEffect(() => {
     if (slide === null) return;
     strip.current?.querySelector<HTMLElement>(`[data-index="${slide}"]`)?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
-    for (const near of [items[(slide + 1) % count], items[(slide - 1 + count) % count]]) {
-      if (near?.kind === "image") new window.Image().src = near.src;
-    }
-  }, [slide, items, count]);
+  }, [slide]);
 
   const launch = (event: MouseEvent<HTMLElement>, next: View) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
@@ -166,7 +170,7 @@ export function CollectionMontage({ id, index, title, description, items }: { id
                 aria-haspopup="dialog"
                 aria-label={last ? `See all ${count} in ${title}` : `Open ${item.kind === "video" ? "video" : "photo"} ${i + 1} of ${count}: ${item.alt}`}
               >
-                <Thumb item={item} eager={i === 0} />
+                <Thumb item={item} sizes={i === 0 ? "(min-width: 700px) 50vw, 100vw" : "(min-width: 700px) 25vw, 50vw"} eager={i === 0} />
                 {last ? (
                   <span className={styles.more}>
                     <strong>+{more}</strong>
@@ -220,7 +224,7 @@ export function CollectionMontage({ id, index, title, description, items }: { id
                 {items.map((item, i) => (
                   <li key={item.id} style={{ "--i": Math.min(i, 24) } as CSSProperties}>
                     <button type="button" onClick={() => go(i)} aria-label={`Open ${item.kind === "video" ? "video" : "photo"} ${i + 1} of ${count}: ${item.alt}`}>
-                      <Thumb item={item} eager={i < 8} />
+                      <Thumb item={item} sizes="(min-width: 1100px) 23vw, (min-width: 700px) 31vw, 50vw" eager={i < 12} />
                     </button>
                   </li>
                 ))}
@@ -233,7 +237,13 @@ export function CollectionMontage({ id, index, title, description, items }: { id
                       {current.kind === "video" ? (
                         <video src={current.src} poster={current.poster || undefined} controls playsInline preload="metadata" aria-label={current.alt} />
                       ) : (
-                        <img src={current.src} alt={current.alt} decoding="async" />
+                        <LoadingImage src={current.src} alt={current.alt} sizes={SLIDE_SIZES} quality={90} loading="eager" unoptimized={!current.optimize} frameClassName={styles.slideFrame} style={{ objectFit: "contain" }} />
+                      )}
+                    </div>
+                    {/* The photos either side, fetched at the same size so stepping is instant. */}
+                    <div hidden>
+                      {[items[(slide! + 1) % count], items[(slide! - 1 + count) % count]].map((near) =>
+                        near.kind === "image" && near.id !== current.id ? <Image key={near.id} src={near.src} alt="" fill sizes={SLIDE_SIZES} quality={90} loading="eager" unoptimized={!near.optimize} /> : null,
                       )}
                     </div>
                     {count > 1 && (
@@ -261,7 +271,7 @@ export function CollectionMontage({ id, index, title, description, items }: { id
                     {items.map((item, i) => (
                       <li key={item.id}>
                         <button type="button" data-index={i} aria-current={i === slide || undefined} aria-label={`${item.kind === "video" ? "Video" : "Photo"} ${i + 1} of ${count}`} onClick={() => go(i)}>
-                          <Thumb item={item} />
+                          <Thumb item={item} sizes="96px" />
                         </button>
                       </li>
                     ))}

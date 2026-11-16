@@ -1,10 +1,11 @@
 import { CollectionMontage, type MontageItem } from "@/components/events/CollectionMontage";
 import { Reveal } from "@/components/motion/Reveal";
-import { MediaImage } from "@/components/ui/MediaImage";
-import { resolveMedia } from "@/content/media";
-import { managedMedia } from "@/lib/db/adapters";
+import { LoadingImage } from "@/components/ui/LoadingImage";
 import type { EventCategory, EventMedia } from "@/lib/db/types";
 import styles from "./collections.module.css";
+
+/** Files in the site's own R2 bucket can go through the image optimizer (sized copies from the CDN). */
+const inBucket = (url: string) => Boolean(url && process.env.R2_PUBLIC_URL && url.startsWith(process.env.R2_PUBLIC_URL.replace(/\/$/, "") + "/"));
 
 const toItem = (item: EventMedia): MontageItem => ({
   id: item.id,
@@ -15,6 +16,8 @@ const toItem = (item: EventMedia): MontageItem => ({
   alt: item.alt_text || item.title,
   title: item.title,
   caption: item.caption || "",
+  optimize: inBucket((item.media_type === "image" && item.preview_url) || item.media_url),
+  optimizePoster: inBucket(item.poster_url),
 });
 
 /**
@@ -41,7 +44,7 @@ export function EventCollections({ categories, media }: { categories: EventCateg
             <>
               {cover && (
                 <div className={styles.cover}>
-                  <MediaImage media={resolveMedia(managedMedia(cover, category.title))} sizes="(max-width: 700px) 90vw, 25vw" />
+                  <LoadingImage src={cover} alt="" sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 25vw" quality={75} unoptimized={!inBucket(cover)} />
                 </div>
               )}
               <span className={styles.number}>{String(i + 1).padStart(2, "0")}</span>
