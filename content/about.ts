@@ -58,7 +58,7 @@ export const about = {
       label: "Service",
       heading: "Learning, care and support where it is needed",
       body: "Humanitarian support and health and wellbeing guide how we serve. Members give their time and skills to help communities in Louisiana and in Lagos.",
-      link: { label: "See our impact", href: "/impact" } satisfies LinkItem,
+      link: { label: "Explore humanitarian support", href: causeHref("humanitarian-support") } satisfies LinkItem,
       media: resolveMedia({ asset: "greetingCelebration" }),
     },
   ],

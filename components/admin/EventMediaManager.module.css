@@ -1,0 +1,522 @@
+/* Admin: event photos and videos, by category (matches AdminArea.module.css). */
+
+.shell {
+  min-height: 100svh;
+  background: #edf0ea;
+  color: #173b31;
+}
+
+.content {
+  width: min(100% - 2.5rem, 75rem);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 7vw, 6rem) 0;
+}
+
+.back {
+  color: #173b31;
+  font-weight: 700;
+  text-underline-offset: 0.25rem;
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  margin: 0.35rem 0 0.75rem;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+}
+
+.lead {
+  max-width: 40rem;
+  margin: 0;
+  color: #52655e;
+  line-height: 1.6;
+}
+
+.primary,
+.secondary,
+.secondaryLink {
+  border: 0;
+  border-radius: 0.45rem;
+  cursor: pointer;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.primary {
+  background: #173b31;
+  color: #fff;
+}
+
+.secondary,
+.secondaryLink {
+  background: #dfe6dc;
+  color: #173b31;
+}
+
+.primary:disabled,
+.secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.linkButton {
+  border: 0;
+  background: none;
+  color: #173b31;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+.error,
+.notice {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.6rem;
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+.error {
+  color: #922c1c;
+  background: #f8e6e2;
+}
+
+.notice {
+  color: #173b31;
+  background: #dfe9dc;
+}
+
+.empty {
+  padding: 2rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #52655e;
+}
+
+/* ── Categories ─────────────────────────────────────────────────── */
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.category {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid #cbd2c9;
+  border-radius: 0.9rem;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category:hover:not(:disabled) {
+  border-color: #8a6c32;
+  transform: translateY(-2px);
+}
+
+.category[aria-selected="true"] {
+  border-color: #173b31;
+  background: #173b31;
+  color: #fff;
+  box-shadow: 0 0.75rem 1.75rem -1rem rgb(23 59 49 / 0.6);
+}
+
+.category:disabled:not([aria-selected="true"]) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.categoryTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.categoryCount {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.badge {
+  justify-self: start;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  background: #f1e7d2;
+  color: #6d5424;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ── Selected category ──────────────────────────────────────────── */
+
+.panel {
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  border-radius: 1rem;
+  background: #f7f8f5;
+  border: 1px solid #d7ddd4;
+}
+
+.drop {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem) 1rem;
+  border: 2px dashed #b9c1b8;
+  border-radius: 0.9rem;
+  background: #fff;
+  text-align: center;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.drop[data-dragging] {
+  border-color: #8a6c32;
+  background: #fbf7ee;
+}
+
+.dropTitle {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.dropText,
+.hint {
+  margin: 0;
+  color: #52655e;
+}
+
+.hint {
+  max-width: 38rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.batch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.batch label,
+.editorFields label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.batch input:not([type="checkbox"]),
+.editorFields input:not([type="checkbox"]),
+.editorFields select,
+.editorFields textarea {
+  width: 100%;
+  min-width: min(20rem, 70vw);
+  box-sizing: border-box;
+  padding: 0.7rem;
+  border: 1px solid #b9c1b8;
+  border-radius: 0.4rem;
+  font: inherit;
+  font-weight: 400;
+}
+
+.editorFields textarea {
+  min-height: 6rem;
+}
+
+.batch .check,
+.editorFields .check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.check input {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* ── Upload queue ───────────────────────────────────────────────── */
+
+.queue {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.queueHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.queueHead p {
+  margin: 0;
+  font-weight: 700;
+}
+
+.queueHead div {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.queue ul {
+  display: grid;
+  gap: 0.6rem;
+  max-height: 22rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.job {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 4.5rem;
+  gap: 0.25rem 0.75rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.jobName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jobSize {
+  color: #52655e;
+}
+
+.jobState {
+  text-align: right;
+  font-weight: 700;
+}
+
+.job[data-state="done"] .jobState {
+  color: #3c5e35;
+}
+
+.job[data-state="failed"] .jobState,
+.jobError {
+  color: #922c1c;
+}
+
+.jobError {
+  grid-column: 1 / -1;
+  font-size: 0.82rem;
+}
+
+.bar {
+  grid-column: 1 / -1;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #e3e8e0;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  background: #173b31;
+  transform-origin: left;
+  transition: transform 0.2s linear;
+}
+
+.job[data-state="done"] .bar span {
+  background: #3c5e35;
+}
+
+.job[data-state="failed"] .bar span {
+  background: #922c1c;
+}
+
+/* ── Edit form ──────────────────────────────────────────────────── */
+
+.editor {
+  padding: 1.25rem;
+  border: 1px solid #cbd2c9;
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.editor h2 {
+  margin: 0 0 1rem;
+}
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 1.25rem;
+}
+
+.editorPreview img,
+.editorPreview video {
+  display: block;
+  width: 100%;
+  max-height: 28rem;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  background: #111;
+}
+
+.editorFields {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* ── Grid of what is in the category ────────────────────────────── */
+
+.gridHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.gridHead h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.gridHead p {
+  margin: 0;
+  color: #52655e;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.tile {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  border: 1px solid #dce1da;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #1d2b26;
+}
+
+.thumb img,
+.thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.type,
+.status {
+  position: absolute;
+  top: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.type {
+  left: 0.4rem;
+  background: rgb(0 0 0 / 0.6);
+  color: #fff;
+}
+
+.status {
+  right: 0.4rem;
+  background: #f1e7d2;
+  color: #6d5424;
+}
+
+.status[data-published] {
+  background: #dfe9dc;
+  color: #2c4a26;
+}
+
+.tileTitle {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.tileActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tileActions button {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: #173b31;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+.tileActions button:last-child {
+  margin-left: auto;
+  color: #922c1c;
+}
+
+@media (max-width: 760px) {
+  .header {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .editorGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -24,7 +24,6 @@ Everything visitors read lives in typed files under `content/`. Each record has 
 | Events | `content/events.ts` | Fill `schedule` only with a confirmed local date/time and its zone (`"America/Chicago"` for Louisiana, `"Africa/Lagos"` for Lagos). Set `rsvp` to open RSVPs. Events move to "Past" automatically. Never add unannounced or recurring meetings. |
 | News | `content/news.ts` | Publish with a day-precision date. |
 | Stories, volunteer highlights | `content/stories.ts` | `cause` links a story to its program page. |
-| Figures and testimonials | `content/impact.ts` | Figures need `asOf` and `source`; testimonials need `consent: true`. |
 | Officers | `content/leadership.ts` | Names, roles, terms, bios and photos from the club only. |
 | Reports | `content/reports.ts` + `public/reports/` | The download appears only when the file exists. |
 | Programs (six mission areas) | `content/causes.ts` | |

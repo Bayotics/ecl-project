@@ -1,28 +1,84 @@
-import Link from "next/link";
+import { CollectionMontage, type MontageItem } from "@/components/events/CollectionMontage";
+import { Reveal } from "@/components/motion/Reveal";
 import { MediaImage } from "@/components/ui/MediaImage";
 import { resolveMedia } from "@/content/media";
 import { managedMedia } from "@/lib/db/adapters";
-import type { EventCategory,EventMedia } from "@/lib/db/types";
+import type { EventCategory, EventMedia } from "@/lib/db/types";
 import styles from "./collections.module.css";
 
-export function EventCollections({categories,media,selected}:{categories:EventCategory[];media:EventMedia[];selected:string}) {
- const active=categories.find(c=>c.slug===selected);
- const items=active?media.filter(m=>m.category_id===active.id):media;
- return <section id="collections" className={styles.section} aria-labelledby="collections-title">
-  <div className={styles.heading}><div><p className={styles.eyebrow}>Our community, in moments</p><h2 id="collections-title">Explore our events</h2></div><p>Browse photographs and videos by category, or see what’s coming up in the calendar below.</p></div>
-  <div className={styles.categories}>{categories.map((category,i)=>{
-   const count=media.filter(m=>m.category_id===category.id).length;
-   return <Link key={category.id} href={`/events?collection=${encodeURIComponent(category.slug)}#event-media`} className={`${styles.category} ${active?.id===category.id?styles.active:""}`} aria-current={active?.id===category.id?"true":undefined}>
-    {category.image_url && <div className={styles.cover}><MediaImage media={resolveMedia(managedMedia(category.image_url,category.title))} sizes="(max-width: 700px) 90vw, 25vw" /></div>}
-    <span className={styles.number}>{String(i+1).padStart(2,"0")}</span><h3>{category.title}</h3>
-    {category.description && <p>{category.description}</p>}
-    <span className={styles.categoryFooter}>{count ? `${count} ${count===1?"moment":"moments"}` : "Collection coming soon"}<span aria-hidden="true">↗</span></span>
-   </Link>;
-  })}</div>
-  <div id="event-media" className={styles.collectionHeader}><h3>{active?active.title:"All photos & videos"}</h3>{active && <Link href="/events#event-media">View all categories</Link>}</div>
-  {items.length ? <div className={styles.mediaGrid}>{items.map(item=><figure key={item.id} className={styles.mediaCard}>
-    <div className={styles.mediaFrame}>{item.media_type==="video" ? <video controls playsInline preload="none" poster={item.poster_url||undefined} aria-label={item.alt_text||item.title}><source src={item.media_url}/>Your browser does not support this video. <a href={item.media_url}>Open video</a></video> : <MediaImage media={resolveMedia(managedMedia(item.media_url,item.alt_text||item.title))} sizes="(max-width: 700px) 90vw, 45vw" loading="lazy"/>}</div>
-    <figcaption><span className={styles.eyebrow}>{categories.find(c=>c.id===item.category_id)?.title} · {item.media_type==="video"?"Video":"Photo"}</span><h4>{item.title}</h4>{item.caption && <p>{item.caption}</p>}</figcaption>
-  </figure>)}</div> : <div className={styles.empty}><span aria-hidden="true">◇</span><p>{active?`${active.title} photos and videos will appear here as they are published.`:"Photos and videos will appear here as the club publishes them."}</p></div>}
- </section>;
+const toItem = (item: EventMedia): MontageItem => ({
+  id: item.id,
+  kind: item.media_type === "video" ? "video" : "image",
+  src: (item.media_type === "image" && item.preview_url) || item.media_url,
+  full: item.media_url,
+  poster: item.poster_url || "",
+  alt: item.alt_text || item.title,
+  title: item.title,
+  caption: item.caption || "",
+});
+
+/**
+ * Event categories as cards, then each category with photos or videos as a five-item montage with a
+ * "See all" viewer. Categories with nothing published yet keep their card ("Collection coming soon").
+ */
+export function EventCollections({ categories, media }: { categories: EventCategory[]; media: EventMedia[] }) {
+  const collections = categories.map((category) => ({ category, items: media.filter((m) => m.category_id === category.id).map(toItem) }));
+  const withMedia = collections.filter((c) => c.items.length);
+
+  return (
+    <section id="collections" className={styles.section} aria-labelledby="collections-title">
+      <div className={styles.heading}>
+        <div>
+          <p className={styles.eyebrow}>Our community, in moments</p>
+          <h2 id="collections-title">Explore our events</h2>
+        </div>
+        <p>Browse photographs and videos by category, or see what’s coming up in the calendar below.</p>
+      </div>
+      <div className={styles.categories}>
+        {collections.map(({ category, items }, i) => {
+          const cover = category.image_url || items.find((item) => item.kind === "image")?.src || "";
+          const body = (
+            <>
+              {cover && (
+                <div className={styles.cover}>
+                  <MediaImage media={resolveMedia(managedMedia(cover, category.title))} sizes="(max-width: 700px) 90vw, 25vw" />
+                </div>
+              )}
+              <span className={styles.number}>{String(i + 1).padStart(2, "0")}</span>
+              <h3>{category.title}</h3>
+              {category.description && <p>{category.description}</p>}
+              <span className={styles.categoryFooter}>
+                {items.length ? `${items.length} ${items.length === 1 ? "moment" : "moments"}` : "Collection coming soon"}
+                {items.length > 0 && <span aria-hidden="true">↓</span>}
+              </span>
+            </>
+          );
+          return items.length ? (
+            <a key={category.id} href={`#collection-${category.slug}`} className={styles.category}>
+              {body}
+            </a>
+          ) : (
+            <div key={category.id} className={`${styles.category} ${styles.soon}`}>
+              {body}
+            </div>
+          );
+        })}
+      </div>
+
+      <div id="event-media" className={styles.collections}>
+        {withMedia.length ? (
+          withMedia.map(({ category, items }) => (
+            <Reveal key={category.id} stagger={0.07}>
+              <CollectionMontage id={category.slug} index={categories.indexOf(category)} title={category.title} description={category.description} items={items} />
+            </Reveal>
+          ))
+        ) : (
+          <div className={styles.empty}>
+            <span aria-hidden="true">◇</span>
+            <p>Photos and videos will appear here as the club publishes them.</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
 }

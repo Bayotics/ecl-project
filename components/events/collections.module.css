@@ -7,3 +7,8 @@
 @media(prefers-reduced-motion:reduce){.category{transition:none}}
 
 .collectionHeader{scroll-margin-top:calc(var(--nav-h, 80px) + 2rem)}
+
+
+.collections{margin-top:clamp(3rem,6vw,5rem);scroll-margin-top:calc(var(--nav-h, 80px) + 2rem)}
+.soon{opacity:.75}
+@media(hover:hover){.soon:hover{transform:none;box-shadow:none}}

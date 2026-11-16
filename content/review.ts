@@ -1,7 +1,6 @@
 import { causes } from "./causes";
 import { donationSettings } from "./donations";
 import { chapterHistory, originalHistory } from "./history";
-import { metrics, testimonials } from "./impact";
 import { policyReview } from "./policies";
 import { events } from "./events";
 import { albums } from "./gallery";
@@ -75,8 +74,6 @@ export function getReviewFlags(): ReviewItem[] {
     ...albums.map((album): [string, RecordMeta] => [`Album: ${album.title}`, album]),
     ...leadership.map((leader): [string, RecordMeta] => [`Leader: ${leader.name}`, leader]),
     ...reports.map((report): [string, RecordMeta] => [`Report: ${report.title}`, report]),
-    ...metrics.map((metric): [string, RecordMeta] => [`Figure: ${metric.label}`, metric]),
-    ...testimonials.map((quote): [string, RecordMeta] => [`Testimonial: ${quote.name}`, quote]),
     ...socialLinks.map((link): [string, RecordMeta] => [`Social: ${link.label}`, link]),
     ...Object.values(assets).map((asset): [string, RecordMeta] => [`Media: ${asset.id}`, asset]),
   ];

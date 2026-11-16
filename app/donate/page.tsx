@@ -66,7 +66,7 @@ export default async function DonatePage({ searchParams }: PageProps<"/donate">)
           details. A gift is shown as confirmed only after the payment provider notifies the club that the payment
           succeeded, and you will receive a receipt by email from the provider.
         </p>
-        <ActionRow actions={[{ label: "Reports", href: "/reports" }, { label: "Our impact", href: "/impact" }]} />
+        <ActionRow actions={[{ label: "Reports", href: "/reports" }, { label: "Programs & causes", href: "/programs" }]} />
       </PageSection>
     </>
   );

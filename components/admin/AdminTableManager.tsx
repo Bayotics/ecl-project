@@ -55,7 +55,7 @@ export function AdminTableManager({ table }: { table: string }) {
     setBusy(true);setError("");
     try {
       // The original file is stored exactly as chosen; the website sizes it for each screen when shown.
-      if(!["image/jpeg","image/png","image/webp","image/avif"].includes(file.type) || file.size>25*1024*1024) throw new Error("Choose a JPEG, PNG, WebP or AVIF image under 25 MB.");
+      if(!["image/jpeg","image/png","image/webp","image/avif"].includes(file.type) || file.size>50*1024*1024) throw new Error("Choose a JPEG, PNG, WebP or AVIF image under 50 MB.");
       change("image_url",await uploadMedia("site-media",file));
       setNotice("Original image uploaded at full quality. Save the record to use it.");
     } catch(e){setError(e instanceof Error?e.message:"Upload failed.");}finally{setBusy(false);}

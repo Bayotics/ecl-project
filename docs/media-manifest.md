@@ -30,7 +30,7 @@ The originals are kept in `assets/source/new-media/`. Photos were resized to a m
 | Hero 1 "A shared legacy" | Club footage on R2 `site-media/hero/club-hero-{720,1080,1440,2160}.mp4` (from `homepage-hero.MOV`, 4K 40 s; H.264 CRF 18, no audio). Each screen gets the smallest copy that is sharp on it and drops a size if playback stalls. `homeHeroThumbnail` shows until the footage plays, under reduced motion, on data-saver connections, and if the video fails. The About page still uses `hero-video.mp4` with `heroVideoPoster`. |
 | Hero 2 "Community in action" | `communityDance` |
 | Hero 3 "Build with us" (also the /get-involved intro) | `familyCelebration` |
-| Impact panel (also the /impact intro) | `celebrationGuests` |
+| Homepage "Our impact" panel | `celebrationGuests` |
 | Causes panel | `eldersGathering` |
 | Cause cards and program pages | Youth Outreach `homeYouthOutreach` · Cultural Heritage `lagosEyoFloat` · Humanitarian Support `greetingCelebration` · Community Building `communityDance` · Health and Wellbeing `celebrationGuests` |
 | Header Programs panel | `asoOkeCouple` |

@@ -4,10 +4,10 @@ import { news } from "./news";
 import { stories } from "./stories";
 import type { FeedItem } from "./types";
 
-/** Each kind has its own section: news at /news, events at /events, stories at /impact. */
+/** News at /news and events at /events; a story belongs to its program page (or all programs). */
 export function feedHref(item: Pick<FeedItem, "kind" | "slug">): string {
   if (item.kind === "event") return `/events/${item.slug}`;
-  if (item.kind === "story") return `/impact/${item.slug}`;
+  if (item.kind === "story") return "cause" in item && item.cause ? `/programs/${item.cause}` : "/programs";
   return `/news/${item.slug}`;
 }
 

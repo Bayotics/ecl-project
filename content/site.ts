@@ -90,7 +90,6 @@ export const impactPanel: RevealPanelContent = {
   title: "Our impact",
   // Supplied in Prompt 5; deliberately asserts no project or total.
   body: "Our shared heritage brings people together. Discover the stories, participation and service that shape the ECL community.",
-  action: { label: "Explore our impact", href: "/impact" },
   media: resolveMedia({ asset: "homeImpact" }),
 };
 

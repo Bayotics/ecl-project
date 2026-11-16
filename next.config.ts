@@ -37,7 +37,10 @@ const nextConfig: NextConfig = {
       // Education was removed and Youth Leadership renamed Youth Outreach.
       { source: "/programs/education", destination: "/programs", permanent: true },
       { source: "/programs/youth-leadership", destination: "/programs/youth-outreach", permanent: true },
-      { source: "/our-work", destination: "/impact", permanent: true },
+      { source: "/our-work", destination: "/about", permanent: true },
+      // "Our impact" was removed (redundant with About us).
+      { source: "/impact", destination: "/about", permanent: true },
+      { source: "/impact/:slug", destination: "/about", permanent: true },
       { source: "/get-involved/membership", destination: "/join", permanent: true },
       { source: "/get-involved/volunteer", destination: "/volunteer", permanent: true },
       { source: "/get-involved/partner", destination: "/get-involved#partnerships", permanent: true },

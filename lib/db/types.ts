@@ -119,7 +119,9 @@ export type EventCategory = {
 }
 export type EventMedia = {
  id:string; category_id:string; title:string; media_type:"image"|"video";
- media_url:string; poster_url:string; alt_text:string; caption:string;
+ media_url:string; poster_url:string; alt_text:string;
+ /** Web-size copy of a photo (about 2400px), shown in galleries; media_url stays the untouched original. Absent on older records. */
+ preview_url?:string; caption:string;
  sort_order:number; published:boolean; created_at:string;
 }
 export type PageMedia = {

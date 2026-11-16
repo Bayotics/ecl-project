@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({ title: pages.news.label, description: pages.news.description, path: pages.news.href });
 
-/** Dated club updates only. Events live at /events; stories at /impact. */
+/** Dated club updates only. Events live at /events. */
 export default function NewsPage() {
   const items = newsCards();
 

@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({ title: pages.contact.label, des
 
 /**
  * Dedicated contact route; also the inline fallback for the contact and newsletter dialogs.
- * `?topic=Partnership` preselects the topic (links from /get-involved and /impact).
+ * `?topic=Partnership` preselects the topic (links from /get-involved).
  */
 export default async function ContactPage({ searchParams }: PageProps<"/contact">) {
   const managed = await publicSettings();

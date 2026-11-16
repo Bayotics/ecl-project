@@ -21,12 +21,6 @@ export const pages = {
     title: "Club leadership",
     description: "Officers and committee members of Eko Club Louisiana.",
   },
-  impact: {
-    href: "/impact",
-    label: "Our impact",
-    title: "Stories, service and participation",
-    description: "Stories, volunteer highlights and confirmed figures from the work of Eko Club Louisiana.",
-  },
   programs: {
     href: "/programs",
     label: "Programs & causes",
