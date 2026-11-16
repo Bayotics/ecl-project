@@ -33,3 +33,8 @@ next-env.d.ts
 /public/media/Youth-Leadership/
 /public/media/Community-building/
 /public/media/health-and-wellbeing/
+# Hero footage and thumbnail originals (the site uses public/media/hero and assets/media/homepage/hero-thumbnail.jpg)
+/public/media/homepage-hero.MOV
+/public/media/hero-thumbnail.jpg
+# History page originals (the site uses assets/media/history; the film is on R2, see scripts/upload-history-video.mjs)
+/public/media/history/

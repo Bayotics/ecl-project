@@ -3,7 +3,10 @@ import type { HeroSlide } from "./types";
 
 const STOCK = "Supplied photograph that does not show Eko Club Louisiana; replace with club photography when available.";
 const FOOTAGE =
-  "Aerial Louisiana footage supplied 2026-10-15 (public/media/hero-video.mp4, 16.7 MB). Confirm its source and usage rights; a smaller muted encode plus WebM would load faster on phones.";
+  "Club footage supplied 2026-11-15 (public/media/homepage-hero.MOV, 4K, 40 s). Copies at 720p to 2160p are on R2 (scripts/upload-hero-video.mjs); the thumbnail shows while it loads.";
+
+// The footage copies live on R2 (no file-size limit, free downloads), not in the repository.
+const footage = `${(process.env.R2_PUBLIC_URL ?? "").replace(/\/$/, "")}/site-media/hero`;
 
 /** The three hero slides, in order. Copy from Prompt 2. */
 export const heroSlides: HeroSlide[] = [
@@ -14,9 +17,10 @@ export const heroSlides: HeroSlide[] = [
     headline: "A shared legacy",
     text: "Advancing culture and humanitarian support in Louisiana and Lagos.",
     cta: { label: "Discover our mission", href: "/about#mission" },
-    // Poster and fallback: the opening frame of the footage, so nothing jumps when playback starts.
-    media: { asset: "heroVideoPoster" },
-    video: [{ src: "/media/hero-video.mp4", type: "video/mp4" }],
+    // Shown until the footage is playing (and instead of it on data saver or if it fails).
+    media: { asset: "homeHeroThumbnail" },
+    // Each screen gets the smallest copy that is still sharp on it (see HeroVideo).
+    video: [720, 1080, 1440, 2160].map((height) => ({ src: `${footage}/club-hero-${height}.mp4`, type: "video/mp4", height })),
     ...meta(BRIEF_2, briefReview(FOOTAGE)),
   },
   {

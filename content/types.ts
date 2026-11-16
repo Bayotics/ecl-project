@@ -60,6 +60,10 @@ export type AssetId =
   | "homeImpact"
   | "homeCauses"
   | "homeYouthOutreach"
+  | "homeHeroThumbnail"
+  | "historyLagosIsland"
+  | "historyDawodu"
+  | "historyKeynotePoster"
   | "homeCulturalHeritage"
   | "homeHumanitarianSupport"
   | "homeCommunityBuilding"
@@ -414,4 +418,6 @@ export interface RevealPanelContent {
 export interface VideoSource {
   src: string;
   type: string;
+  /** Frame height in pixels. When a list gives heights, the hero picks the one that suits the screen. */
+  height?: number;
 }

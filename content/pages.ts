@@ -10,10 +10,10 @@ export const pages = {
   },
   history: {
     href: "/about/history",
-    label: "Our story",
-    title: "Between Lagos and Louisiana",
-    lead: "Many of us carry two homes. The club is where they meet: a place to honor where we come from and to contribute to where we live now.",
-    description: "The story of Eko Club Louisiana.",
+    label: "History",
+    title: "Born on Lagos Island",
+    lead: "Eko Club was founded in 1974 and formally launched in May 1975 by friends who grew up together on Lagos Island.",
+    description: "How Eko Club began on Lagos Island: founded in 1974 and formally launched in May 1975."
   },
   leadership: {
     href: "/about/leadership",

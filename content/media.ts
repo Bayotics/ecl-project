@@ -20,6 +20,10 @@ import homePresidentMessage from "@/assets/media/homepage/message-from-president
 import homeImpact from "@/assets/media/homepage/impact-card.png";
 import homeCauses from "@/assets/media/homepage/causes-card.png";
 import homeYouthOutreach from "@/assets/media/homepage/youth-outreach.jpg";
+import homeHeroThumbnail from "@/assets/media/homepage/hero-thumbnail.jpg";
+import historyLagosIsland from "@/assets/media/history/lagos-island.jpg";
+import historyDawodu from "@/assets/media/history/olusesi-dawodu.jpg";
+import historyKeynotePoster from "@/assets/media/history/keynote-poster.jpg";
 import homeCulturalHeritage from "@/assets/media/homepage/cultural-heritage.png";
 import homeHumanitarianSupport from "@/assets/media/homepage/humanitarian-support.png";
 import homeCommunityBuilding from "@/assets/media/homepage/community-building.png";
@@ -121,12 +125,34 @@ const programPhoto = (id: AssetId, src: MediaAsset["src"], folder: string, file:
   review: { verified: true, notes: [] },
 });
 
+/** History page photographs supplied by the club on 2026-11-16 (copied unchanged into assets/media/history). */
+const historyPhoto = (id: AssetId, src: MediaAsset["src"], file: string, original: [number, number], alt: string, focal: MediaAsset["focal"]): MediaAsset => ({
+  id,
+  kind: "photo",
+  src,
+  alt,
+  focal,
+  credit: null,
+  original: { file: `public/media/history/${file}`, width: original[0], height: original[1] },
+  status: "published",
+  provenance: { source: "club-supplied", retrieved: "2026-11-16", note: "Supplied for the History page in public/media/history." },
+  review: { verified: true, notes: [] },
+});
+
 const STOCK = "Unsplash photograph supplied with the new media. It does not show Eko Club Louisiana members; replace with club photography when available and keep the photographer credit.";
 const LAGOS = "Lagos street-festival photograph supplied with the new media. Confirm the photographer and usage rights.";
 
 export const assets: Record<AssetId, MediaAsset> = {
+  // Homepage hero: shown while the footage loads (web copy at 3000 px, JPEG quality 90).
+  homeHeroThumbnail: {
+    ...homepage("homeHeroThumbnail", homeHeroThumbnail, "hero-thumbnail.jpg", [5760, 3840], "Club members in royal-blue and white traditional attire posing together for a group photograph.", { x: 50, y: 35 }),
+    original: { file: "public/media/hero-thumbnail.jpg", width: 5760, height: 3840 },
+  },
   // Health and Wellbeing photos: web copies at 3000 px, JPEG quality 90 (no visible difference from the originals).
   // Wide opening strip: frame low enough to keep heads and the donations in view.
+  historyLagosIsland: historyPhoto("historyLagosIsland", historyLagosIsland, "lagos-island.jpeg", [2048, 1366], "Lagos Island from above: office towers and a cathedral clock tower beside the lagoon, with the bridge to the mainland.", { x: 64, y: 50 }),
+  historyDawodu: historyPhoto("historyDawodu", historyDawodu, "Late-dawodu1.jpg", [230, 285], "Portrait of the late Olusesi Dawodu in a pinstripe suit and patterned tie.", { x: 50, y: 30 }),
+  historyKeynotePoster: historyPhoto("historyKeynotePoster", historyKeynotePoster, "videoplayback (1).mp4", [480, 360], "The keynote speaker at a lectern beside the Nigerian flag, at the 6th International Convention of Eko Club International in 2009.", { x: 50, y: 40 }),
   healthHero: { ...programPhoto("healthHero", healthHero, "health-and-wellbeing", "IMG_5044.jpeg", [4032, 3024], "Members in club T-shirts with an elder, hands on donated food and supplies under an Eko Club Louisiana charity outreach banner."), focal: { x: 50, y: 55 } },
   healthCare: programPhoto("healthCare", healthCare, "health-and-wellbeing", "IMG_5628.CR2", [6000, 4000], "Members in club shirts gathered around a table of personal-care and hygiene supplies."),
   healthElder: programPhoto("healthElder", healthElder, "health-and-wellbeing", "IMG_5041.jpeg", [4032, 3024], "An elder in traditional attire standing beside donated food at the charity outreach."),

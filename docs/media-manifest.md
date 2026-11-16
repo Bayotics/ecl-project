@@ -27,7 +27,7 @@ The originals are kept in `assets/source/new-media/`. Photos were resized to a m
 
 | Placement | Asset |
 | --- | --- |
-| Hero 1 "A shared legacy" | Hero video. The poster and fallback are `heroVideoPoster`: shown before playback, under reduced motion, on data-saver connections, and if the video fails. |
+| Hero 1 "A shared legacy" | Club footage on R2 `site-media/hero/club-hero-{720,1080,1440,2160}.mp4` (from `homepage-hero.MOV`, 4K 40 s; H.264 CRF 18, no audio). Each screen gets the smallest copy that is sharp on it and drops a size if playback stalls. `homeHeroThumbnail` shows until the footage plays, under reduced motion, on data-saver connections, and if the video fails. The About page still uses `hero-video.mp4` with `heroVideoPoster`. |
 | Hero 2 "Community in action" | `communityDance` |
 | Hero 3 "Build with us" (also the /get-involved intro) | `familyCelebration` |
 | Impact panel (also the /impact intro) | `celebrationGuests` |
@@ -56,3 +56,14 @@ The originals are kept in `assets/source/new-media/`. Photos were resized to a m
 - Keep the Unsplash credits shown in the gallery and lightbox wherever these photos are captioned.
 - Confirm usage rights and the credit line with Zion Photography.
 - Confirm the date of the "Inauguration and ECI Quarterly Meeting" (the banner shows December 2018; the day is not legible).
+
+## History page (supplied 2026-11-16, originals in public/media/history, git-ignored)
+
+| Asset | File | Used on |
+| --- | --- | --- |
+| historyLagosIsland | assets/media/history/lagos-island.jpg (lagos-island.jpeg, 2048×1366, unchanged) | /about/history, "How it began" |
+| historyDawodu | assets/media/history/olusesi-dawodu.jpg (Late-dawodu1.jpg, 230×285, unchanged; the page frame hides its 6px black border) | /about/history, portrait card of the late Olusesi Dawodu, founding president of Eko Club International |
+| historyKeynotePoster | assets/media/history/keynote-poster.jpg (frame at 0:30 of the keynote) | /about/history, film poster |
+| Keynote film | R2 `site-media/history/keynote-2009.mp4` (videoplayback (1).mp4 unchanged: 44 min, 480×360, 101 MB; upload with scripts/upload-history-video.mjs). Plays from 0:07.5, after the "Beginning of disc 2" title card. | /about/history, film |
+
+The 10 Bishop Street section uses the existing oldies-night photograph (asoOkeCouple).
