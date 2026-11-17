@@ -46,7 +46,8 @@ export const mission = {
 /**
  * President's address, shown as a video card beside the mission (homepage). Club staff: put the file in
  * public/media/ (MP4/H.264, ideally with a WebVTT captions file) and list it in `sources`; add the
- * President's name in `speaker` once confirmed. Until a source is listed the card says "Video coming soon".
+ * The President's name comes from the executives list (the homepage reads it); until a source is listed it is
+ * shown on the poster.
  */
 export const presidentAddress = {
   label: "From the President",

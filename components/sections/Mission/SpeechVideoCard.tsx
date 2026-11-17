@@ -12,7 +12,7 @@ export interface SpeechVideo {
   /** Small label above the title, e.g. "From the President". */
   label: string;
   title: string;
-  /** "Name, President" once confirmed; null until then. */
+  /** The speaker's name; shown on the poster until the video is added, then under the title. */
   speaker: string | null;
   /** Display duration, e.g. "4:12". */
   duration: string | null;
@@ -25,7 +25,7 @@ export interface SpeechVideo {
 /**
  * Video card for a speech (Our mission row). Unlike the ambient footage elsewhere, a speech plays with
  * sound, only when the visitor asks: a poster with a play button swaps in a native <video controls>.
- * Nothing is downloaded until then. Without a source the card says the video is on its way.
+ * Nothing is downloaded until then. Without a source the poster carries the speaker's name.
  */
 export function SpeechVideoCard({ video }: { video: SpeechVideo }) {
   const [started, setStarted] = useState(false);
@@ -73,7 +73,7 @@ export function SpeechVideoCard({ video }: { video: SpeechVideo }) {
                 <span className={styles.playLabel}>Play video{video.duration ? ` · ${video.duration}` : ""}</span>
               </button>
             ) : (
-              <span className={styles.pending}>{failed ? "Video unavailable" : "Video coming soon"}</span>
+              (failed || video.speaker) && <span className={styles.pending}>{failed ? "Video unavailable" : video.speaker}</span>
             )}
           </>
         )}
@@ -83,7 +83,7 @@ export function SpeechVideoCard({ video }: { video: SpeechVideo }) {
         <span id={titleId} className={styles.title}>
           {video.title}
         </span>
-        {video.speaker ? <span className={styles.speaker}>{video.speaker}</span> : null}
+        {available && video.speaker ? <span className={styles.speaker}>{video.speaker}</span> : null}
       </figcaption>
     </figure>
   );
