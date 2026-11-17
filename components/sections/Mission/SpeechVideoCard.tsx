@@ -9,9 +9,8 @@ import { MediaImage } from "@/components/ui/MediaImage";
 import styles from "./SpeechVideoCard.module.css";
 
 export interface SpeechVideo {
-  /** Small label above the title, e.g. "From the President". */
+  /** Caption under the card, e.g. "President Eko Club Louisiana"; also the card's accessible name. */
   label: string;
-  title: string;
   /** The speaker's name; shown on the poster until the video is added, then under the title. */
   speaker: string | null;
   /** Display duration, e.g. "4:12". */
@@ -79,9 +78,8 @@ export function SpeechVideoCard({ video }: { video: SpeechVideo }) {
         )}
       </div>
       <figcaption className={styles.caption}>
-        <span className={styles.label}>{video.label}</span>
-        <span id={titleId} className={styles.title}>
-          {video.title}
+        <span id={titleId} className={styles.label}>
+          {video.label}
         </span>
         {available && video.speaker ? <span className={styles.speaker}>{video.speaker}</span> : null}
       </figcaption>

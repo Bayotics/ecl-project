@@ -101,13 +101,6 @@
   color: var(--color-ink-muted);
 }
 
-.title {
-  font-size: var(--fs-h3);
-  font-weight: var(--fw-heading);
-  line-height: var(--lh-tight);
-  color: var(--color-ink);
-}
-
 .speaker {
   font-size: var(--fs-small);
   color: var(--color-ink-soft);
