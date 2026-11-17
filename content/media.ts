@@ -196,7 +196,7 @@ export const assets: Record<AssetId, MediaAsset> = {
   aboutUsDropdown: homepage("aboutUsDropdown", aboutUsDropdown, "about-us-dropdown.png", [965, 624], "Eko Club Louisiana members gathered together.", { x: 50, y: 50 }),
   homeCommunityInAction: homepage("homeCommunityInAction", homeCommunityInAction, "community-in-action-slide.jpg", [6000, 4000], "Women in colourful traditional attire and gele head wraps walking together along a city street.", { x: 50, y: 50 }),
   homeBuildWithUs: homepage("homeBuildWithUs", homeBuildWithUs, "build-with-us-slide.CR2", [6000, 4000], "Volunteers in matching red-and-white shirts gathered behind a table of donated personal-care supplies.", { x: 50, y: 45 }),
-  homePresidentMessage: homepage("homePresidentMessage", homePresidentMessage, "message-from-president-thuimbnail.webp", [525, 685], "Portrait of a man in a cream agbada and an embroidered gold cap.", { x: 50, y: 35 }),
+  homePresidentMessage: homepage("homePresidentMessage", homePresidentMessage, "message-from-president-thuimbnail.webp", [768, 757], "Hon. Wallace Jimson in a dark embroidered agbada and a striped cap.", { x: 50, y: 30 }),
   homeImpact: homepage("homeImpact", homeImpact, "impact-card.png", [966, 638], "Women in matching royal-blue lace attire and gele head wraps standing together in a school hall.", { x: 50, y: 50 }),
   homeCauses: homepage("homeCauses", homeCauses, "causes-card.png", [961, 638], "Two club members wearing green Eko Club stoles and blue head ties.", { x: 50, y: 40 }),
   homeYouthOutreach: homepage("homeYouthOutreach", homeYouthOutreach, "youth-outreach-card.jpg", [6020, 4015], "Young people in matching red-and-white shirts gathered around a table of donated supplies.", { x: 50, y: 45 }),
