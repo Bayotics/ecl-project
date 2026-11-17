@@ -50,7 +50,7 @@ export const mission = {
  * shown on the poster.
  */
 export const presidentAddress = {
-  label: "President Eko Club Louisiana",
+  label: "President, Eko Club Louisiana",
   speaker: null as string | null,
   duration: null as string | null,
   sources: [] as VideoSource[],
