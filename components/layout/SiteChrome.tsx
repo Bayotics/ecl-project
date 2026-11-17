@@ -4,6 +4,7 @@ import { Suspense, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 import { DialogHost } from "@/components/forms/DialogHost";
+import { CookieNotice } from "@/components/layout/CookieNotice/CookieNotice";
 import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader/SiteHeader";
 import { RouteTransition } from "@/components/motion/RouteTransition";
@@ -29,6 +30,7 @@ export function SiteChrome({ children, navigation }: { children: ReactNode; navi
           <DialogHost fallback={{ email: site.contact.email, phone: site.contact.phone.display }} />
         </Suspense>
       ) : null}
+      {!privateRoute ? <CookieNotice /> : null}
     </>
   );
 }

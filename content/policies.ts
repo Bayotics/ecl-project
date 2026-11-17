@@ -92,9 +92,10 @@ export function cookieSections(services: Services): PolicySection[] {
     {
       heading: "Cookies on this website",
       paragraphs: [
-        "This website does not set cookies of its own, and it does not use advertising or tracking cookies. It does not store anything in your browser's local storage.",
+        "This website uses only the cookies it needs to work, and it does not use advertising or tracking cookies. The one cookie it sets itself keeps members and administrators signed in, and only after they sign in.",
+        "Your answer to the cookie notice is remembered in your browser's local storage, so the notice is not shown again. You can change it below.",
         services.analytics
-          ? `Visit counts come from ${services.analytics}, which works without cookies.`
+          ? `Visit counts come from ${services.analytics}, which works without cookies. It is not loaded if you decline in the cookie notice.`
           : "No analytics service is in use.",
       ],
     },
