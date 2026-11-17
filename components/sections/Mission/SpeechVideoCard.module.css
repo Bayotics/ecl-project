@@ -1,4 +1,4 @@
-/* Speech video card in the right third of the mission row: 4:5 on desktop, 16:9 on phones. */
+/* Speech video card in the right third of the mission row: 4:5 (the portrait poster) at every size. */
 
 .card {
   display: grid;
@@ -113,8 +113,10 @@
   color: var(--color-ink-soft);
 }
 
+/* Below desktop the card sits under the mission text at full width: keep the whole portrait in view,
+   but not so wide that it fills a tablet screen. */
 @media (max-width: 1023.98px) {
-  .frame {
-    aspect-ratio: 16 / 9;
+  .card {
+    width: min(100%, 26rem);
   }
 }
