@@ -20,6 +20,9 @@ export function configuredServices(): ConfiguredServices {
     forms: Object.fromEntries(kinds.map((kind) => [kind, isDeliveryConfigured(kind)])) as Record<FormKind, boolean>,
     store: store?.kind ?? null,
     donations: Boolean(stripeConfig().config && store),
-    analytics: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ? "Plausible Analytics" : null,
+    analytics:
+      [process.env.VERCEL ? "Vercel Web Analytics" : null, process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ? "Plausible Analytics" : null]
+        .filter(Boolean)
+        .join(" and ") || null,
   };
 }

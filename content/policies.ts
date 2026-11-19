@@ -74,7 +74,7 @@ export function privacySections(services: Services): PolicySection[] {
       heading: "Analytics",
       paragraphs: services.analytics
         ? [
-            `The website uses ${services.analytics}, which counts visits without cookies and without collecting personal information. It records pages viewed, referring sites, device type and country, in aggregate.`,
+            `The website uses ${services.analytics}, which ${services.analytics.includes(" and ") ? "count" : "counts"} visits without cookies and without collecting personal information. It records pages viewed, referring sites, device type and country, in aggregate.`,
           ]
         : ["The website does not currently use analytics."],
     },
@@ -95,7 +95,7 @@ export function cookieSections(services: Services): PolicySection[] {
         "This website uses only the cookies it needs to work, and it does not use advertising or tracking cookies. The one cookie it sets itself keeps members and administrators signed in, and only after they sign in.",
         "Your answer to the cookie notice is remembered in your browser's local storage, so the notice is not shown again. You can change it below.",
         services.analytics
-          ? `Visit counts come from ${services.analytics}, which works without cookies. It is not loaded if you decline in the cookie notice.`
+          ? `Visit counts come from ${services.analytics}, which ${services.analytics.includes(" and ") ? "work" : "works"} without cookies. It is not loaded if you decline in the cookie notice.`
           : "No analytics service is in use.",
       ],
     },
